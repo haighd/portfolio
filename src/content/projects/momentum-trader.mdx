@@ -1,0 +1,47 @@
+---
+title: "Momentum Trader"
+description: "Multi-strategy swing trading system with backtesting and parameter optimization"
+slug: "momentum-trader"
+featured: true
+order: 4
+techStack: ["Python", "PostgreSQL", "Backtrader", "Telegram", "Alpaca API"]
+github: "https://github.com/haighd/momentum_trader"
+---
+
+## Overview
+
+A systematic swing trading application implementing multiple strategies with comprehensive risk management and real-time notification system.
+
+## Key Features
+
+- **Multiple Strategies**: EMA Crossover, Time-Series Momentum, RSI Mean Reversion
+- **Risk Management**: 2% position sizing, ATR trailing stops, 5% daily loss limit
+- **Notifications**: Telegram alerts for trades, daily digests, system heartbeat
+- **Backtesting**: Historical testing with Sharpe ratio optimization
+
+## Trading Strategies
+
+### Dual EMA Crossover
+For trending markets - uses RSI confirmation to filter false signals.
+
+### Time-Series Momentum (TSMOM)
+Captures persistent trends using momentum indicators across multiple timeframes.
+
+### RSI Mean Reversion
+For ranging/sideways markets - trades oversold/overbought conditions.
+
+## Technical Highlights
+
+- Strategy selection based on market regime (trending vs ranging)
+- Grid search parameter optimization for each strategy
+- HTTP health server for Railway deployment monitoring
+- Complete trade history with PostgreSQL persistence
+
+## Risk Controls
+
+The system implements multiple layers of protection:
+
+1. **Position Sizing**: Max 2% of portfolio per trade
+2. **Stop Losses**: ATR-based trailing stops
+3. **Daily Limits**: 5% max daily drawdown circuit breaker
+4. **Diversification**: Maximum positions per sector

@@ -1,0 +1,41 @@
+---
+title: "Trader"
+description: "Autonomous algorithmic trading system with predictability-first asset selection and multi-layered risk management"
+slug: "trader"
+featured: true
+order: 1
+techStack: ["Python", "FastAPI", "React", "PostgreSQL", "asyncio", "Docker"]
+github: "https://github.com/predictive-trader/trader"
+---
+
+## Overview
+
+An autonomous trading system that uses statistical forecasting to identify predictable assets, then executes a direction-reversal strategy with strict risk controls.
+
+## Key Features
+
+- **Predictability-First Selection**: ETS forecasting models identify assets with ~55% directional accuracy
+- **Inflection Point Trading**: Direction-reversal strategy captures trend changes
+- **Multi-Layered Risk Management**: 2% trailing stops, daily loss circuit breakers, position limits
+- **Event-Driven Architecture**: Custom asyncio event bus for real-time processing
+- **Production Dashboard**: React 19 frontend with real-time updates via FastAPI
+
+## Technical Highlights
+
+Built with a focus on reliability and observability:
+
+- Broker-agnostic design with Alpaca integration for paper/live trading
+- PostgreSQL persistence with comprehensive audit logging
+- Docker containerization for Railway deployment
+- Event-driven async architecture using custom asyncio patterns
+- 19 of 20 planned epics complete
+
+## Architecture
+
+The system follows a clean separation of concerns:
+
+1. **Data Layer**: Fetches market data and maintains historical records
+2. **Analysis Layer**: Runs ETS models to score asset predictability
+3. **Strategy Layer**: Implements IPT (Inflection Point Trading) logic
+4. **Execution Layer**: Manages orders with risk controls
+5. **Monitoring Layer**: Real-time dashboard and alerting

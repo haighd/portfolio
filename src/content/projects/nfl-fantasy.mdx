@@ -1,0 +1,44 @@
+---
+title: "NFL Fantasy Playoffs"
+description: "Real-time fantasy football leaderboard with live stats sync and team management"
+slug: "nfl-fantasy"
+featured: true
+order: 3
+techStack: ["Next.js", "React", "TypeScript", "PostgreSQL", "Drizzle", "TanStack Query"]
+github: "https://github.com/haighd/nfl-fantasy-playoffs-2026"
+---
+
+## Overview
+
+A live leaderboard application for a custom fantasy football playoffs league with real-time scoring updates during NFL games.
+
+## Key Features
+
+- **Live Leaderboard**: Real-time ranked standings with expandable rosters
+- **Auto Stats Sync**: Tank01 NFL API integration with 20-minute refresh during games
+- **Team Management**: Admin dashboard for members, rosters, eliminations
+- **Draft Import**: CSV bulk import for initial roster setup
+
+## Technical Highlights
+
+Built for real-time performance and reliability:
+
+- Next.js 15 with App Router and React 19
+- Smart polling intervals based on game time detection
+- Drizzle ORM for type-safe database access
+- Deployed on Railway with auto-scaling
+
+## Real-Time Architecture
+
+The application intelligently adjusts its data fetching based on context:
+
+- **During Games**: 5-minute polling intervals for live scoring updates
+- **Off-Season**: 30-minute intervals to reduce API costs
+- **Game Detection**: Automatic detection of active games to trigger live mode
+
+## Admin Features
+
+- Member management with roster assignments
+- Manual elimination tracking
+- Bulk operations via CSV import
+- Rate-limited public API endpoints for third-party integrations

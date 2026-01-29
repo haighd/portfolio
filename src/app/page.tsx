@@ -1,65 +1,122 @@
-import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { Button, Badge } from "@/components/ui";
+import { Section } from "@/components/layout";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <>
+      {/* Hero Section */}
+      <Section className="pt-24 md:pt-32">
+        <div className="max-w-3xl">
+          <Badge variant="accent" className="mb-4">
+            Analytics Leadership
+          </Badge>
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+            Building data-driven
+            <span className="block text-muted-foreground">
+              solutions that matter
+            </span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="mt-6 text-lg leading-8 text-muted-foreground">
+            Analytics leader with hands-on technical depth in Python, SQL, and
+            ML/AI. I bridge the gap between strategic vision and technical
+            execution to deliver measurable business impact.
           </p>
+          <div className="mt-8 flex flex-wrap gap-4">
+            <Button asChild>
+              <Link href="/projects">
+                View Projects
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href="/about">Learn More</Link>
+            </Button>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      </Section>
+
+      {/* Featured Projects Preview */}
+      <Section className="border-t border-border bg-muted/30">
+        <div className="mb-8 flex items-end justify-between">
+          <div>
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Featured Projects
+            </h2>
+            <p className="mt-2 text-muted-foreground">
+              Technical projects demonstrating hands-on capability
+            </p>
+          </div>
+          <Link
+            href="/projects"
+            className="hidden text-sm text-muted-foreground transition-colors hover:text-foreground sm:block"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            View all projects &rarr;
+          </Link>
         </div>
-      </main>
-    </div>
+
+        {/* Placeholder for projects - will be populated in Phase 3 */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="rounded-lg border border-border bg-background p-6"
+            >
+              <div className="mb-4 h-4 w-24 rounded bg-muted" />
+              <div className="mb-2 h-3 w-full rounded bg-muted" />
+              <div className="h-3 w-2/3 rounded bg-muted" />
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-6 sm:hidden">
+          <Link
+            href="/projects"
+            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            View all projects &rarr;
+          </Link>
+        </div>
+      </Section>
+
+      {/* Brief About */}
+      <Section>
+        <div className="grid gap-8 md:grid-cols-2 md:items-center">
+          <div>
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Technical Depth Meets Strategic Vision
+            </h2>
+            <p className="mt-4 text-muted-foreground">
+              With experience spanning data science, machine learning, and
+              analytics leadership, I bring a unique perspective that combines
+              hands-on technical execution with strategic business impact.
+            </p>
+            <Button variant="ghost" asChild className="mt-4 -ml-4">
+              <Link href="/about">
+                More about me
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              { label: "Python", desc: "ML & Data Engineering" },
+              { label: "SQL", desc: "Analytics & Optimization" },
+              { label: "ML/AI", desc: "Predictive Modeling" },
+              { label: "Leadership", desc: "Team & Strategy" },
+            ].map((skill) => (
+              <div
+                key={skill.label}
+                className="rounded-lg border border-border p-4"
+              >
+                <div className="font-medium">{skill.label}</div>
+                <div className="text-sm text-muted-foreground">{skill.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
+    </>
   );
 }
