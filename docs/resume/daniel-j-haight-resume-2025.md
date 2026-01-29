@@ -40,7 +40,7 @@ Analytics and Data Science leader with 10+ years driving operational excellence 
 ### Senior Manager, NA Supply Chain, Transportation CI
 **Becton, Dickinson & Co.**, Franklin Lakes, NJ | Nov 2019 - Nov 2020
 
-- Coached Project Leaders in delivering >$4.1M savings YTD in FY20, exceeding FY20 target of $5M
+- Coached Project Leaders in delivering >$4.1M savings YTD in FY20, on track to exceed FY20 target of $5M
 - Improved LTL vendor OTIF performance by ~10% by identifying opportunistic shipping lanes and subsequent action plans
 - Led Kaizen event at specialty Distribution Center, improving occurrence of "critical incidents" and customer experience
 - Engaged NA Transportation Analytics team to develop strategic plan including expanding team capabilities
