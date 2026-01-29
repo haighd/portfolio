@@ -2,8 +2,12 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button, Badge } from "@/components/ui";
 import { Section } from "@/components/layout";
+import { ProjectCard } from "@/components/project-card";
+import { getFeaturedProjects } from "@/lib/content";
 
 export default function HomePage() {
+  const featuredProjects = getFeaturedProjects();
+
   return (
     <>
       {/* Hero Section */}
@@ -56,17 +60,9 @@ export default function HomePage() {
           </Link>
         </div>
 
-        {/* Placeholder for projects - will be populated in Phase 3 */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className="rounded-lg border border-border bg-background p-6"
-            >
-              <div className="mb-4 h-4 w-24 rounded bg-muted" />
-              <div className="mb-2 h-3 w-full rounded bg-muted" />
-              <div className="h-3 w-2/3 rounded bg-muted" />
-            </div>
+          {featuredProjects.map((project) => (
+            <ProjectCard key={project.slug} project={project} />
           ))}
         </div>
 
