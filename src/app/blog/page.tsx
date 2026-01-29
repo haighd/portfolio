@@ -33,25 +33,25 @@ export default function BlogPage() {
           </h2>
           <ul className="mt-6 space-y-4">
             <li className="flex gap-3">
-              <span className="text-muted-foreground">→</span>
+              <span className="text-muted-foreground" aria-hidden="true">→</span>
               <span className="text-muted-foreground">
                 Practical ML/AI implementation strategies
               </span>
             </li>
             <li className="flex gap-3">
-              <span className="text-muted-foreground">→</span>
+              <span className="text-muted-foreground" aria-hidden="true">→</span>
               <span className="text-muted-foreground">
                 Building and scaling analytics teams
               </span>
             </li>
             <li className="flex gap-3">
-              <span className="text-muted-foreground">→</span>
+              <span className="text-muted-foreground" aria-hidden="true">→</span>
               <span className="text-muted-foreground">
                 Technical deep-dives on side projects
               </span>
             </li>
             <li className="flex gap-3">
-              <span className="text-muted-foreground">→</span>
+              <span className="text-muted-foreground" aria-hidden="true">→</span>
               <span className="text-muted-foreground">
                 Data engineering patterns and best practices
               </span>

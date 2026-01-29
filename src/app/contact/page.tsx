@@ -69,7 +69,12 @@ export default function ContactPage() {
                     />
                   </div>
                   <div className="flex-1">
-                    <h2 className="font-semibold">{method.name}</h2>
+                    <h2 className="font-semibold">
+                      {method.name}
+                      {method.external && (
+                        <span className="sr-only"> (opens in new tab)</span>
+                      )}
+                    </h2>
                     <p className="mt-1 text-sm text-muted-foreground">
                       {method.description}
                     </p>
