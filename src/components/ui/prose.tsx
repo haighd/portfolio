@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-interface ProseProps extends React.HTMLAttributes<HTMLDivElement> {}
+type ProseProps = React.HTMLAttributes<HTMLDivElement>;
 
 const Prose = React.forwardRef<HTMLDivElement, ProseProps>(
   ({ className, ...props }, ref) => (
