@@ -6,6 +6,7 @@ Dan Haight's professional portfolio site showcasing Analytics Leadership experie
 
 **Domain:** danalytics.info
 **Repository:** github.com/haighd/portfolio
+**LinkedIn:** linkedin.com/in/djhaight
 
 ---
 
