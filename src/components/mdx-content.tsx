@@ -3,7 +3,7 @@
 import * as React from "react";
 import * as runtime from "react/jsx-runtime";
 
-const useMDXComponent = (code: string) => {
+const getMDXComponent = (code: string) => {
   const fn = new Function(code);
   return fn({ ...runtime }).default;
 };
@@ -103,7 +103,10 @@ interface MDXContentProps {
   code: string;
 }
 
+// MDX requires dynamic component creation from compiled code
+/* eslint-disable react-hooks/static-components */
 export function MDXContent({ code }: MDXContentProps) {
-  const Component = useMDXComponent(code);
+  const Component = React.useMemo(() => getMDXComponent(code), [code]);
   return <Component components={components} />;
 }
+/* eslint-enable react-hooks/static-components */
