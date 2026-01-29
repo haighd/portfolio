@@ -56,7 +56,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
             className="text-muted-foreground hover:text-foreground transition-colors"
             aria-label="View on GitHub"
           >
-            <Github className="h-4 w-4" />
+            <Github className="h-4 w-4" aria-hidden="true" />
           </a>
         )}
         {project.liveUrl && (
@@ -67,7 +67,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
             className="text-muted-foreground hover:text-foreground transition-colors"
             aria-label="View live site"
           >
-            <ExternalLink className="h-4 w-4" />
+            <ExternalLink className="h-4 w-4" aria-hidden="true" />
           </a>
         )}
       </CardFooter>
