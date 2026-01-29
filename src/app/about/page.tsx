@@ -1,8 +1,137 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { Section } from "@/components/layout";
+import { Badge, Button } from "@/components/ui";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Analytics leader with hands-on technical depth in Python, SQL, and ML/AI.",
+};
+
+const skills = {
+  "Languages & Tools": ["Python", "SQL", "TypeScript", "React", "FastAPI"],
+  "Data & ML": [
+    "Machine Learning",
+    "Statistical Modeling",
+    "Data Engineering",
+    "ETL Pipelines",
+  ],
+  Platforms: ["PostgreSQL", "Docker", "AWS", "Railway"],
+  Leadership: [
+    "Team Management",
+    "Strategy Development",
+    "Stakeholder Communication",
+    "Mentorship",
+  ],
+};
+
 export default function AboutPage() {
   return (
-    <div className="container mx-auto px-4 py-16">
-      <h1 className="text-4xl font-bold">About</h1>
-      <p className="mt-4 text-gray-600">Coming soon.</p>
-    </div>
+    <>
+      <Section className="pt-24 md:pt-32">
+        <div className="grid gap-12 md:grid-cols-3">
+          <div className="md:col-span-2">
+            <h1 className="text-4xl font-bold tracking-tight">About Me</h1>
+            <div className="mt-6 space-y-4 text-muted-foreground">
+              <p className="text-lg">
+                I&apos;m an analytics leader who believes the best data work
+                happens when strategic thinking meets technical execution.
+              </p>
+              <p>
+                With experience spanning data science, machine learning, and
+                analytics leadership, I bring a unique perspective that combines
+                hands-on technical capability with the ability to translate
+                complex insights into business impact.
+              </p>
+              <p>
+                Currently, I lead analytics initiatives at Merck, where I
+                develop ML/AI solutions for business process optimization and
+                partner with cross-functional teams to drive data-informed
+                decision making.
+              </p>
+              <p>
+                Outside of work, I build side projects that let me explore new
+                technologies and stay sharp on the technical side. From
+                algorithmic trading systems to full-stack web applications,
+                these projects keep me connected to the craft of building
+                software.
+              </p>
+            </div>
+            <div className="mt-8 flex gap-4">
+              <Button asChild>
+                <Link href="/experience">
+                  View Experience
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href="/projects">See Projects</Link>
+              </Button>
+            </div>
+          </div>
+          <div className="space-y-6">
+            <div className="rounded-lg border border-border p-6">
+              <h2 className="font-semibold">Current Role</h2>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Associate Director, Data Science & Analytics
+              </p>
+              <p className="text-sm text-muted-foreground">Merck</p>
+            </div>
+            <div className="rounded-lg border border-border p-6">
+              <h2 className="font-semibold">Location</h2>
+              <p className="mt-2 text-sm text-muted-foreground">Remote</p>
+            </div>
+            <div className="rounded-lg border border-border p-6">
+              <h2 className="font-semibold">Focus Areas</h2>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <Badge variant="secondary">ML/AI</Badge>
+                <Badge variant="secondary">Analytics</Badge>
+                <Badge variant="secondary">Leadership</Badge>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      <Section className="border-t border-border bg-muted/30">
+        <h2 className="text-2xl font-semibold tracking-tight">
+          Skills & Technologies
+        </h2>
+        <p className="mt-2 text-muted-foreground">
+          Technical skills I use regularly in my work and side projects.
+        </p>
+        <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {Object.entries(skills).map(([category, items]) => (
+            <div key={category}>
+              <h3 className="font-medium">{category}</h3>
+              <ul className="mt-3 space-y-2">
+                {items.map((skill) => (
+                  <li key={skill} className="text-sm text-muted-foreground">
+                    {skill}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section>
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="text-2xl font-semibold tracking-tight">
+            Let&apos;s Connect
+          </h2>
+          <p className="mt-4 text-muted-foreground">
+            Interested in discussing analytics, data science, or potential
+            opportunities? I&apos;d love to hear from you.
+          </p>
+          <Button asChild className="mt-6">
+            <Link href="/contact">Get in Touch</Link>
+          </Button>
+        </div>
+      </Section>
+    </>
   );
 }
