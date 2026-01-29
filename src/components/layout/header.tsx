@@ -22,7 +22,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-sm">
       <Container>
-        <nav className="flex h-16 items-center justify-between">
+        <nav aria-label="Main" className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link
             href="/"
@@ -37,6 +37,7 @@ export function Header() {
               <li key={item.name}>
                 <Link
                   href={item.href}
+                  aria-current={pathname === item.href ? "page" : undefined}
                   className={cn(
                     "text-sm transition-colors hover:text-foreground",
                     pathname === item.href
@@ -56,6 +57,7 @@ export function Header() {
             className="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground md:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu"
             aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? (
@@ -68,12 +70,13 @@ export function Header() {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="border-t border-border pb-4 md:hidden">
+          <div id="mobile-menu" className="border-t border-border pb-4 md:hidden">
             <ul className="mt-4 space-y-2">
               {navigation.map((item) => (
                 <li key={item.name}>
                   <Link
                     href={item.href}
+                    aria-current={pathname === item.href ? "page" : undefined}
                     className={cn(
                       "block rounded-md px-3 py-2 text-base transition-colors hover:bg-muted",
                       pathname === item.href
