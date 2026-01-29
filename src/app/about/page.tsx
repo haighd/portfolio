@@ -5,7 +5,7 @@ import { Section } from "@/components/layout";
 import { Badge, Button } from "@/components/ui";
 
 export const metadata: Metadata = {
-  title: "About | Dan Haight",
+  title: "About",
   description:
     "Analytics leader with hands-on technical depth in Python, SQL, and ML/AI.",
 };

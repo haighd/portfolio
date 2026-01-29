@@ -7,7 +7,7 @@ import { MDXContent } from "@/components/mdx-content";
 import { getExperiences } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "Experience | Dan Haight",
+  title: "Experience",
   description:
     "Professional experience in analytics leadership, data science, and ML/AI.",
 };
@@ -30,8 +30,8 @@ export default function ExperiencePage() {
           <div className="absolute left-0 top-0 hidden h-full w-px bg-border md:left-32 md:block" />
 
           <div className="space-y-12">
-            {experiences.map((experience, index) => (
-              <div key={index} className="relative md:pl-44">
+            {experiences.map((experience) => (
+              <div key={`${experience.company}-${experience.role}`} className="relative md:pl-44">
                 {/* Timeline dot */}
                 <div className="absolute left-0 top-2 hidden h-3 w-3 rounded-full border-2 border-accent bg-background md:left-[121px] md:block" />
 
@@ -53,7 +53,7 @@ export default function ExperiencePage() {
                       {experience.company} · {experience.location}
                     </p>
                   </div>
-                  <div className="prose-sm text-muted-foreground">
+                  <div className="text-sm">
                     <MDXContent code={experience.body} />
                   </div>
                 </div>

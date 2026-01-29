@@ -31,12 +31,12 @@ export function ProjectCard({ project }: ProjectCardProps) {
       </CardHeader>
       <CardContent className="flex-1">
         <div className="flex flex-wrap gap-2">
-          {project.techStack.slice(0, 4).map((tech) => (
+          {project.techStack?.slice(0, 4).map((tech) => (
             <Badge key={tech} variant="secondary">
               {tech}
             </Badge>
           ))}
-          {project.techStack.length > 4 && (
+          {(project.techStack?.length ?? 0) > 4 && (
             <Badge variant="outline">+{project.techStack.length - 4}</Badge>
           )}
         </div>

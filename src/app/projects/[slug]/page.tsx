@@ -27,7 +27,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${project.title} | Dan Haight`,
+    title: project.title,
     description: project.description,
   };
 }
@@ -57,7 +57,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </p>
 
         <div className="mt-6 flex flex-wrap gap-2">
-          {project.techStack.map((tech) => (
+          {project.techStack?.map((tech) => (
             <Badge key={tech} variant="secondary">
               {tech}
             </Badge>
@@ -92,7 +92,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </div>
       </header>
 
-      <article className="prose-custom">
+      <article>
         <MDXContent code={project.body} />
       </article>
     </Section>

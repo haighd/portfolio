@@ -4,7 +4,7 @@ import { ProjectCard } from "@/components/project-card";
 import { getProjects } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "Projects | Dan Haight",
+  title: "Projects",
   description:
     "Technical projects demonstrating hands-on capability in Python, ML/AI, and data engineering.",
 };
