@@ -20,9 +20,9 @@ const contactMethods = [
   {
     name: "LinkedIn",
     description: "Connect professionally",
-    href: "https://linkedin.com/in/danhaight",
+    href: "https://linkedin.com/in/djhaight",
     icon: Linkedin,
-    label: "linkedin.com/in/danhaight",
+    label: "linkedin.com/in/djhaight",
     external: true,
   },
   {

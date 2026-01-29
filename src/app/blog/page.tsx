@@ -72,7 +72,7 @@ export default function BlogPage() {
           <div className="mt-6 flex justify-center gap-4">
             <Button asChild>
               <a
-                href="https://linkedin.com/in/danhaight"
+                href="https://linkedin.com/in/djhaight"
                 target="_blank"
                 rel="noopener noreferrer"
               >

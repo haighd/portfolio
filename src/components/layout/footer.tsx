@@ -10,7 +10,7 @@ const socialLinks = [
   },
   {
     name: "LinkedIn",
-    href: "https://linkedin.com/in/danhaight",
+    href: "https://linkedin.com/in/djhaight",
     icon: Linkedin,
   },
   {
