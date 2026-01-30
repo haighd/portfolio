@@ -36,22 +36,29 @@ Here's how the blog collection is defined:
 const blog = defineCollection({
   name: "BlogPost",
   pattern: "blog/**/*.mdx",
-  schema: s.object({
-    title: s.string().max(100),
-    slug: s.slug("blog"),
-    publishedDate: s.string(),
-    tags: s.array(s.string()).default([]),
-    body: s.mdx(),
-    raw: s.raw(),
-  }).transform((data) => {
-    // Calculate reading time from raw content
-    const words = data.raw.split(/\s+/).filter(Boolean).length;
-    return { ...data, readingTime: Math.ceil(words / 200) };
-  }),
+  schema: s
+    .object({
+      title: s.string().max(100),
+      description: s.string().max(200),
+      slug: s.slug("blog"),
+      publishedDate: s.string(),
+      updatedDate: s.string().optional(),
+      tags: s.array(s.string()).default([]),
+      featured: s.boolean().default(false),
+      body: s.mdx(),
+      raw: s.raw(),
+    })
+    .transform((data) => {
+      const { raw, ...rest } = data;
+      // Calculate reading time from raw content (~200 words/minute)
+      const words = raw.split(/\s+/).filter(Boolean).length;
+      const readingTime = Math.max(1, Math.ceil(words / 200));
+      return { ...rest, readingTime };
+    }),
 });
 ```
 
-The `transform` function calculates reading time automatically from the raw MDX content. Every blog post gets a `readingTime` field without any manual input.
+The `transform` function strips the raw MDX content and calculates reading time automatically. Every blog post gets a `readingTime` field (minimum 1 minute) without any manual input.
 
 ### Type-Safe Content Layer
 
