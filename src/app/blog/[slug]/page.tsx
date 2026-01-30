@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Calendar } from "lucide-react";
+import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import { Section } from "@/components/layout";
 import { Badge } from "@/components/ui";
 import { MDXContent } from "@/components/mdx-content";
@@ -88,22 +88,25 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       </Link>
 
       <header className="mb-12">
-        <div className="text-muted-foreground mb-4 flex items-center gap-2 text-sm">
-          <Calendar className="h-4 w-4" aria-hidden="true" />
-          <time dateTime={post.publishedDate}>
-            {formatDate(post.publishedDate)}
-          </time>
+        <div className="text-muted-foreground mb-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+          <span className="flex items-center gap-1">
+            <Calendar className="h-4 w-4" aria-hidden="true" />
+            <time dateTime={post.publishedDate}>
+              {formatDate(post.publishedDate)}
+            </time>
+          </span>
           {post.updatedDate && (
-            <>
-              <span aria-hidden="true">&middot;</span>
-              <span>
-                Updated{" "}
-                <time dateTime={post.updatedDate}>
-                  {formatDate(post.updatedDate)}
-                </time>
-              </span>
-            </>
+            <span>
+              Updated{" "}
+              <time dateTime={post.updatedDate}>
+                {formatDate(post.updatedDate)}
+              </time>
+            </span>
           )}
+          <span className="flex items-center gap-1">
+            <Clock className="h-4 w-4" aria-hidden="true" />
+            <span>{post.readingTime} min read</span>
+          </span>
         </div>
 
         <h1 className="text-4xl font-bold tracking-tight">{post.title}</h1>

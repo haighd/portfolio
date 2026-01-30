@@ -34,16 +34,25 @@ const experiences = defineCollection({
 const blog = defineCollection({
   name: "BlogPost",
   pattern: "blog/**/*.mdx",
-  schema: s.object({
-    title: s.string().max(100),
-    description: s.string().max(200),
-    slug: s.slug("blog"),
-    publishedDate: s.string(),
-    updatedDate: s.string().optional(),
-    tags: s.array(s.string()).default([]),
-    featured: s.boolean().default(false),
-    body: s.mdx(),
-  }),
+  schema: s
+    .object({
+      title: s.string().max(100),
+      description: s.string().max(200),
+      slug: s.slug("blog"),
+      publishedDate: s.string(),
+      updatedDate: s.string().optional(),
+      tags: s.array(s.string()).default([]),
+      featured: s.boolean().default(false),
+      body: s.mdx(),
+      raw: s.raw(),
+    })
+    .transform((data) => {
+      const { raw, ...rest } = data;
+      // Calculate reading time from raw content (~200 words/minute)
+      const words = raw.split(/\s+/).filter(Boolean).length;
+      const readingTime = Math.max(1, Math.ceil(words / 200));
+      return { ...rest, readingTime };
+    }),
 });
 
 export default defineConfig({
