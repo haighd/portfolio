@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Section } from "@/components/layout";
@@ -33,7 +34,10 @@ export default function AboutPage() {
       <Section className="pt-24 md:pt-32">
         <div className="grid gap-12 md:grid-cols-3">
           <div className="md:col-span-2">
-            <h1 className="text-4xl font-bold tracking-tight">About Me</h1>
+            <h1 className="text-4xl font-bold tracking-tight">
+              About Me
+              <span className="mt-2 block h-1 w-16 rounded-full bg-foreground/20" />
+            </h1>
             <div className="mt-6 space-y-4 text-muted-foreground">
               <p className="text-lg">
                 I&apos;m an analytics leader who believes the best data work
@@ -72,6 +76,17 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="space-y-6">
+            {/* Headshot */}
+            <div className="overflow-hidden rounded-lg border border-border">
+              <Image
+                src="/static/images/headshot.webp"
+                alt="Dan Haight"
+                width={600}
+                height={400}
+                className="w-full object-cover"
+                priority
+              />
+            </div>
             <div className="rounded-lg border border-border p-6">
               <h2 className="font-semibold">Current Role</h2>
               <p className="mt-2 text-sm text-muted-foreground">
@@ -95,9 +110,11 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      <Section className="border-t border-border bg-muted/30">
+      <Section className="relative border-t border-border bg-muted/30">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/20 to-transparent" />
         <h2 className="text-2xl font-semibold tracking-tight">
           Skills & Technologies
+          <span className="mt-2 block h-1 w-12 rounded-full bg-foreground/20" />
         </h2>
         <p className="mt-2 text-muted-foreground">
           Technical skills I use regularly in my work and side projects.
@@ -105,7 +122,10 @@ export default function AboutPage() {
         <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {Object.entries(skills).map(([category, items]) => (
             <div key={category}>
-              <h3 className="font-medium">{category}</h3>
+              <h3 className="flex items-center gap-2 font-medium">
+                <span className="h-1.5 w-1.5 rounded-full bg-foreground/40" />
+                {category}
+              </h3>
               <ul className="mt-3 space-y-2">
                 {items.map((skill) => (
                   <li key={skill} className="text-sm text-muted-foreground">

@@ -10,3 +10,4 @@ export {
 export { Badge, badgeVariants, type BadgeProps } from "./badge";
 export { Container } from "./container";
 export { Prose } from "./prose";
+export { Logo, type LogoProps } from "./logo";
