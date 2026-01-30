@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui";
 import { MDXContent } from "@/components/mdx-content";
 import { getBlogPostBySlug, getBlogPosts, getRelatedPosts } from "@/lib/content";
 import { RelatedPosts } from "@/components/related-posts";
+import { formatDate } from "@/lib/utils";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -59,15 +60,6 @@ export async function generateMetadata({
       images: [ogImageUrl.toString()],
     },
   };
-}
-
-function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: "UTC",
-  });
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {

@@ -1,18 +1,10 @@
 import Link from "next/link";
 import { Calendar } from "lucide-react";
 import type { BlogPost } from "@/lib/content";
+import { formatDateShort } from "@/lib/utils";
 
 interface RelatedPostsProps {
   posts: BlogPost[];
-}
-
-function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    timeZone: "UTC",
-  });
 }
 
 export function RelatedPosts({ posts }: RelatedPostsProps) {
@@ -36,7 +28,7 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
             <div className="text-muted-foreground mb-2 flex items-center gap-1 text-xs">
               <Calendar className="h-3 w-3" aria-hidden="true" />
               <time dateTime={post.publishedDate}>
-                {formatDate(post.publishedDate)}
+                {formatDateShort(post.publishedDate)}
               </time>
             </div>
             <h3 className="group-hover:text-accent font-semibold leading-snug transition-colors">
