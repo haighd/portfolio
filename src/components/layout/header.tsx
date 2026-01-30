@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/ui";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const navigation = [
   { name: "About", href: "/about" },
@@ -32,40 +33,46 @@ export function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <ul className="hidden items-center gap-8 md:flex">
-            {navigation.map((item) => (
-              <li key={item.name}>
-                <Link
-                  href={item.href}
-                  aria-current={pathname === item.href ? "page" : undefined}
-                  className={cn(
-                    "text-sm transition-colors hover:text-foreground",
-                    pathname === item.href
-                      ? "text-foreground"
-                      : "text-muted-foreground"
-                  )}
-                >
-                  {item.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <div className="hidden items-center gap-8 md:flex">
+            <ul className="flex items-center gap-8">
+              {navigation.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    href={item.href}
+                    aria-current={pathname === item.href ? "page" : undefined}
+                    className={cn(
+                      "text-sm transition-colors hover:text-foreground",
+                      pathname === item.href
+                        ? "text-foreground"
+                        : "text-muted-foreground"
+                    )}
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <ThemeToggle />
+          </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            type="button"
-            className="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground md:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-expanded={mobileMenuOpen}
-            aria-controls="mobile-menu"
-            aria-label="Toggle navigation menu"
-          >
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6" aria-hidden="true" />
-            ) : (
-              <Menu className="h-6 w-6" aria-hidden="true" />
-            )}
-          </button>
+          {/* Mobile Controls */}
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle />
+            <button
+              type="button"
+              className="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-menu"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? (
+                <X className="h-6 w-6" aria-hidden="true" />
+              ) : (
+                <Menu className="h-6 w-6" aria-hidden="true" />
+              )}
+            </button>
+          </div>
         </nav>
 
         {/* Mobile Navigation */}
