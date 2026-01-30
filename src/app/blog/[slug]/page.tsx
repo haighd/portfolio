@@ -5,7 +5,9 @@ import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import { Section } from "@/components/layout";
 import { Badge } from "@/components/ui";
 import { MDXContent } from "@/components/mdx-content";
-import { getBlogPostBySlug, getBlogPosts } from "@/lib/content";
+import { getBlogPostBySlug, getBlogPosts, getRelatedPosts } from "@/lib/content";
+import { RelatedPosts } from "@/components/related-posts";
+import { formatDate } from "@/lib/utils";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -60,15 +62,6 @@ export async function generateMetadata({
   };
 }
 
-function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: "UTC",
-  });
-}
-
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
   const post = getBlogPostBySlug(slug);
@@ -76,6 +69,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   if (!post) {
     notFound();
   }
+
+  const relatedPosts = getRelatedPosts(slug, 3);
 
   return (
     <Section className="pt-24 md:pt-32" containerSize="narrow">
@@ -126,6 +121,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <article>
         <MDXContent code={post.body} />
       </article>
+
+      {relatedPosts.length > 0 && (
+        <div className="border-border mt-16 border-t pt-12">
+          <RelatedPosts posts={relatedPosts} />
+        </div>
+      )}
     </Section>
   );
 }

@@ -10,18 +10,10 @@ import {
   Badge,
 } from "@/components/ui";
 import type { BlogPost } from "@/lib/content";
+import { formatDate } from "@/lib/utils";
 
 interface BlogPostCardProps {
   post: BlogPost;
-}
-
-function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: "UTC",
-  });
 }
 
 export function BlogPostCard({ post }: BlogPostCardProps) {
