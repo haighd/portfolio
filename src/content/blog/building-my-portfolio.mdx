@@ -1,9 +1,9 @@
 ---
 title: "Building My Portfolio with Next.js and Velite"
 slug: building-my-portfolio
-description: "A walkthrough of the tech stack and design decisions behind danalytics.info"
+description: "A deep dive into the tech stack, content architecture, and design decisions behind danalytics.info - featuring Next.js, Velite, TypeScript, and Tailwind CSS"
 publishedDate: "2026-01-30"
-tags: ["nextjs", "react", "velite", "tailwind"]
+tags: ["nextjs", "react", "velite", "tailwindcss", "typescript", "mdx", "portfolio"]
 featured: true
 ---
 
@@ -11,26 +11,119 @@ featured: true
 
 As an analytics leader transitioning between roles, I wanted a space that showcases both my leadership experience and technical depth. LinkedIn is great for professional networking, but a portfolio site allows for deeper storytelling and technical demonstrations.
 
-## Tech Stack Decisions
+This site hosts projects like my [autonomous trading system](/projects/trader) and [Golden Paws photography platform](/projects/golden-paws) - the kind of work that deserves more than a bullet point. Check out the full [projects page](/projects) to see what I've been building.
+
+## The Tech Stack
 
 ### Next.js 14+ with App Router
 
-I chose Next.js for its excellent developer experience and built-in optimizations. The App Router provides a clean way to structure pages with React Server Components by default, reducing client-side JavaScript.
+I chose Next.js for its excellent developer experience and built-in optimizations. The App Router provides a clean way to structure pages with React Server Components by default.
+
+Server Components bring significant benefits:
+
+- **Reduced bundle size** - Components render on the server, sending only HTML to the client
+- **Simplified data fetching** - No need for client-side loading states or useEffect chains
+- **SEO by default** - Content is available immediately for crawlers
+- **Streaming** - Pages can progressively load, improving perceived performance
 
 ### Velite for Content Management
 
 Rather than a headless CMS, I opted for [Velite](https://velite.js.org/) - a content layer that transforms MDX files into type-safe data. This keeps content in the repository, version-controlled alongside the code.
 
+Here's how the blog collection is defined:
+
+```typescript
+const blog = defineCollection({
+  name: "BlogPost",
+  pattern: "blog/**/*.mdx",
+  schema: s
+    .object({
+      title: s.string().max(100),
+      description: s.string().max(200),
+      slug: s.slug("blog"),
+      publishedDate: s.string(),
+      updatedDate: s.string().optional(),
+      tags: s.array(s.string()).default([]),
+      featured: s.boolean().default(false),
+      body: s.mdx(),
+      raw: s.raw(),
+    })
+    .transform((data) => {
+      const { raw, ...rest } = data;
+      // Calculate reading time from raw content (~200 words/minute)
+      const words = raw.split(/\s+/).filter(Boolean).length;
+      const readingTime = Math.max(1, Math.ceil(words / 200));
+      return { ...rest, readingTime };
+    }),
+});
+```
+
+The `transform` function strips the raw MDX content and calculates reading time automatically. Every blog post gets a `readingTime` field (minimum 1 minute) without any manual input.
+
+### Type-Safe Content Layer
+
+Velite generates TypeScript types from content schemas. The content library provides type-safe access to all posts:
+
+```typescript
+export type BlogPost = (typeof blog)[number];
+
+export function getBlogPosts() {
+  return blog.sort((a, b) =>
+    new Date(b.publishedDate).getTime() -
+    new Date(a.publishedDate).getTime()
+  );
+}
+```
+
+This means typos in field names get caught at build time, not runtime. The entire content pipeline is type-checked from MDX frontmatter through to React components.
+
 ### Tailwind CSS v4
 
-Tailwind's utility-first approach speeds up development significantly. Version 4 brings CSS-native features and improved performance.
+Tailwind's utility-first approach speeds up development significantly. Version 4 brings CSS-native features like `@layer` and `@property`, plus improved performance through its new engine.
+
+## Custom MDX Components
+
+MDX lets me write in Markdown while embedding React components. To maintain consistent styling, I customize how standard HTML elements render:
+
+```typescript
+const components = {
+  a: ({ children, href, ...props }) => (
+    <a
+      href={href}
+      target={href?.startsWith("http") ? "_blank" : undefined}
+      rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
+      {...props}
+    >
+      {children}
+    </a>
+  ),
+};
+```
+
+This example shows how external links automatically open in new tabs with proper security attributes. Similar customizations apply to headings, code blocks, and blockquotes - ensuring visual consistency across all content.
+
+## Content Architecture
+
+The content flows through a straightforward pipeline:
+
+**MDX Files** → **Velite** → **TypeScript Types** → **React Components** → **Static HTML**
+
+1. Write content in MDX with frontmatter
+2. Velite parses and validates against schemas at build time
+3. TypeScript types are generated for type-safe access
+4. React components consume typed content
+5. Next.js renders to static HTML for production
+
+This architecture means content errors surface early, during development rather than in production.
 
 ## Key Features
 
-- **Dark mode** - System preference detection with manual toggle
-- **MDX content** - Write in Markdown with React components
+- **Dark mode** - System preference detection with manual toggle using `next-themes`
+- **MDX content** - Write in Markdown with embedded React components
 - **Type-safe** - Full TypeScript coverage from content to components
 - **Performance** - Static generation where possible, streaming where needed
+- **RSS feed** - Auto-generated feed for blog subscribers
+- **Related posts** - Tag-based algorithm surfaces relevant content
 
 ## What's Next
 
