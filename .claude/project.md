@@ -1,6 +1,6 @@
 # Portfolio Project - Session Memory
 
-**Last Updated**: 2026-01-29 18:28
+**Last Updated**: 2026-01-29 23:15
 **Project**: Dan Haight Portfolio Site
 **Repository**: https://github.com/haighd/portfolio
 
@@ -8,17 +8,18 @@
 
 ## Current Status
 
-**Phase**: Phase 5 - Polish Pages
-**Active Branch**: `feat/phase-5-polish`
-**Current Focus**: Phase 5 polish pages (blog placeholder, contact, navigation, a11y, SEO)
+**Phase**: Content Complete
+**Active Branch**: `main`
+**Current Focus**: LinkedIn MCP server operational - ready for profile updates
 
 ### Completed
 - [x] Phase 1: Project Scaffold (Next.js 16, Tailwind v4, TypeScript, Bun)
 - [x] Phase 2: Design System (CSS variables, UI components, layout components)
 - [x] Phase 3: Content Layer (Velite, MDX schemas, project content)
 - [x] Phase 4: Core Pages (PR #2 merged)
-- [ ] Phase 5: Polish Pages
-- [ ] Phase 6: Deployment
+- [x] Phase 5: Polish Pages (PR #3 merged)
+- [x] Phase 6: Deployment (Railway + Cloudflare)
+- [x] Phase 7: Content Updates (PRs #4, #5, #6 merged)
 
 ---
 
@@ -40,8 +41,10 @@
 | Components | shadcn/ui style (CVA + Radix) |
 | Runtime | Bun |
 | CI | GitHub Actions (CI Pipeline) |
-| Deployment | Railway (planned) |
-| Domain | danalytics.info (Cloudflare DNS) |
+| Deployment | Railway (auto-deploy from main) |
+| CDN/DNS | Cloudflare |
+| Domain | danalytics.info |
+| Email | FastMail (dan@danalytics.info) |
 
 ---
 
@@ -52,51 +55,52 @@
 | `.github/workflows/ci.yml` | CI Pipeline (typecheck, lint, build) |
 | `velite.config.ts` | Content collection schemas |
 | `src/lib/content.ts` | Content query helpers |
-| `src/components/project-card.tsx` | Reusable project card component |
-| `src/components/mdx-content.tsx` | MDX renderer |
-| `src/app/page.tsx` | Homepage with featured projects |
-| `src/app/about/page.tsx` | About page with skills |
-| `src/app/experience/page.tsx` | Experience timeline |
-| `src/app/projects/page.tsx` | Projects index |
-| `src/app/projects/[slug]/page.tsx` | Project detail pages |
+| `src/content/experience/*.mdx` | Experience timeline content (5 roles) |
+| `docs/resume/daniel-j-haight-resume-2025.md` | Updated resume (markdown) |
+| `CLAUDE.md` | Project config with LinkedIn URL |
 
 ---
 
 ## Change Log
 
-**2026-01-29 18:34** - Merged PR #2: Phase 4 core pages
-- Merge commit: `3d9eada`
-- Homepage, projects, about, experience pages complete
+**2026-01-29 22:40** - Merged PR #6: Updated 2025 resume
+- Added `docs/resume/daniel-j-haight-resume-2025.md`
+- Director role with 2025 accomplishments
+- ASQ Six Sigma cert corrected (exp. Jun 2028)
+- Added ACRP-CP and Merck Sigma Green Belt certs
+- FY20 savings phrasing fixed per Copilot review
 
-**2026-01-29 18:26** - Fixed accessibility issue in project-card
-- Added `aria-hidden="true"` to decorative icons
-- Commit: `0673a23`
+**2026-01-29 22:15** - Merged PR #5: Director promotion and 2025 accomplishments
+- Added `merck.mdx` (Director, Data Science - Nov 2024)
+- Added `merck-assoc-director.mdx` (May 2023 - Nov 2024)
+- Updated order numbers for all experience files
+- Experience timeline now shows 5 roles
 
-**2026-01-29 18:06** - Addressed 13 Copilot review comments on PR #2
-- Fixed title duplication (removed "| Dan Haight" suffix, layout template adds it)
-- Removed undefined `prose-custom` and `prose-sm` classes
-- Changed experience map key from index to `${company}-${role}`
-- Added optional chaining for `techStack` arrays
-- Commit: `885d6e4`
+**2026-01-29 21:30** - Merged PR #4: Experience content and LinkedIn URL fix
+- Updated all experience MDX files with real content
+- Fixed LinkedIn URL: `danhaight` → `djhaight` in footer, blog, contact
+- Deleted placeholder `previous-role.mdx`
 
-**2026-01-29 17:59** - Implemented Phase 4 core pages (PR #2)
-- Updated homepage to use `getFeaturedProjects()`
-- Created `ProjectCard` component
-- Implemented `/projects` index and `/projects/[slug]` detail pages
-- Implemented `/about` page with skills grid
-- Implemented `/experience` page with timeline layout
-- Commit: `4375415`
+**2026-01-29 23:15** - LinkedIn MCP server fully operational
+- Updated `~/.claude/mcp-configs/unified.json` with LinkedIn entry
+- Verified server discovery: `discover_servers(query: "linkedin")` ✓
+- Verified tool loading: `get_server_tools("linkedin")` ✓ (6 tools available)
+- Tested `get_person_profile("djhaight")` - successfully retrieved profile data
+- Available tools: get_person_profile, get_company_profile, get_company_posts, get_job_details, search_jobs, close_session
 
-**2026-01-29 16:13** - Added CI workflow and addressed branch protection (PR #1 merged)
-- Created `.github/workflows/ci.yml` with Bun 1.3.0, caching
-- Fixed ESLint errors in `mdx-content.tsx` (renamed useMDXComponent)
-- Fixed empty interface in `prose.tsx`
-- PR #1 merged to main
+**2026-01-29 21:45** - Added LinkedIn MCP server to proxy
+- Session created at `~/.linkedin-mcp/session.json`
+- Server config added to `~/.claude/mcp-configs/servers.json`
+- Registry entry added to `~/.claude/mcp-configs/registry.json`
 
-**2026-01-29 11:00** - Added branch protection rules to repo
-- Ruleset: "Protect main branch (Starter)"
-- Requires PR, CI Pipeline status check, Copilot review
-- Linear history required
+**2026-01-29 21:20** - Added LinkedIn URL to CLAUDE.md
+- `linkedin.com/in/djhaight` added to Project Overview
+
+**2026-01-29 19:10** - Phase 6 Deployment complete
+- Railway project created and deployed
+- Custom domain: danalytics.info
+- Cloudflare DNS configured (CNAME, MX, SPF, DKIM, DMARC)
+- FastMail email setup for dan@danalytics.info
 
 ---
 
@@ -109,39 +113,51 @@
 5. **Email**: FastMail for dan@danalytics.info (existing account, add domain)
 6. **Branch Protection**: All changes via PRs, CI must pass, Copilot review enabled
 7. **Deployment**: Railway with Cloudflare proxy for caching/DDoS protection
+8. **LinkedIn MCP**: Using stickerdaniel/linkedin-mcp-server for profile data access
 
 ---
 
 ## Active Issues
 
-- Experience content files need Dan's real role details (using placeholders)
+- None - portfolio content complete
 
 ---
 
 ## Next Steps
 
-1. **Phase 5: Polish Pages**
-   - Blog placeholder page
-   - Contact page with mailto link
-   - Navigation polish
-   - Accessibility audit
-   - SEO (robots.txt, sitemap, structured data)
+1. **LinkedIn Profile Updates** (manual)
+   - Update headline to Director title (currently not showing latest)
+   - Update About section with latest accomplishments
+   - Add danalytics.info portfolio to Featured section
+   - Review and update job descriptions on work history
 
-2. **Phase 6: Deployment**
-   - Create Railway project and service
-   - Configure auto-deploy from main
-   - Add custom domain in Railway
-   - Configure Cloudflare DNS (CNAME → Railway)
-   - Set Cloudflare SSL mode (Full Strict)
-   - FastMail email setup (MX, SPF, DKIM records)
+2. **Portfolio Enhancements** (optional)
+   - Analytics integration (Plausible/Umami)
+   - Dark mode toggle
+   - Blog with MDX content
+   - LinkedIn sync automation (using MCP tools)
 
 ---
 
-## Deployment Access
+## Deployment
 
-- **Railway CLI**: Logged in as Dan Haight (djhaight@gmail.com)
-- **Railway MCP**: Available (create-project, deploy, generate-domain, etc.)
-- **Cloudflare**: DNS manual via dashboard (no MCP)
+- **Live URL**: https://danalytics.info
+- **Railway URL**: https://portfolio-production-318e9.up.railway.app
+- **Railway Project**: https://railway.com/project/4388c04f-046e-49bb-9813-ac3d1067d008
+- **Auto-deploy**: Enabled from `main` branch
+- **Email**: dan@danalytics.info (FastMail)
+
+---
+
+## Experience Timeline
+
+| Order | Company | Role | Dates |
+|-------|---------|------|-------|
+| 1 | Merck & Co. | Director, Data Science | Nov 2024 - Present |
+| 2 | Merck & Co. | Associate Director, Data Science | May 2023 - Nov 2024 |
+| 3 | BD | Associate Director, Supply Chain Analytics | Nov 2020 - May 2023 |
+| 4 | BD | Senior Manager, Transportation CI | Nov 2019 - Nov 2020 |
+| 5 | UnitedHealth Group | Assoc. Director, Business Transformation | Jul 2018 - Nov 2019 |
 
 ---
 
