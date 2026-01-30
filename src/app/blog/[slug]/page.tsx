@@ -5,7 +5,8 @@ import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import { Section } from "@/components/layout";
 import { Badge } from "@/components/ui";
 import { MDXContent } from "@/components/mdx-content";
-import { getBlogPostBySlug, getBlogPosts } from "@/lib/content";
+import { getBlogPostBySlug, getBlogPosts, getRelatedPosts } from "@/lib/content";
+import { RelatedPosts } from "@/components/related-posts";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -77,6 +78,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
+  const relatedPosts = getRelatedPosts(slug, 3);
+
   return (
     <Section className="pt-24 md:pt-32" containerSize="narrow">
       <Link
@@ -126,6 +129,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <article>
         <MDXContent code={post.body} />
       </article>
+
+      {relatedPosts.length > 0 && (
+        <div className="border-border mt-16 border-t pt-12">
+          <RelatedPosts posts={relatedPosts} />
+        </div>
+      )}
     </Section>
   );
 }
