@@ -42,11 +42,13 @@ export default function HomePage() {
       </Section>
 
       {/* Featured Projects Preview */}
-      <Section className="border-t border-border bg-muted/30">
+      <Section className="relative border-t border-border bg-muted/30">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/20 to-transparent" />
         <div className="mb-8 flex items-end justify-between">
           <div>
             <h2 className="text-2xl font-semibold tracking-tight">
               Featured Projects
+              <span className="mt-2 block h-1 w-12 rounded-full bg-foreground/20" />
             </h2>
             <p className="mt-2 text-muted-foreground">
               Technical projects demonstrating hands-on capability
@@ -82,6 +84,7 @@ export default function HomePage() {
           <div>
             <h2 className="text-2xl font-semibold tracking-tight">
               Technical Depth Meets Strategic Vision
+              <span className="mt-2 block h-1 w-12 rounded-full bg-foreground/20" />
             </h2>
             <p className="mt-4 text-muted-foreground">
               With experience spanning data science, machine learning, and

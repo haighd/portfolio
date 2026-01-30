@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Container } from "@/components/ui";
+import { Container, Logo } from "@/components/ui";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 const navigation = [
@@ -27,9 +27,10 @@ export function Header() {
           {/* Logo */}
           <Link
             href="/"
-            className="text-lg font-semibold tracking-tight transition-colors hover:text-muted-foreground"
+            className="flex items-center gap-2 text-lg font-semibold tracking-tight transition-colors hover:text-muted-foreground"
           >
-            Dan Haight
+            <Logo variant="d-bars" size={28} />
+            <span>Dan Haight</span>
           </Link>
 
           {/* Desktop Navigation */}
