@@ -65,24 +65,23 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </div>
 
         <div className="mt-6 flex flex-wrap gap-4">
-          {project.github &&
-            (project.private ? (
-              <Button variant="outline" disabled className="cursor-not-allowed">
-                <Lock className="h-4 w-4" />
-                Private Repository
-              </Button>
-            ) : (
-              <Button variant="outline" asChild>
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Github className="h-4 w-4" />
-                  View on GitHub
-                </a>
-              </Button>
-            ))}
+          {project.private ? (
+            <Button variant="outline" disabled className="cursor-not-allowed">
+              <Lock className="h-4 w-4" />
+              Private Repository
+            </Button>
+          ) : project.github ? (
+            <Button variant="outline" asChild>
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Github className="h-4 w-4" />
+                View on GitHub
+              </a>
+            </Button>
+          ) : null}
           {project.liveUrl && (
             <Button variant="outline" asChild>
               <a
