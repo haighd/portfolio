@@ -47,10 +47,11 @@ const blog = defineCollection({
       raw: s.raw(),
     })
     .transform((data) => {
+      const { raw, ...rest } = data;
       // Calculate reading time from raw content (~200 words/minute)
-      const words = data.raw.split(/\s+/).filter(Boolean).length;
+      const words = raw.split(/\s+/).filter(Boolean).length;
       const readingTime = Math.max(1, Math.ceil(words / 200));
-      return { ...data, readingTime };
+      return { ...rest, readingTime };
     }),
 });
 
