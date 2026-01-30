@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Calendar } from "lucide-react";
+import { Calendar, Clock } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -28,11 +28,17 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
   return (
     <Card className="flex flex-col">
       <CardHeader>
-        <div className="text-muted-foreground mb-2 flex items-center gap-2 text-sm">
-          <Calendar className="h-4 w-4" aria-hidden="true" />
-          <time dateTime={post.publishedDate}>
-            {formatDate(post.publishedDate)}
-          </time>
+        <div className="text-muted-foreground mb-2 flex items-center gap-4 text-sm">
+          <span className="flex items-center gap-1">
+            <Calendar className="h-4 w-4" aria-hidden="true" />
+            <time dateTime={post.publishedDate}>
+              {formatDate(post.publishedDate)}
+            </time>
+          </span>
+          <span className="flex items-center gap-1">
+            <Clock className="h-4 w-4" aria-hidden="true" />
+            <span>{post.readingTime} min read</span>
+          </span>
         </div>
         <CardTitle>
           <Link
