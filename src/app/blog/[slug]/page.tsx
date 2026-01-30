@@ -26,6 +26,11 @@ export async function generateMetadata({
     return { title: "Post Not Found" };
   }
 
+  const ogImageUrl = new URL("/api/og", "https://danalytics.info");
+  ogImageUrl.searchParams.set("title", post.title);
+  ogImageUrl.searchParams.set("description", post.description);
+  ogImageUrl.searchParams.set("type", "article");
+
   return {
     title: post.title,
     description: post.description,
@@ -36,6 +41,20 @@ export async function generateMetadata({
       publishedTime: post.publishedDate,
       modifiedTime: post.updatedDate,
       tags: post.tags,
+      images: [
+        {
+          url: ogImageUrl.toString(),
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description,
+      images: [ogImageUrl.toString()],
     },
   };
 }
