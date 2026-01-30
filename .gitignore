@@ -45,3 +45,7 @@ next-env.d.ts
 
 # resume files (privacy)
 docs/resume/*.pdf
+
+# claude code config (local only)
+.claude/
+CLAUDE.md
