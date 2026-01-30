@@ -26,7 +26,8 @@ export async function generateMetadata({
     return { title: "Post Not Found" };
   }
 
-  const ogImageUrl = new URL("/api/og", "https://danalytics.info");
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://danalytics.info";
+  const ogImageUrl = new URL("/api/og", siteUrl);
   ogImageUrl.searchParams.set("title", post.title);
   ogImageUrl.searchParams.set("description", post.description);
   ogImageUrl.searchParams.set("type", "article");
