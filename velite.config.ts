@@ -31,6 +31,21 @@ const experiences = defineCollection({
   }),
 });
 
+const blog = defineCollection({
+  name: "BlogPost",
+  pattern: "blog/**/*.mdx",
+  schema: s.object({
+    title: s.string().max(100),
+    description: s.string().max(200),
+    slug: s.slug("blog"),
+    publishedDate: s.string(),
+    updatedDate: s.string().optional(),
+    tags: s.array(s.string()).default([]),
+    featured: s.boolean().default(false),
+    body: s.mdx(),
+  }),
+});
+
 export default defineConfig({
   root: "src/content",
   output: {
@@ -40,7 +55,7 @@ export default defineConfig({
     name: "[name]-[hash:6].[ext]",
     clean: true,
   },
-  collections: { projects, experiences },
+  collections: { projects, experiences, blog },
   mdx: {
     remarkPlugins: [],
     rehypePlugins: [],
