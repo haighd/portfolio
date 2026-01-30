@@ -20,6 +20,7 @@ function formatDate(dateString: string) {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC",
   });
 }
 
@@ -27,7 +28,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
   return (
     <Card className="flex flex-col">
       <CardHeader>
-        <div className="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
+        <div className="text-muted-foreground mb-2 flex items-center gap-2 text-sm">
           <Calendar className="h-4 w-4" aria-hidden="true" />
           <time dateTime={post.publishedDate}>
             {formatDate(post.publishedDate)}
@@ -58,7 +59,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
       <CardFooter>
         <Link
           href={`/blog/${post.slug}`}
-          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          className="text-muted-foreground hover:text-foreground text-sm transition-colors"
         >
           Read more &rarr;
         </Link>

@@ -45,6 +45,7 @@ function formatDate(dateString: string) {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC",
   });
 }
 
@@ -60,14 +61,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     <Section className="pt-24 md:pt-32" containerSize="narrow">
       <Link
         href="/blog"
-        className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        className="text-muted-foreground hover:text-foreground mb-8 inline-flex items-center gap-2 text-sm transition-colors"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to blog
       </Link>
 
       <header className="mb-12">
-        <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground">
+        <div className="text-muted-foreground mb-4 flex items-center gap-2 text-sm">
           <Calendar className="h-4 w-4" aria-hidden="true" />
           <time dateTime={post.publishedDate}>
             {formatDate(post.publishedDate)}
@@ -86,7 +87,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
 
         <h1 className="text-4xl font-bold tracking-tight">{post.title}</h1>
-        <p className="mt-4 text-lg text-muted-foreground">{post.description}</p>
+        <p className="text-muted-foreground mt-4 text-lg">{post.description}</p>
 
         {post.tags && post.tags.length > 0 && (
           <div className="mt-6 flex flex-wrap gap-2">
