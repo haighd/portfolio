@@ -35,7 +35,7 @@ export default function HomePage() {
               </Link>
             </Button>
             <Button variant="outline" asChild>
-              <Link href="/about">Learn More</Link>
+              <Link href="/about">About Me</Link>
             </Button>
           </div>
         </div>
