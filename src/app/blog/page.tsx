@@ -47,6 +47,7 @@ export default function BlogPage() {
         </p>
       </div>
 
+      <h2 className="sr-only">All Posts</h2>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) => (
           <BlogPostCard key={post.slug} post={post} />
