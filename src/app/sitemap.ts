@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { projects } from "#site/content";
+import { projects, blog } from "#site/content";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://danalytics.info";
@@ -50,5 +50,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticPages, ...projectPages];
+  const blogPages: MetadataRoute.Sitemap = blog.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: post.updatedDate
+      ? new Date(post.updatedDate)
+      : new Date(post.publishedDate),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...projectPages, ...blogPages];
 }
