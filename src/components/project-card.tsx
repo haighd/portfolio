@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink, Github, Lock } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -48,7 +48,15 @@ export function ProjectCard({ project }: ProjectCardProps) {
         >
           View details &rarr;
         </Link>
-        {project.github && (
+        {project.private ? (
+          <span
+            className="inline-flex items-center gap-1 text-muted-foreground/60"
+            aria-label="Private repository"
+          >
+            <Lock className="h-4 w-4" aria-hidden="true" />
+            <span className="text-xs">Private</span>
+          </span>
+        ) : project.github ? (
           <a
             href={project.github}
             target="_blank"
@@ -58,7 +66,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           >
             <Github className="h-4 w-4" aria-hidden="true" />
           </a>
-        )}
+        ) : null}
         {project.liveUrl && (
           <a
             href={project.liveUrl}

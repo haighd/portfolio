@@ -11,6 +11,7 @@ const projects = defineCollection({
     order: s.number().default(0),
     techStack: s.array(s.string()),
     github: s.string().optional(),
+    private: s.boolean().default(false),
     liveUrl: s.string().optional(),
     image: s.string().optional(),
     body: s.mdx(),

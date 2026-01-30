@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ExternalLink, Github } from "lucide-react";
+import { ArrowLeft, ExternalLink, Github, Lock } from "lucide-react";
 import { Section } from "@/components/layout";
 import { Badge, Button } from "@/components/ui";
 import { MDXContent } from "@/components/mdx-content";
@@ -65,7 +65,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </div>
 
         <div className="mt-6 flex flex-wrap gap-4">
-          {project.github && (
+          {project.private ? (
+            <Button variant="outline" disabled className="cursor-not-allowed">
+              <Lock className="h-4 w-4" />
+              Private Repository
+            </Button>
+          ) : project.github ? (
             <Button variant="outline" asChild>
               <a
                 href={project.github}
@@ -76,7 +81,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 View on GitHub
               </a>
             </Button>
-          )}
+          ) : null}
           {project.liveUrl && (
             <Button variant="outline" asChild>
               <a
