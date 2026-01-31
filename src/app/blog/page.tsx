@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Section } from "@/components/layout";
-import { Button } from "@/components/ui";
+import { Button, Badge } from "@/components/ui";
 import { BlogPostCard } from "@/components/blog-post-card";
-import { Badge } from "@/components/ui";
 import { getAllBlogTags, getBlogPosts } from "@/lib/content";
 
 export const metadata: Metadata = {

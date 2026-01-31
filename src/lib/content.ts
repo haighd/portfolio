@@ -27,21 +27,15 @@ export function getNowContent() {
   return now[0];
 }
 
+const sortByPublishedDateDesc = (a: BlogPost, b: BlogPost) =>
+  new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime();
+
 export function getBlogPosts() {
-  return blog.sort(
-    (a, b) =>
-      new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime()
-  );
+  return blog.sort(sortByPublishedDateDesc);
 }
 
 export function getFeaturedBlogPosts() {
-  return blog
-    .filter((post) => post.featured)
-    .sort(
-      (a, b) =>
-        new Date(b.publishedDate).getTime() -
-        new Date(a.publishedDate).getTime()
-    );
+  return blog.filter((post) => post.featured).sort(sortByPublishedDateDesc);
 }
 
 export function getBlogPostBySlug(slug: string) {
@@ -55,12 +49,7 @@ export function getAllBlogTags(): string[] {
 }
 
 export function getPostsByTag(tag: string): BlogPost[] {
-  return blog
-    .filter((post) => post.tags?.includes(tag))
-    .sort(
-      (a, b) =>
-        new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime()
-    );
+  return blog.filter((post) => post.tags?.includes(tag)).sort(sortByPublishedDateDesc);
 }
 
 export function getRelatedPosts(currentSlug: string, limit = 3): BlogPost[] {
@@ -72,11 +61,7 @@ export function getRelatedPosts(currentSlug: string, limit = 3): BlogPost[] {
     // No tags, return most recent posts excluding current
     return blog
       .filter((post) => post.slug !== currentSlug)
-      .sort(
-        (a, b) =>
-          new Date(b.publishedDate).getTime() -
-          new Date(a.publishedDate).getTime()
-      )
+      .sort(sortByPublishedDateDesc)
       .slice(0, limit);
   }
 
@@ -106,11 +91,7 @@ export function getRelatedPosts(currentSlug: string, limit = 3): BlogPost[] {
     const relatedSlugs = new Set(related.map((p) => p.slug));
     const filler = blog
       .filter((p) => p.slug !== currentSlug && !relatedSlugs.has(p.slug))
-      .sort(
-        (a, b) =>
-          new Date(b.publishedDate).getTime() -
-          new Date(a.publishedDate).getTime()
-      )
+      .sort(sortByPublishedDateDesc)
       .slice(0, limit - related.length);
     related.push(...filler);
   }

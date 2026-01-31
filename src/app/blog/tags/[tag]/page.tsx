@@ -6,31 +6,29 @@ import { BlogPostCard } from "@/components/blog-post-card";
 import { getAllBlogTags, getPostsByTag } from "@/lib/content";
 
 interface TagPageProps {
-  params: Promise<{ tag: string }>;
+  params: { tag: string };
 }
 
 export async function generateStaticParams() {
   const tags = getAllBlogTags();
-  return tags.map((tag) => ({ tag: encodeURIComponent(tag) }));
+  return tags.map((tag) => ({ tag }));
 }
 
 export async function generateMetadata({
   params,
 }: TagPageProps): Promise<Metadata> {
-  const { tag } = await params;
-  const decodedTag = decodeURIComponent(tag);
-  const posts = getPostsByTag(decodedTag);
+  const { tag } = params;
+  const posts = getPostsByTag(tag);
 
   return {
-    title: `Posts tagged "${decodedTag}"`,
-    description: `${posts.length} article${posts.length !== 1 ? "s" : ""} tagged with "${decodedTag}"`,
+    title: `Posts tagged "${tag}"`,
+    description: `${posts.length} article${posts.length !== 1 ? "s" : ""} tagged with "${tag}"`,
   };
 }
 
 export default async function TagPage({ params }: TagPageProps) {
-  const { tag } = await params;
-  const decodedTag = decodeURIComponent(tag);
-  const posts = getPostsByTag(decodedTag);
+  const { tag } = params;
+  const posts = getPostsByTag(tag);
 
   return (
     <Section className="pt-24 md:pt-32">
@@ -44,7 +42,7 @@ export default async function TagPage({ params }: TagPageProps) {
 
       <div className="mb-12">
         <h1 className="text-4xl font-bold tracking-tight">
-          Posts tagged &ldquo;{decodedTag}&rdquo;
+          Posts tagged &ldquo;{tag}&rdquo;
         </h1>
         <p className="text-muted-foreground mt-4 text-lg">
           {posts.length} article{posts.length !== 1 ? "s" : ""}
