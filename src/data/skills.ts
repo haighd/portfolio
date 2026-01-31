@@ -15,7 +15,7 @@ export type SkillCategory = {
   skills: Skill[];
 };
 
-export const proficiencyOrder: Record<Proficiency, number> = {
+const proficiencyOrder: Record<Proficiency, number> = {
   expert: 0,
   advanced: 1,
   intermediate: 2,
@@ -195,7 +195,7 @@ export const certifications: Certification[] = [
 // This is a curated list that was previously on the about page.
 // Kept explicit here for clarity and to avoid complex derivation logic.
 export function getSkillsSummary(): Record<string, string[]> {
-  return {
+  const summary = {
     "Languages & Tools": ["Python", "SQL", "TypeScript", "React", "FastAPI"],
     "Data & ML": [
       "Machine Learning",
@@ -211,4 +211,22 @@ export function getSkillsSummary(): Record<string, string[]> {
       "Mentorship",
     ],
   };
+
+  // In development, validate that summary skills exist in the main list.
+  if (process.env.NODE_ENV !== "production") {
+    const allSkillNames = skillCategories.flatMap((cat) =>
+      cat.skills.map((s) => s.name)
+    );
+    const summarySkills = Object.values(summary).flat();
+
+    for (const skill of summarySkills) {
+      if (!allSkillNames.includes(skill)) {
+        console.warn(
+          `[Skills Data Inconsistency] The skill '${skill}' from the 'about' page summary does not exist in the main skill list in 'src/data/skills.ts'.`
+        );
+      }
+    }
+  }
+
+  return summary;
 }
