@@ -51,44 +51,57 @@ type SkillCategory = {
 
 const skillCategories: SkillCategory[] = [
   {
-    name: "Languages & Tools",
-    description: "Core programming languages and development tools",
+    name: "Languages",
+    description: "Programming and query languages",
     skills: [
       { name: "Python", proficiency: "expert" },
       { name: "SQL", proficiency: "expert" },
-      { name: "TypeScript", proficiency: "advanced" },
-      { name: "React", proficiency: "advanced" },
-      { name: "FastAPI", proficiency: "advanced" },
+      // ... more skills
     ],
   },
   {
-    name: "Data & ML",
-    description: "Machine learning, analytics, and data engineering",
+    name: "Frameworks & Libraries",
+    description: "Development frameworks and data libraries",
+    skills: [
+      { name: "R Shiny", proficiency: "expert" },
+      { name: "pandas", proficiency: "expert" },
+      // ... more skills
+    ],
+  },
+  {
+    name: "Data Science & Analytics",
+    description: "Machine learning, statistics, and analytics",
     skills: [
       { name: "Machine Learning", proficiency: "expert" },
       { name: "Statistical Modeling", proficiency: "expert" },
-      { name: "Data Engineering", proficiency: "expert" },
-      { name: "ETL Pipelines", proficiency: "advanced" },
+      // ... more skills
     ],
   },
   {
-    name: "Platforms",
-    description: "Infrastructure, databases, and cloud services",
+    name: "Platforms & Infrastructure",
+    description: "Databases, cloud services, and DevOps",
     skills: [
       { name: "PostgreSQL", proficiency: "expert" },
-      { name: "Docker", proficiency: "advanced" },
-      { name: "AWS", proficiency: "advanced" },
-      { name: "Railway", proficiency: "intermediate" },
+      { name: "Google Cloud Platform", proficiency: "expert" },
+      // ... more skills
     ],
   },
   {
-    name: "Leadership",
-    description: "Team management and strategic capabilities",
+    name: "Tools",
+    description: "Software and development environments",
+    skills: [
+      { name: "Power BI", proficiency: "expert" },
+      { name: "Jupyter", proficiency: "expert" },
+      // ... more skills
+    ],
+  },
+  {
+    name: "Leadership & Operations",
+    description: "Management, strategy, and process improvement",
     skills: [
       { name: "Team Management", proficiency: "expert" },
       { name: "Strategy Development", proficiency: "expert" },
-      { name: "Stakeholder Communication", proficiency: "expert" },
-      { name: "Mentorship", proficiency: "advanced" },
+      // ... more skills
     ],
   },
 ];

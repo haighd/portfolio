@@ -16,6 +16,19 @@ type Skill = {
   proficiency: Proficiency;
 };
 
+const sortSkills = (skills: Skill[]): Skill[] => {
+  const proficiencyOrder: Record<Proficiency, number> = {
+    expert: 0,
+    advanced: 1,
+    intermediate: 2,
+  };
+  return [...skills].sort((a, b) => {
+    const profDiff = proficiencyOrder[a.proficiency] - proficiencyOrder[b.proficiency];
+    if (profDiff !== 0) return profDiff;
+    return a.name.localeCompare(b.name);
+  });
+};
+
 type SkillCategory = {
   name: string;
   description: string;
@@ -196,7 +209,7 @@ export default function SkillsPage() {
               {category.description}
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
-              {category.skills.map((skill) => (
+              {sortSkills(category.skills).map((skill) => (
                 <Badge
                   key={skill.name}
                   variant={skill.proficiency}
