@@ -6,7 +6,7 @@
 
 ## Overview
 
-Create a searchable skills/tech stack directory page at `/skills` that showcases technical expertise organized by category, with proficiency levels and cross-links to relevant projects.
+Create a skills/tech stack directory page at `/skills` that showcases technical expertise organized by category with proficiency levels. Search functionality and project cross-links are deferred to future iterations.
 
 ## Research Summary
 

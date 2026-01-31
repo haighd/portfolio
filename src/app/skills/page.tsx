@@ -34,6 +34,10 @@ const skillCategories: SkillCategory[] = [
     skills: [
       { name: "Python", proficiency: "expert" },
       { name: "SQL", proficiency: "expert" },
+      { name: "R", proficiency: "expert" },
+      { name: "R Shiny", proficiency: "expert" },
+      { name: "R - tidyverse", proficiency: "expert" },
+      { name: "VBA", proficiency: "expert" },
       { name: "TypeScript", proficiency: "advanced" },
       { name: "React", proficiency: "advanced" },
       { name: "FastAPI", proficiency: "advanced" },
@@ -114,7 +118,7 @@ export default function SkillsPage() {
       {/* Legend */}
       <div className="mt-8 flex items-center gap-4 text-sm text-muted-foreground">
         <span>Proficiency:</span>
-        {(Object.keys(proficiencyVariantMap) as Proficiency[]).map((level) => (
+        {(["expert", "advanced", "intermediate"] as Proficiency[]).map((level) => (
           <Badge key={level} variant={proficiencyVariantMap[level]}>
             {level.charAt(0).toUpperCase() + level.slice(1)}
           </Badge>
