@@ -48,6 +48,21 @@ export function getBlogPostBySlug(slug: string) {
   return blog.find((post) => post.slug === slug);
 }
 
+export function getAllBlogTags(): string[] {
+  const tags = new Set<string>();
+  blog.forEach((post) => post.tags?.forEach((tag) => tags.add(tag)));
+  return Array.from(tags).sort();
+}
+
+export function getPostsByTag(tag: string): BlogPost[] {
+  return blog
+    .filter((post) => post.tags?.includes(tag))
+    .sort(
+      (a, b) =>
+        new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime()
+    );
+}
+
 export function getRelatedPosts(currentSlug: string, limit = 3): BlogPost[] {
   const currentPost = getBlogPostBySlug(currentSlug);
   if (!currentPost) return [];

@@ -4,7 +4,8 @@ import { ArrowRight } from "lucide-react";
 import { Section } from "@/components/layout";
 import { Button } from "@/components/ui";
 import { BlogPostCard } from "@/components/blog-post-card";
-import { getBlogPosts } from "@/lib/content";
+import { Badge } from "@/components/ui";
+import { getAllBlogTags, getBlogPosts } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
   const posts = getBlogPosts();
+  const allTags = getAllBlogTags();
 
   if (posts.length === 0) {
     return (
@@ -46,6 +48,21 @@ export default function BlogPage() {
           leadership.
         </p>
       </div>
+
+      {allTags.length > 0 && (
+        <div className="mb-8 flex flex-wrap gap-2">
+          {allTags.map((tag) => (
+            <Link key={tag} href={`/blog/tags/${encodeURIComponent(tag)}`}>
+              <Badge
+                variant="outline"
+                className="hover:bg-accent cursor-pointer transition-colors"
+              >
+                {tag}
+              </Badge>
+            </Link>
+          ))}
+        </div>
+      )}
 
       <h2 className="sr-only">All Posts</h2>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

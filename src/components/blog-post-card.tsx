@@ -45,9 +45,14 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
       <CardContent className="flex-1">
         <div className="flex flex-wrap gap-2">
           {post.tags?.slice(0, 4).map((tag) => (
-            <Badge key={tag} variant="secondary">
-              {tag}
-            </Badge>
+            <Link key={tag} href={`/blog/tags/${encodeURIComponent(tag)}`}>
+              <Badge
+                variant="secondary"
+                className="hover:bg-secondary/80 cursor-pointer transition-colors"
+              >
+                {tag}
+              </Badge>
+            </Link>
           ))}
           {(post.tags?.length ?? 0) > 4 && (
             <Badge variant="outline">+{post.tags.length - 4}</Badge>
