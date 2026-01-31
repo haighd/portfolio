@@ -24,19 +24,20 @@ Add static archive pages for each blog tag to improve SEO and content discoverab
 Add two helper functions:
 
 ```typescript
+const sortByPublishedDateDesc = (a: BlogPost, b: BlogPost) =>
+  new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime();
+
 export function getAllBlogTags(): string[] {
   const tags = new Set<string>();
-  blog.forEach((post) => post.tags?.forEach((tag) => tags.add(tag)));
+  blog.forEach((post) => post.tags?.forEach((tag) => tags.add(tag.toLowerCase())));
   return Array.from(tags).sort();
 }
 
 export function getPostsByTag(tag: string): BlogPost[] {
+  const lowercasedTag = tag.toLowerCase();
   return blog
-    .filter((post) => post.tags?.includes(tag))
-    .sort(
-      (a, b) =>
-        new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime()
-    );
+    .filter((post) => post.tags?.some((t) => t.toLowerCase() === lowercasedTag))
+    .sort(sortByPublishedDateDesc);
 }
 ```
 
