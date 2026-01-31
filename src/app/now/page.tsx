@@ -6,10 +6,12 @@ import { MDXContent } from "@/components/mdx-content";
 import { getNowContent } from "@/lib/content";
 import { formatDate } from "@/lib/utils";
 
+const description =
+  "What I'm currently focused on, learning, reading, and building.";
+
 export const metadata: Metadata = {
   title: "Now",
-  description:
-    "What I'm currently focused on, learning, reading, and building.",
+  description,
 };
 
 export default function NowPage() {
@@ -26,9 +28,7 @@ export default function NowPage() {
           Now
           <span className="mt-2 block h-1 w-16 rounded-full bg-foreground/20" />
         </h1>
-        <p className="mt-4 text-lg text-muted-foreground">
-          What I&apos;m currently focused on, learning, reading, and building.
-        </p>
+        <p className="mt-4 text-lg text-muted-foreground">{description}</p>
         <p className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
           <Calendar className="h-4 w-4" aria-hidden="true" />
           Last updated{" "}

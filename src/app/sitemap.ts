@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { projects, blog } from "#site/content";
+import { projects, now, blog } from "#site/content";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://danalytics.info";
@@ -19,7 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${baseUrl}/now`,
-      lastModified: new Date(),
+      lastModified: now[0] ? new Date(now[0].lastUpdated) : new Date(),
       changeFrequency: "weekly",
       priority: 0.7,
     },
