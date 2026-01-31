@@ -44,11 +44,11 @@ Create a client component with:
 ```typescript
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { X } from "lucide-react";
 import type { Project } from "@/lib/content";
 import { Badge, Button } from "@/components/ui";
 import { ProjectCard } from "@/components/project-card";
-import { X } from "lucide-react";
 
 interface ProjectsFilterProps {
   projects: Project[];
@@ -61,29 +61,39 @@ export function ProjectsFilter({ projects, allTech }: ProjectsFilterProps) {
   const [selectedTech, setSelectedTech] = useState<Set<string>>(new Set());
   const [sortBy, setSortBy] = useState<SortOption>("default");
 
-  // Filter logic
-  const filtered = projects.filter((p) => {
-    if (selectedTech.size === 0) return true;
-    return p.techStack?.some((t) => selectedTech.has(t));
-  });
+  // Filter and sort logic - memoized to prevent recalculation on every render
+  const sorted = useMemo(() => {
+    const filtered = projects.filter((p) => {
+      if (selectedTech.size === 0) return true;
+      return p.techStack?.some((t) => selectedTech.has(t));
+    });
 
-  // Sort logic
-  const sorted = [...filtered].sort((a, b) => {
-    switch (sortBy) {
-      case "featured":
-        return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
-      case "alphabetical":
-        return a.title.localeCompare(b.title);
-      default:
-        return a.order - b.order;
-    }
-  });
+    return [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case "featured":
+          // Sort featured projects first, then by order
+          return (
+            (b.featured ? 1 : 0) - (a.featured ? 1 : 0) ||
+            a.order - b.order
+          );
+        case "alphabetical":
+          return a.title.localeCompare(b.title);
+        default:
+          return a.order - b.order;
+      }
+    });
+  }, [projects, selectedTech, sortBy]);
 
   const toggleTech = (tech: string) => {
-    const next = new Set(selectedTech);
-    if (next.has(tech)) next.delete(tech);
-    else next.add(tech);
-    setSelectedTech(next);
+    setSelectedTech((currentTech) => {
+      const next = new Set(currentTech);
+      if (next.has(tech)) {
+        next.delete(tech);
+      } else {
+        next.add(tech);
+      }
+      return next;
+    });
   };
 
   const clearFilters = () => {
@@ -95,28 +105,35 @@ export function ProjectsFilter({ projects, allTech }: ProjectsFilterProps) {
 
   return (
     <>
-      {/* Filter controls */}
-      <div className="mb-8 space-y-4">
-        {/* Tech filter */}
-        <div className="flex flex-wrap gap-2">
+      <div className="mb-8 space-y-4" role="region" aria-label="Project filters">
+        <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by technology">
           {allTech.map((tech) => (
             <Badge
               key={tech}
+              role="button"
+              tabIndex={0}
+              aria-pressed={selectedTech.has(tech)}
               variant={selectedTech.has(tech) ? "default" : "outline"}
               className="cursor-pointer transition-colors"
               onClick={() => toggleTech(tech)}
+              onKeyDown={(e) => {
+                if (e.key === " " || e.key === "Enter") {
+                  e.preventDefault();
+                  toggleTech(tech);
+                }
+              }}
             >
               {tech}
             </Badge>
           ))}
         </div>
 
-        {/* Sort & Clear */}
         <div className="flex items-center gap-4">
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as SortOption)}
-            className="rounded-md border bg-background px-3 py-1.5 text-sm"
+            className="bg-background rounded-md border px-3 py-1.5 text-sm"
+            aria-label="Sort projects by"
           >
             <option value="default">Default order</option>
             <option value="featured">Featured first</option>
@@ -132,15 +149,18 @@ export function ProjectsFilter({ projects, allTech }: ProjectsFilterProps) {
         </div>
       </div>
 
-      {/* Results */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {sorted.map((project) => (
-          <ProjectCard key={project.slug} project={project} />
-        ))}
-      </div>
-
-      {sorted.length === 0 && (
-        <p className="text-muted-foreground text-center py-8">
+      {sorted.length > 0 ? (
+        <div
+          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {sorted.map((project) => (
+            <ProjectCard key={project.slug} project={project} />
+          ))}
+        </div>
+      ) : (
+        <p className="text-muted-foreground py-8 text-center" aria-live="polite">
           No projects match the selected filters.
         </p>
       )}
