@@ -104,18 +104,20 @@ export function ProjectsFilter({ projects, allTech }: ProjectsFilterProps) {
         </div>
       </div>
 
+      <p className="sr-only" aria-live="polite" aria-atomic="true">
+        {sorted.length > 0
+          ? `Showing ${sorted.length} project${sorted.length === 1 ? "" : "s"}`
+          : "No projects match the selected filters"}
+      </p>
+
       {sorted.length > 0 ? (
-        <div
-          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-          aria-live="polite"
-          aria-atomic="true"
-        >
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {sorted.map((project) => (
             <ProjectCard key={project.slug} project={project} />
           ))}
         </div>
       ) : (
-        <p className="text-muted-foreground py-8 text-center" aria-live="polite">
+        <p className="text-muted-foreground py-8 text-center">
           No projects match the selected filters.
         </p>
       )}
