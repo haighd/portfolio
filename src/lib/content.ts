@@ -20,9 +20,8 @@ export function getProjectBySlug(slug: string) {
 }
 
 export function getAllProjectTechStack(): string[] {
-  const tech = new Set<string>();
-  projects.forEach((p) => p.techStack?.forEach((t) => tech.add(t)));
-  return Array.from(tech).sort();
+  const allTech = projects.flatMap((p) => p.techStack ?? []);
+  return Array.from(new Set(allTech)).sort();
 }
 
 export function getExperiences() {

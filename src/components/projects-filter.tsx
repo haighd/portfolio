@@ -27,7 +27,10 @@ export function ProjectsFilter({ projects, allTech }: ProjectsFilterProps) {
     return [...filtered].sort((a, b) => {
       switch (sortBy) {
         case "featured":
-          return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
+          return (
+            (b.featured ? 1 : 0) - (a.featured ? 1 : 0) ||
+            a.order - b.order
+          );
         case "alphabetical":
           return a.title.localeCompare(b.title);
         default:
@@ -57,8 +60,8 @@ export function ProjectsFilter({ projects, allTech }: ProjectsFilterProps) {
 
   return (
     <>
-      <div className="mb-8 space-y-4">
-        <div className="flex flex-wrap gap-2">
+      <div className="mb-8 space-y-4" role="region" aria-label="Project filters">
+        <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by technology">
           {allTech.map((tech) => (
             <Badge
               key={tech}
@@ -84,6 +87,7 @@ export function ProjectsFilter({ projects, allTech }: ProjectsFilterProps) {
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as SortOption)}
             className="bg-background rounded-md border px-3 py-1.5 text-sm"
+            aria-label="Sort projects by"
           >
             <option value="default">Default order</option>
             <option value="featured">Featured first</option>
@@ -99,14 +103,18 @@ export function ProjectsFilter({ projects, allTech }: ProjectsFilterProps) {
         </div>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {sorted.map((project) => (
-          <ProjectCard key={project.slug} project={project} />
-        ))}
-      </div>
-
-      {sorted.length === 0 && (
-        <p className="text-muted-foreground py-8 text-center">
+      {sorted.length > 0 ? (
+        <div
+          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+          aria-live="polite"
+          aria-atomic="false"
+        >
+          {sorted.map((project) => (
+            <ProjectCard key={project.slug} project={project} />
+          ))}
+        </div>
+      ) : (
+        <p className="text-muted-foreground py-8 text-center" aria-live="polite">
           No projects match the selected filters.
         </p>
       )}
