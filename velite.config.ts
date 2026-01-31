@@ -32,6 +32,16 @@ const experiences = defineCollection({
   }),
 });
 
+const now = defineCollection({
+  name: "Now",
+  pattern: "now/*.mdx",
+  schema: s.object({
+    title: s.string(),
+    lastUpdated: s.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
+    body: s.mdx(),
+  }),
+});
+
 const blog = defineCollection({
   name: "BlogPost",
   pattern: "blog/**/*.mdx",
@@ -65,7 +75,7 @@ export default defineConfig({
     name: "[name]-[hash:6].[ext]",
     clean: true,
   },
-  collections: { projects, experiences, blog },
+  collections: { projects, experiences, now, blog },
   mdx: {
     remarkPlugins: [],
     rehypePlugins: [],
