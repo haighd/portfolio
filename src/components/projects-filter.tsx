@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { X } from "lucide-react";
 import type { Project } from "@/lib/content";
 import { Badge, Button } from "@/components/ui";
@@ -17,29 +17,35 @@ export function ProjectsFilter({ projects, allTech }: ProjectsFilterProps) {
   const [selectedTech, setSelectedTech] = useState<Set<string>>(new Set());
   const [sortBy, setSortBy] = useState<SortOption>("default");
 
-  // Filter logic
-  const filtered = projects.filter((p) => {
-    if (selectedTech.size === 0) return true;
-    return p.techStack?.some((t) => selectedTech.has(t));
-  });
+  // Filter and sort logic - memoized to prevent recalculation on every render
+  const sorted = useMemo(() => {
+    const filtered = projects.filter((p) => {
+      if (selectedTech.size === 0) return true;
+      return p.techStack?.some((t) => selectedTech.has(t));
+    });
 
-  // Sort logic
-  const sorted = [...filtered].sort((a, b) => {
-    switch (sortBy) {
-      case "featured":
-        return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
-      case "alphabetical":
-        return a.title.localeCompare(b.title);
-      default:
-        return a.order - b.order;
-    }
-  });
+    return [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case "featured":
+          return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
+        case "alphabetical":
+          return a.title.localeCompare(b.title);
+        default:
+          return a.order - b.order;
+      }
+    });
+  }, [projects, selectedTech, sortBy]);
 
   const toggleTech = (tech: string) => {
-    const next = new Set(selectedTech);
-    if (next.has(tech)) next.delete(tech);
-    else next.add(tech);
-    setSelectedTech(next);
+    setSelectedTech((currentTech) => {
+      const next = new Set(currentTech);
+      if (next.has(tech)) {
+        next.delete(tech);
+      } else {
+        next.add(tech);
+      }
+      return next;
+    });
   };
 
   const clearFilters = () => {
@@ -56,9 +62,17 @@ export function ProjectsFilter({ projects, allTech }: ProjectsFilterProps) {
           {allTech.map((tech) => (
             <Badge
               key={tech}
+              role="button"
+              tabIndex={0}
               variant={selectedTech.has(tech) ? "default" : "outline"}
               className="cursor-pointer transition-colors"
               onClick={() => toggleTech(tech)}
+              onKeyDown={(e) => {
+                if (e.key === " " || e.key === "Enter") {
+                  e.preventDefault();
+                  toggleTech(tech);
+                }
+              }}
             >
               {tech}
             </Badge>
