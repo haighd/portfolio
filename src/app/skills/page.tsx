@@ -122,7 +122,7 @@ export default function SkillsPage() {
       </div>
 
       {/* Legend */}
-      <div className="mt-8 flex items-center gap-4 text-sm text-muted-foreground">
+      <div className="mt-8 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
         <span>Proficiency:</span>
         {proficiencyLevels.map((level) => (
           <Badge key={level} variant={proficiencyVariantMap[level]}>
