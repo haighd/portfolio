@@ -8,7 +8,8 @@ export const metadata: Metadata = {
     "Technical expertise across data, engineering, and leadership.",
 };
 
-type Proficiency = "expert" | "advanced" | "intermediate";
+const proficiencyLevels = ["expert", "advanced", "intermediate"] as const;
+type Proficiency = (typeof proficiencyLevels)[number];
 
 type Skill = {
   name: string;
@@ -38,6 +39,8 @@ const skillCategories: SkillCategory[] = [
       { name: "R Shiny", proficiency: "expert" },
       { name: "R - tidyverse", proficiency: "expert" },
       { name: "VBA", proficiency: "expert" },
+      { name: "Power BI", proficiency: "expert" },
+      { name: "Power Apps", proficiency: "advanced" },
       { name: "TypeScript", proficiency: "advanced" },
       { name: "React", proficiency: "advanced" },
       { name: "FastAPI", proficiency: "advanced" },
@@ -50,6 +53,9 @@ const skillCategories: SkillCategory[] = [
       { name: "Machine Learning", proficiency: "expert" },
       { name: "Statistical Modeling", proficiency: "expert" },
       { name: "Data Engineering", proficiency: "expert" },
+      { name: "Data Visualization", proficiency: "expert" },
+      { name: "Business Intelligence", proficiency: "expert" },
+      { name: "Operations Research", proficiency: "expert" },
       { name: "ETL Pipelines", proficiency: "advanced" },
     ],
   },
@@ -118,7 +124,7 @@ export default function SkillsPage() {
       {/* Legend */}
       <div className="mt-8 flex items-center gap-4 text-sm text-muted-foreground">
         <span>Proficiency:</span>
-        {(["expert", "advanced", "intermediate"] as Proficiency[]).map((level) => (
+        {proficiencyLevels.map((level) => (
           <Badge key={level} variant={proficiencyVariantMap[level]}>
             {level.charAt(0).toUpperCase() + level.slice(1)}
           </Badge>
