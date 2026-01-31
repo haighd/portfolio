@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import { Section } from "@/components/layout";
 import { Badge } from "@/components/ui";
+
+export const metadata: Metadata = {
+  title: "Skills",
+  description:
+    "Technical expertise across data, engineering, and leadership.",
+};
 
 type Proficiency = "expert" | "advanced" | "intermediate";
 
@@ -93,6 +100,10 @@ export default function SkillsPage() {
                   variant={proficiencyVariantMap[skill.proficiency]}
                 >
                   {skill.name}
+                  <span className="sr-only">
+                    {" "}
+                    ({skill.proficiency} proficiency)
+                  </span>
                 </Badge>
               ))}
             </div>
