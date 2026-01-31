@@ -76,7 +76,7 @@ Change:
 
 To:
 ```tsx
-<Link href={`/blog/tags/${encodeURIComponent(tag)}`}>
+<Link href={`/blog/tags/${encodeURIComponent(tag.toLowerCase())}`}>
   <Badge variant="secondary" className="hover:bg-secondary/80 cursor-pointer">
     {tag}
   </Badge>

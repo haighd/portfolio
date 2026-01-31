@@ -5,6 +5,10 @@ import { Section } from "@/components/layout";
 import { BlogPostCard } from "@/components/blog-post-card";
 import { getAllBlogTags, getPostsByTag } from "@/lib/content";
 
+function capitalizeTag(tag: string): string {
+  return tag.charAt(0).toUpperCase() + tag.slice(1);
+}
+
 interface TagPageProps {
   params: Promise<{ tag: string }>;
 }
@@ -20,15 +24,17 @@ export async function generateMetadata({
   const { tag } = await params;
   const posts = getPostsByTag(tag);
 
+  const displayTag = capitalizeTag(tag);
   return {
-    title: `Posts tagged "${tag}"`,
-    description: `${posts.length} article${posts.length !== 1 ? "s" : ""} tagged with "${tag}"`,
+    title: `Posts tagged "${displayTag}"`,
+    description: `${posts.length} article${posts.length !== 1 ? "s" : ""} tagged with "${displayTag}"`,
   };
 }
 
 export default async function TagPage({ params }: TagPageProps) {
   const { tag } = await params;
   const posts = getPostsByTag(tag);
+  const displayTag = capitalizeTag(tag);
 
   return (
     <Section className="pt-24 md:pt-32">
@@ -42,7 +48,7 @@ export default async function TagPage({ params }: TagPageProps) {
 
       <div className="mb-12">
         <h1 className="text-4xl font-bold tracking-tight">
-          Posts tagged &ldquo;{tag}&rdquo;
+          Posts tagged &ldquo;{displayTag}&rdquo;
         </h1>
         <p className="text-muted-foreground mt-4 text-lg">
           {posts.length} article{posts.length !== 1 ? "s" : ""}
