@@ -16,11 +16,13 @@ type Skill = {
   proficiency: Proficiency;
 };
 
-const proficiencyOrder: Record<Proficiency, number> = {
-  expert: 0,
-  advanced: 1,
-  intermediate: 2,
-};
+const proficiencyOrder = proficiencyLevels.reduce(
+  (acc, level, index) => {
+    acc[level] = index;
+    return acc;
+  },
+  {} as Record<Proficiency, number>
+);
 
 const sortSkills = (skills: Skill[]): Skill[] =>
   [...skills].sort((a, b) => {
