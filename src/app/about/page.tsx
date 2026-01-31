@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Section } from "@/components/layout";
 import { Badge, Button } from "@/components/ui";
+import { getSkillsSummary } from "@/data/skills";
 
 export const metadata: Metadata = {
   title: "About",
@@ -11,22 +12,7 @@ export const metadata: Metadata = {
     "Analytics leader with hands-on technical depth in Python, SQL, and ML/AI.",
 };
 
-const skills = {
-  "Languages & Tools": ["Python", "SQL", "TypeScript", "React", "FastAPI"],
-  "Data & ML": [
-    "Machine Learning",
-    "Statistical Modeling",
-    "Data Engineering",
-    "ETL Pipelines",
-  ],
-  Platforms: ["PostgreSQL", "Docker", "AWS", "Railway"],
-  Leadership: [
-    "Team Management",
-    "Strategy Development",
-    "Stakeholder Communication",
-    "Mentorship",
-  ],
-};
+const skills = getSkillsSummary();
 
 export default function AboutPage() {
   return (
