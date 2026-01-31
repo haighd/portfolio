@@ -114,9 +114,11 @@ export default function SkillsPage() {
       {/* Legend */}
       <div className="mt-8 flex items-center gap-4 text-sm text-muted-foreground">
         <span>Proficiency:</span>
-        <Badge variant="default">Expert</Badge>
-        <Badge variant="secondary">Advanced</Badge>
-        <Badge variant="outline">Intermediate</Badge>
+        {(Object.keys(proficiencyVariantMap) as Proficiency[]).map((level) => (
+          <Badge key={level} variant={proficiencyVariantMap[level]}>
+            {level.charAt(0).toUpperCase() + level.slice(1)}
+          </Badge>
+        ))}
       </div>
     </Section>
   );
