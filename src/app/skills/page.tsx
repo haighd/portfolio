@@ -16,18 +16,18 @@ type Skill = {
   proficiency: Proficiency;
 };
 
-const sortSkills = (skills: Skill[]): Skill[] => {
-  const proficiencyOrder: Record<Proficiency, number> = {
-    expert: 0,
-    advanced: 1,
-    intermediate: 2,
-  };
-  return [...skills].sort((a, b) => {
+const proficiencyOrder: Record<Proficiency, number> = {
+  expert: 0,
+  advanced: 1,
+  intermediate: 2,
+};
+
+const sortSkills = (skills: Skill[]): Skill[] =>
+  [...skills].sort((a, b) => {
     const profDiff = proficiencyOrder[a.proficiency] - proficiencyOrder[b.proficiency];
     if (profDiff !== 0) return profDiff;
     return a.name.localeCompare(b.name);
   });
-};
 
 type SkillCategory = {
   name: string;
