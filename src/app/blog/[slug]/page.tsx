@@ -110,9 +110,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         {post.tags && post.tags.length > 0 && (
           <div className="mt-6 flex flex-wrap gap-2">
             {post.tags.map((tag) => (
-              <Badge key={tag} variant="secondary">
-                {tag}
-              </Badge>
+              <Link key={tag} href={`/blog/tags/${encodeURIComponent(tag.toLowerCase())}`}>
+                <Badge
+                  variant="secondary"
+                  className="hover:bg-secondary/80 cursor-pointer transition-colors"
+                >
+                  {tag}
+                </Badge>
+              </Link>
             ))}
           </div>
         )}
