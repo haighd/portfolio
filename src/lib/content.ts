@@ -19,6 +19,12 @@ export function getProjectBySlug(slug: string) {
   return projects.find((p) => p.slug === slug);
 }
 
+export function getAllProjectTechStack(): string[] {
+  const tech = new Set<string>();
+  projects.forEach((p) => p.techStack?.forEach((t) => tech.add(t)));
+  return Array.from(tech).sort();
+}
+
 export function getExperiences() {
   return experiences.sort((a, b) => a.order - b.order);
 }
