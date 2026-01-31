@@ -34,7 +34,7 @@ export const sortSkills = (skills: Skill[]): Skill[] =>
     return a.name.localeCompare(b.name);
   });
 
-export const skillCategories: SkillCategory[] = [
+const skillCategories: SkillCategory[] = [
   {
     name: "Languages",
     description: "Programming and query languages",
