@@ -35,8 +35,8 @@ Create a searchable skills/tech stack directory page at `/skills` that showcases
 
 ```tsx
 // src/app/skills/page.tsx
-import { Section } from "@/components/ui/section";
-import { Badge } from "@/components/ui/badge";
+import { Section } from "@/components/layout";
+import { Badge } from "@/components/ui";
 
 type Skill = {
   name: string;

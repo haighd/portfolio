@@ -1,9 +1,17 @@
 import { Section } from "@/components/layout";
 import { Badge } from "@/components/ui";
 
+type Proficiency = "expert" | "advanced" | "intermediate";
+
 type Skill = {
   name: string;
-  proficiency: "expert" | "advanced" | "intermediate";
+  proficiency: Proficiency;
+};
+
+const proficiencyVariantMap: Record<Proficiency, "default" | "secondary" | "outline"> = {
+  expert: "default",
+  advanced: "secondary",
+  intermediate: "outline",
 };
 
 type SkillCategory = {
@@ -82,13 +90,7 @@ export default function SkillsPage() {
               {category.skills.map((skill) => (
                 <Badge
                   key={skill.name}
-                  variant={
-                    skill.proficiency === "expert"
-                      ? "default"
-                      : skill.proficiency === "advanced"
-                        ? "secondary"
-                        : "outline"
-                  }
+                  variant={proficiencyVariantMap[skill.proficiency]}
                 >
                   {skill.name}
                 </Badge>
