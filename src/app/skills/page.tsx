@@ -16,13 +16,11 @@ type Skill = {
   proficiency: Proficiency;
 };
 
-const proficiencyOrder = proficiencyLevels.reduce(
-  (acc, level, index) => {
-    acc[level] = index;
-    return acc;
-  },
-  {} as Record<Proficiency, number>
-);
+const proficiencyOrder: Record<Proficiency, number> = {
+  expert: 0,
+  advanced: 1,
+  intermediate: 2,
+};
 
 const sortSkills = (skills: Skill[]): Skill[] =>
   [...skills].sort((a, b) => {
@@ -164,6 +162,12 @@ const skillCategories: SkillCategory[] = [
   },
 ];
 
+// Pre-sort skills by proficiency then alphabetically (avoids sorting on each render)
+const sortedSkillCategories = skillCategories.map((category) => ({
+  ...category,
+  skills: sortSkills(category.skills),
+}));
+
 type Certification = {
   name: string;
   issuer: string;
@@ -204,14 +208,14 @@ export default function SkillsPage() {
 
       {/* Skill categories grid */}
       <div className="grid gap-8 md:grid-cols-2">
-        {skillCategories.map((category) => (
+        {sortedSkillCategories.map((category) => (
           <div key={category.name} className="rounded-lg border p-6">
             <h2 className="text-xl font-semibold">{category.name}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
               {category.description}
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
-              {sortSkills(category.skills).map((skill) => (
+              {category.skills.map((skill) => (
                 <Badge
                   key={skill.name}
                   variant={skill.proficiency}
