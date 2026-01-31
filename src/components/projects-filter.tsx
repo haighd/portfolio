@@ -3,7 +3,9 @@
 import { useState, useMemo } from "react";
 import { X } from "lucide-react";
 import type { Project } from "@/lib/content";
-import { Badge, Button } from "@/components/ui";
+import { Button } from "@/components/ui";
+import { badgeVariants } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import { ProjectCard } from "@/components/project-card";
 
 interface ProjectsFilterProps {
@@ -64,23 +66,20 @@ export function ProjectsFilter({ projects, allTech }: ProjectsFilterProps) {
       <div className="mb-8 space-y-4" role="region" aria-label="Project filters">
         <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by technology">
           {allTech.map((tech) => (
-            <Badge
+            <button
               key={tech}
-              role="button"
-              tabIndex={0}
-              aria-pressed={selectedTech.has(tech)}
-              variant={selectedTech.has(tech) ? "default" : "outline"}
-              className="cursor-pointer transition-colors"
+              type="button"
               onClick={() => toggleTech(tech)}
-              onKeyDown={(e) => {
-                if (e.key === " " || e.key === "Enter") {
-                  e.preventDefault();
-                  toggleTech(tech);
-                }
-              }}
+              aria-pressed={selectedTech.has(tech)}
+              className={cn(
+                badgeVariants({
+                  variant: selectedTech.has(tech) ? "default" : "outline",
+                }),
+                "cursor-pointer",
+              )}
             >
               {tech}
-            </Badge>
+            </button>
           ))}
         </div>
 
