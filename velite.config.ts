@@ -37,7 +37,7 @@ const now = defineCollection({
   pattern: "now/*.mdx",
   schema: s.object({
     title: s.string(),
-    lastUpdated: s.string(),
+    lastUpdated: s.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
     body: s.mdx(),
   }),
 });
