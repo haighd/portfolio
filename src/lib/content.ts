@@ -1,7 +1,8 @@
-import { projects, experiences, blog } from "#site/content";
+import { projects, experiences, now, blog } from "#site/content";
 
 export type Project = (typeof projects)[number];
 export type Experience = (typeof experiences)[number];
+export type Now = (typeof now)[number];
 export type BlogPost = (typeof blog)[number];
 
 export function getProjects() {
@@ -20,6 +21,10 @@ export function getProjectBySlug(slug: string) {
 
 export function getExperiences() {
   return experiences.sort((a, b) => a.order - b.order);
+}
+
+export function getNowContent() {
+  return now[0];
 }
 
 export function getBlogPosts() {
