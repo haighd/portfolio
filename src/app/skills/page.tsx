@@ -22,6 +22,13 @@ const proficiencyOrder: Record<Proficiency, number> = {
   intermediate: 2,
 };
 
+// Map proficiency levels to generic Badge variants
+const proficiencyVariant: Record<Proficiency, "default" | "secondary" | "outline"> = {
+  expert: "default",
+  advanced: "secondary",
+  intermediate: "outline",
+};
+
 const sortSkills = (skills: Skill[]): Skill[] =>
   [...skills].sort((a, b) => {
     const profDiff = proficiencyOrder[a.proficiency] - proficiencyOrder[b.proficiency];
@@ -218,7 +225,7 @@ export default function SkillsPage() {
               {category.skills.map((skill) => (
                 <Badge
                   key={skill.name}
-                  variant={skill.proficiency}
+                  variant={proficiencyVariant[skill.proficiency]}
                 >
                   {skill.name}
                   <span className="sr-only">
@@ -236,7 +243,7 @@ export default function SkillsPage() {
       <div className="mt-8 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
         <span>Proficiency:</span>
         {proficiencyLevels.map((level) => (
-          <Badge key={level} variant={level}>
+          <Badge key={level} variant={proficiencyVariant[level]}>
             {level.charAt(0).toUpperCase() + level.slice(1)}
           </Badge>
         ))}
