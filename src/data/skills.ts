@@ -192,34 +192,23 @@ export const certifications: Certification[] = [
 ];
 
 // Helper to get a simplified skills summary for the about page
-// Returns top skills from key categories
+// This is a curated list that was previously on the about page.
+// Kept explicit here for clarity and to avoid complex derivation logic.
 export function getSkillsSummary(): Record<string, string[]> {
-  const findCategory = (name: string) =>
-    skillCategories.find((c) => c.name === name);
-
-  const getTopSkills = (category: SkillCategory | undefined, count: number) =>
-    category
-      ? sortSkills(category.skills)
-          .slice(0, count)
-          .map((s) => s.name)
-      : [];
-
-  const languages = findCategory("Languages");
-  const frameworks = findCategory("Frameworks & Libraries");
-  const dataScience = findCategory("Data Science & Analytics");
-  const platforms = findCategory("Platforms & Infrastructure");
-  const leadership = findCategory("Leadership & Operations");
-
   return {
-    "Languages & Tools": [
-      ...getTopSkills(languages, 2),
-      ...getTopSkills(frameworks, 2).slice(0, 1),
-      "TypeScript",
-      "React",
-      "FastAPI",
-    ].slice(0, 5),
-    "Data & ML": getTopSkills(dataScience, 4),
-    Platforms: getTopSkills(platforms, 4),
-    Leadership: getTopSkills(leadership, 4),
+    "Languages & Tools": ["Python", "SQL", "TypeScript", "React", "FastAPI"],
+    "Data & ML": [
+      "Machine Learning",
+      "Statistical Modeling",
+      "Data Engineering",
+      "ETL Pipelines",
+    ],
+    Platforms: ["PostgreSQL", "Docker", "AWS", "Railway"],
+    Leadership: [
+      "Team Management",
+      "Strategy Development",
+      "Stakeholder Communication",
+      "Mentorship",
+    ],
   };
 }
