@@ -44,12 +44,15 @@ export function getBlogPostBySlug(slug: string) {
 
 export function getAllBlogTags(): string[] {
   const tags = new Set<string>();
-  blog.forEach((post) => post.tags?.forEach((tag) => tags.add(tag)));
+  blog.forEach((post) => post.tags?.forEach((tag) => tags.add(tag.toLowerCase())));
   return Array.from(tags).sort();
 }
 
 export function getPostsByTag(tag: string): BlogPost[] {
-  return blog.filter((post) => post.tags?.includes(tag)).sort(sortByPublishedDateDesc);
+  const lowercasedTag = tag.toLowerCase();
+  return blog
+    .filter((post) => post.tags?.some((t) => t.toLowerCase() === lowercasedTag))
+    .sort(sortByPublishedDateDesc);
 }
 
 export function getRelatedPosts(currentSlug: string, limit = 3): BlogPost[] {

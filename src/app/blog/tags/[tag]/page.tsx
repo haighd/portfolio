@@ -6,7 +6,7 @@ import { BlogPostCard } from "@/components/blog-post-card";
 import { getAllBlogTags, getPostsByTag } from "@/lib/content";
 
 interface TagPageProps {
-  params: { tag: string };
+  params: Promise<{ tag: string }>;
 }
 
 export async function generateStaticParams() {
@@ -17,7 +17,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: TagPageProps): Promise<Metadata> {
-  const { tag } = params;
+  const { tag } = await params;
   const posts = getPostsByTag(tag);
 
   return {
@@ -27,7 +27,7 @@ export async function generateMetadata({
 }
 
 export default async function TagPage({ params }: TagPageProps) {
-  const { tag } = params;
+  const { tag } = await params;
   const posts = getPostsByTag(tag);
 
   return (

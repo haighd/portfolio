@@ -51,7 +51,7 @@ export default function BlogPage() {
       {allTags.length > 0 && (
         <div className="mb-8 flex flex-wrap gap-2">
           {allTags.map((tag) => (
-            <Link key={tag} href={`/blog/tags/${encodeURIComponent(tag)}`}>
+            <Link key={tag} href={`/blog/tags/${encodeURIComponent(tag.toLowerCase())}`}>
               <Badge
                 variant="outline"
                 className="hover:bg-accent cursor-pointer transition-colors"

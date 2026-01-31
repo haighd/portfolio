@@ -45,7 +45,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
       <CardContent className="flex-1">
         <div className="flex flex-wrap gap-2">
           {post.tags?.slice(0, 4).map((tag) => (
-            <Link key={tag} href={`/blog/tags/${encodeURIComponent(tag)}`}>
+            <Link key={tag} href={`/blog/tags/${encodeURIComponent(tag.toLowerCase())}`}>
               <Badge
                 variant="secondary"
                 className="hover:bg-secondary/80 cursor-pointer transition-colors"
