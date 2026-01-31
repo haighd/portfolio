@@ -27,6 +27,7 @@ export function ProjectsFilter({ projects, allTech }: ProjectsFilterProps) {
     return [...filtered].sort((a, b) => {
       switch (sortBy) {
         case "featured":
+          // Sort featured projects first, then by order
           return (
             (b.featured ? 1 : 0) - (a.featured ? 1 : 0) ||
             a.order - b.order
@@ -67,6 +68,7 @@ export function ProjectsFilter({ projects, allTech }: ProjectsFilterProps) {
               key={tech}
               role="button"
               tabIndex={0}
+              aria-pressed={selectedTech.has(tech)}
               variant={selectedTech.has(tech) ? "default" : "outline"}
               className="cursor-pointer transition-colors"
               onClick={() => toggleTech(tech)}
