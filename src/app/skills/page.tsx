@@ -16,12 +16,6 @@ type Skill = {
   proficiency: Proficiency;
 };
 
-const proficiencyVariantMap: Record<Proficiency, "expert" | "advanced" | "intermediate"> = {
-  expert: "expert",
-  advanced: "advanced",
-  intermediate: "intermediate",
-};
-
 type SkillCategory = {
   name: string;
   description: string;
@@ -205,7 +199,7 @@ export default function SkillsPage() {
               {category.skills.map((skill) => (
                 <Badge
                   key={skill.name}
-                  variant={proficiencyVariantMap[skill.proficiency]}
+                  variant={skill.proficiency}
                 >
                   {skill.name}
                   <span className="sr-only">
@@ -223,7 +217,7 @@ export default function SkillsPage() {
       <div className="mt-8 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
         <span>Proficiency:</span>
         {proficiencyLevels.map((level) => (
-          <Badge key={level} variant={proficiencyVariantMap[level]}>
+          <Badge key={level} variant={level}>
             {level.charAt(0).toUpperCase() + level.slice(1)}
           </Badge>
         ))}

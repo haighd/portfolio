@@ -11,7 +11,7 @@ Create a skills/tech stack directory page at `/skills` that showcases technical 
 ## Research Summary
 
 ### Existing Assets
-- **Skills data** exists in `src/app/about/page.tsx:14-29` as hardcoded object with 4 categories
+- **Skills data** exists in `src/app/about/page.tsx:14-29` as hardcoded object with 4 categories (expanded to 6 in implementation)
 - **Page patterns** established in `/blog`, `/projects`, `/experience`
 - **Navigation** defined in `src/components/layout/header.tsx:11-18`
 - **UI components** available: `Section`, `Container`, `Badge`, `Card`
@@ -149,7 +149,7 @@ export default function SkillsPage() {
 
 **Acceptance criteria:**
 - [x] Page renders at `/skills`
-- [x] Skills organized by 4 categories
+- [x] Skills organized by 6 categories
 - [x] Proficiency levels indicated via badge variants
 
 ---
@@ -166,7 +166,7 @@ const navigation = [
   { name: "About", href: "/about" },
   { name: "Now", href: "/now" },
   { name: "Experience", href: "/experience" },
-+ { name: "Skills", href: "/skills" },
++ { name: "Skills & Certs", href: "/skills" },
   { name: "Projects", href: "/projects" },
   { name: "Blog", href: "/blog" },
   { name: "Contact", href: "/contact" },
@@ -207,7 +207,7 @@ const navigation = [
 ## Testing Checklist
 
 - [x] Page loads at `/skills` without errors
-- [x] All 4 categories display with skills
+- [x] All 6 categories display with skills
 - [x] Badge variants correctly indicate proficiency
 - [x] Navigation link works from any page
 - [x] Mobile responsive (test at 375px, 768px, 1024px)
