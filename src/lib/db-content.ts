@@ -101,6 +101,20 @@ function toNow(db: DbNowContent): Now {
   };
 }
 
+// Helper to convert DB about content to Velite-compatible format
+function toAbout(db: DbAboutContent): About {
+  return {
+    id: db.id,
+    title: db.title,
+    description: db.description,
+    currentRole: db.currentRole,
+    currentCompany: db.currentCompany,
+    location: db.location,
+    focusAreas: db.focusAreas,
+    body: db.body,
+  };
+}
+
 // Cache configuration - longer revalidation for mostly static portfolio content
 const CACHE_REVALIDATE =
   Number(process.env.CACHE_REVALIDATE_SECONDS) || 3600; // default: 1 hour
@@ -196,7 +210,7 @@ export const getNowContent = unstable_cache(
 export const getAboutContent = unstable_cache(
   async (): Promise<About | undefined> => {
     const result = await getDb().select().from(aboutContent).limit(1);
-    return result[0];
+    return result[0] ? toAbout(result[0]) : undefined;
   },
   ["db-about-content"],
   { revalidate: CACHE_REVALIDATE }
