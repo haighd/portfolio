@@ -55,7 +55,6 @@ export default async function AboutPage() {
   const title = about?.title ?? "About Me";
   const currentRole = currentExperience?.role ?? "Associate Director, Data Science & Analytics";
   const currentCompany = currentExperience?.company ?? "Merck";
-  const location = currentExperience?.location ?? "Remote";
   const focusAreas = about?.focusAreas ?? ["ML/AI", "Analytics", "Leadership"];
 
   return (
@@ -105,7 +104,7 @@ export default async function AboutPage() {
             </div>
             <div className="rounded-lg border border-border p-6">
               <h2 className="font-semibold">Location</h2>
-              <p className="mt-2 text-sm text-muted-foreground">{location}</p>
+              <p className="mt-2 text-sm text-muted-foreground">Roxbury Township, NJ</p>
             </div>
             <div className="rounded-lg border border-border p-6">
               <h2 className="font-semibold">Focus Areas</h2>
