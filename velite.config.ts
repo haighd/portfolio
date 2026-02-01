@@ -66,6 +66,19 @@ const blog = defineCollection({
     }),
 });
 
+const skills = defineCollection({
+  name: "Skill",
+  pattern: "skills/**/*.mdx",
+  schema: s.object({
+    name: s.string(),
+    category: s.string(),
+    categorySlug: s.string(),
+    proficiency: s.enum(["expert", "advanced", "intermediate"]),
+    order: s.number().default(0),
+    body: s.mdx(),
+  }),
+});
+
 export default defineConfig({
   root: "src/content",
   output: {
@@ -75,7 +88,7 @@ export default defineConfig({
     name: "[name]-[hash:6].[ext]",
     clean: true,
   },
-  collections: { projects, experiences, now, blog },
+  collections: { projects, experiences, now, blog, skills },
   mdx: {
     remarkPlugins: [],
     rehypePlugins: [],
