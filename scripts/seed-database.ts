@@ -121,6 +121,7 @@ async function main() {
   const blogData = readVeliteJson<VeliteBlogPost[]>("blog.json");
   const skillsData = readVeliteJson<VeliteSkill[]>("skills.json");
   const nowData = readVeliteJson<VeliteNow[]>("now.json");
+  const aboutData = readVeliteJson<VeliteAbout>("about.json");
 
   // Seed projects
   console.log(`Seeding ${projectsData.length} projects...`);
@@ -272,7 +273,6 @@ async function main() {
   console.log("  Now content seeded successfully");
 
   // Seed about content (singleton)
-  const aboutData = readVeliteJson<VeliteAbout>("about.json");
   console.log(`Seeding about content...`);
   await db.delete(schema.aboutContent);
   if (aboutData) {
