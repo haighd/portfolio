@@ -47,6 +47,21 @@ const now = defineCollection({
   }),
 });
 
+const about = defineCollection({
+  name: "About",
+  pattern: "about/index.mdx",
+  single: true,
+  schema: s.object({
+    title: s.string(),
+    description: s.string(),
+    currentRole: s.string(),
+    currentCompany: s.string(),
+    location: s.string(),
+    focusAreas: s.array(s.string()),
+    body: s.mdx(),
+  }),
+});
+
 const blog = defineCollection({
   name: "BlogPost",
   pattern: "blog/**/*.mdx",
@@ -93,7 +108,7 @@ export default defineConfig({
     name: "[name]-[hash:6].[ext]",
     clean: true,
   },
-  collections: { projects, experiences, now, blog, skills },
+  collections: { projects, experiences, now, about, blog, skills },
   mdx: {
     remarkPlugins: [],
     rehypePlugins: [],

@@ -55,6 +55,17 @@ export type Now = {
   body: string;
 };
 
+export type About = {
+  id?: string;
+  title: string;
+  description: string;
+  currentRole: string;
+  currentCompany: string;
+  location: string;
+  focusAreas: string[];
+  body: string;
+};
+
 export type BlogPost = {
   id?: string;
   title: string;
@@ -142,6 +153,19 @@ export async function getNowContent(): Promise<Now | undefined> {
   }
   const velite = await getVeliteContent();
   return velite.now[0] as Now | undefined;
+}
+
+// ============================================================================
+// About Content
+// ============================================================================
+
+export async function getAboutContent(): Promise<About | undefined> {
+  if (USE_DATABASE) {
+    const dbContent = await getDbContent();
+    return dbContent.getAboutContent() as Promise<About | undefined>;
+  }
+  const velite = await getVeliteContent();
+  return velite.about as About | undefined;
 }
 
 // ============================================================================
