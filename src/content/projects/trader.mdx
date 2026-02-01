@@ -1,42 +1,46 @@
 ---
 title: "Trader"
-description: "Autonomous algorithmic trading system with predictability-first asset selection and multi-layered risk management"
+description: "Autonomous algorithmic trading system with intraday gap momentum strategy and multi-layered risk management"
 slug: "trader"
 featured: true
 order: 1
 techStack: ["Python", "FastAPI", "React", "PostgreSQL", "asyncio", "Docker"]
 github: "https://github.com/predictive-trader/trader"
 private: true
+challenge: "Building an autonomous trading system that could identify high-probability intraday setups, execute trades with strict risk controls, and operate without manual intervention while adapting to changing market conditions."
+approach: "Developed VWAP Warrior - an intraday gap momentum strategy targeting low-float stocks with high pre-market relative volume. Built on event-driven Python architecture with multi-layered exits (ATR stops, trailing stops, profit targets, time-based) and comprehensive pre-trade validation. Implemented three-system alignment (production, rehearsal, backtesting) to catch integration bugs before deployment."
+impact: "Complete autonomous trading system with 20 epics delivered. Multi-layered risk management includes 2% position sizing, broker-level stop-losses, and circuit breakers. Three-AI code review process (Claude, Gemini, Codex) ensures code quality. React 19 dashboard provides real-time monitoring and emergency controls."
+learnings: "Three-system alignment (production, rehearsal, backtesting) is essential - divergence leads to 'works in backtest, fails in production' bugs. Event-driven architecture with typed domain events enables clean component communication. Trading rehearsals that intercept orders catch integration issues that unit tests miss."
 ---
 
 ## Overview
 
-An autonomous trading system that uses statistical forecasting to identify predictable assets, then executes a direction-reversal strategy with strict risk controls.
+An autonomous trading system implementing VWAP Warrior - an intraday gap momentum strategy targeting low-float stocks with high pre-market relative volume. Built on Python 3.13 with event-driven architecture and strict risk controls.
 
 ## Key Features
 
-- **Predictability-First Selection**: ETS forecasting models identify assets with ~55% directional accuracy
-- **Inflection Point Trading**: Direction-reversal strategy captures trend changes
-- **Multi-Layered Risk Management**: 2% trailing stops, daily loss circuit breakers, position limits
-- **Event-Driven Architecture**: Custom asyncio event bus for real-time processing
-- **Production Dashboard**: React 19 frontend with real-time updates via FastAPI
+- **VWAP Warrior Strategy**: Intraday gap momentum targeting stocks with 3%+ gaps and 2x+ relative volume
+- **Multi-Layered Exits**: ATR stops, trailing stops, profit targets, time-based exits, and EOD flatten
+- **Three-System Alignment**: Production, rehearsal, and backtesting systems share code paths
+- **Event-Driven Architecture**: Custom asyncio event bus for reactive component communication
+- **Production Dashboard**: React 19 frontend with real-time monitoring and emergency controls
 
 ## Technical Highlights
 
-Built with a focus on reliability and observability:
+Built with a focus on reliability and operational excellence:
 
-- Broker-agnostic design with Alpaca integration for paper/live trading
+- Three-AI code review (Claude, Gemini, Codex) ensures quality before merge
+- Trading rehearsals catch integration bugs before production deployment
 - PostgreSQL persistence with comprehensive audit logging
 - Docker containerization for Railway deployment
-- Event-driven async architecture using custom asyncio patterns
-- 19 of 20 planned epics complete
+- 20 planned epics complete with 100+ stories delivered
 
 ## Architecture
 
 The system follows a clean separation of concerns:
 
-1. **Data Layer**: Fetches market data and maintains historical records
-2. **Analysis Layer**: Runs ETS models to score asset predictability
-3. **Strategy Layer**: Implements IPT (Inflection Point Trading) logic
-4. **Execution Layer**: Manages orders with risk controls
-5. **Monitoring Layer**: Real-time dashboard and alerting
+1. **Market Data Layer**: WebSocket streaming and historical data via Alpaca API
+2. **Screening Layer**: Pre-market gap/RVOL scanning for trade candidates
+3. **Strategy Layer**: VWAP Warrior entry validation and exit management
+4. **Execution Layer**: Order engine with broker-level stop-losses
+5. **Monitoring Layer**: Real-time dashboard, health checks, and alerting

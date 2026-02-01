@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ExternalLink, Github, Lock } from "lucide-react";
+import {
+  ArrowLeft,
+  BookOpen,
+  ExternalLink,
+  Github,
+  Lightbulb,
+  Lock,
+  Target,
+  TrendingUp,
+} from "lucide-react";
 import { Section } from "@/components/layout";
 import { Badge, Button } from "@/components/ui";
 import { MDXContent } from "@/components/mdx-content";
+import { CaseStudySection } from "@/components/case-study-section";
 import { getProjectBySlug, getProjects } from "@/lib/content";
 
 interface ProjectPageProps {
@@ -96,6 +106,47 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           )}
         </div>
       </header>
+
+      {(project.challenge ||
+        project.approach ||
+        project.impact ||
+        project.learnings) && (
+        <div className="mb-12 space-y-6 rounded-lg border border-border bg-muted/30 p-6">
+          <h2 className="text-2xl font-semibold tracking-tight">Case Study</h2>
+
+          {project.challenge && (
+            <CaseStudySection
+              title="The Challenge"
+              content={project.challenge}
+              icon={<Target className="h-5 w-5 text-accent" />}
+            />
+          )}
+
+          {project.approach && (
+            <CaseStudySection
+              title="The Approach"
+              content={project.approach}
+              icon={<Lightbulb className="h-5 w-5 text-accent" />}
+            />
+          )}
+
+          {project.impact && (
+            <CaseStudySection
+              title="Impact & Results"
+              content={project.impact}
+              icon={<TrendingUp className="h-5 w-5 text-accent" />}
+            />
+          )}
+
+          {project.learnings && (
+            <CaseStudySection
+              title="Key Learnings"
+              content={project.learnings}
+              icon={<BookOpen className="h-5 w-5 text-accent" />}
+            />
+          )}
+        </div>
+      )}
 
       <article>
         <MDXContent code={project.body} />
