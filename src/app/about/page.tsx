@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { Section } from "@/components/layout";
 import { Badge, Button } from "@/components/ui";
 import { getSkillsSummary } from "@/data/skills";
-import { getAboutContent } from "@/lib/content";
+import { getAboutContent, getExperiences } from "@/lib/content";
 import { MDXContent } from "@/components/mdx-content";
 
 export const metadata: Metadata = {
@@ -44,13 +44,18 @@ const fallbackBio = (
 );
 
 export default async function AboutPage() {
-  const about = await getAboutContent();
+  const [about, experiences] = await Promise.all([
+    getAboutContent(),
+    getExperiences(),
+  ]);
+
+  // Current role is the experience without an endDate
+  const currentExperience = experiences.find((exp) => !exp.endDate);
 
   const title = about?.title ?? "About Me";
-  const currentRole =
-    about?.currentRole ?? "Associate Director, Data Science & Analytics";
-  const currentCompany = about?.currentCompany ?? "Merck";
-  const location = about?.location ?? "Remote";
+  const currentRole = currentExperience?.role ?? "Associate Director, Data Science & Analytics";
+  const currentCompany = currentExperience?.company ?? "Merck";
+  const location = currentExperience?.location ?? "Remote";
   const focusAreas = about?.focusAreas ?? ["ML/AI", "Analytics", "Leadership"];
 
   return (
