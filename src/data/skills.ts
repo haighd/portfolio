@@ -3,9 +3,13 @@
 // or in the database when DATABASE_CONTENT_ENABLED=true
 // Used by: /skills, /about
 
-import { skills } from "#site/content";
-
 const USE_DATABASE = process.env.DATABASE_CONTENT_ENABLED === "true";
+
+// Velite content is dynamically imported only when DATABASE_CONTENT_ENABLED=false
+async function getVeliteSkills() {
+  const velite = await import("#site/content");
+  return velite.skills;
+}
 
 // Lazy import for database content module (only loaded when USE_DATABASE is true)
 async function getDbContent() {
@@ -60,18 +64,25 @@ const skillsSummary: Record<string, string[]> = {
 };
 
 // Development-time validation: ensure summary skills exist in the Velite collection
-// Only runs with Velite (not database) to avoid async complexity
+// Only runs with Velite (not database) to avoid blocking module initialization
 if (process.env.NODE_ENV !== "production" && !USE_DATABASE) {
-  const allSkillNames = skills.map((s) => s.name);
-  const summarySkills = Object.values(skillsSummary).flat();
+  (async () => {
+    try {
+      const veliteSkills = await getVeliteSkills();
+      const allSkillNames = veliteSkills.map((s) => s.name);
+      const summarySkills = Object.values(skillsSummary).flat();
 
-  for (const skill of summarySkills) {
-    if (!allSkillNames.includes(skill)) {
-      console.warn(
-        `[Skills Data Inconsistency] The skill '${skill}' from the 'about' page summary does not exist in the Velite skills collection.`
-      );
+      for (const skill of summarySkills) {
+        if (!allSkillNames.includes(skill)) {
+          console.warn(
+            `[Skills Data Inconsistency] The skill '${skill}' from the 'about' page summary does not exist in the Velite skills collection.`
+          );
+        }
+      }
+    } catch {
+      // Velite content not available - validation skipped
     }
-  }
+  })();
 }
 
 export function getSkillsSummary(): Record<string, string[]> {
@@ -84,7 +95,7 @@ export async function getSkills() {
     const dbContent = await getDbContent();
     return dbContent.getSkills();
   }
-  return skills;
+  return getVeliteSkills();
 }
 
 // Export certifications getter that supports both static and database

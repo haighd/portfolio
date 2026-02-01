@@ -55,7 +55,7 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
             </Link>
           ))}
           {(post.tags?.length ?? 0) > 4 && (
-            <Badge variant="outline">+{post.tags.length - 4}</Badge>
+            <Badge variant="outline">+{(post.tags?.length ?? 0) - 4}</Badge>
           )}
         </div>
       </CardContent>

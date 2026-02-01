@@ -1,8 +1,14 @@
 import type { MetadataRoute } from "next";
-import { projects, now, blog } from "#site/content";
+import { getProjects, getNowContent, getBlogPosts } from "@/lib/content";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://danalytics.info";
+
+  const [projectList, nowContent, blogList] = await Promise.all([
+    getProjects(),
+    getNowContent(),
+    getBlogPosts(),
+  ]);
 
   const staticPages: MetadataRoute.Sitemap = [
     {
@@ -19,7 +25,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${baseUrl}/now`,
-      lastModified: now[0] ? new Date(now[0].lastUpdated) : new Date(),
+      lastModified: nowContent ? new Date(nowContent.lastUpdated) : new Date(),
       changeFrequency: "weekly",
       priority: 0.7,
     },
@@ -49,14 +55,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  const projectPages: MetadataRoute.Sitemap = projects.map((project) => ({
+  const projectPages: MetadataRoute.Sitemap = projectList.map((project) => ({
     url: `${baseUrl}/projects/${project.slug}`,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.6,
   }));
 
-  const blogPages: MetadataRoute.Sitemap = blog.map((post) => ({
+  const blogPages: MetadataRoute.Sitemap = blogList.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: post.updatedDate
       ? new Date(post.updatedDate)

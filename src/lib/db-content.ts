@@ -44,8 +44,18 @@ export type Now = Omit<DbNowContent, "lastUpdated" | "createdAt" | "updatedAt"> 
 export type Certification = Omit<DbCertification, "createdAt" | "updatedAt">;
 
 // Helper to format date as ISO string (date only, no time)
-function formatDate(date: Date): string {
-  return date.toISOString().split("T")[0] as string;
+// Handles both Date objects and string inputs from different database drivers
+function formatDate(date: Date | string): string {
+  // Create a new Date object to handle both Date and string types uniformly
+  const d = new Date(date);
+
+  // Throw error for invalid dates to surface data integrity issues early
+  if (isNaN(d.getTime())) {
+    throw new Error(`Invalid date received, could not parse: "${date}"`);
+  }
+
+  // Format as YYYY-MM-DD (toISOString always has 'T', so split is safe)
+  return d.toISOString().split("T")[0]!;
 }
 
 // Helper to convert DB experience to Velite-compatible format
