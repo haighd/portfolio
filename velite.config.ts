@@ -14,6 +14,11 @@ const projects = defineCollection({
     private: s.boolean().default(false),
     liveUrl: s.string().optional(),
     image: s.string().optional(),
+    // Case study fields (all optional for backward compatibility)
+    challenge: s.string().optional(),
+    approach: s.string().optional(),
+    impact: s.string().optional(),
+    learnings: s.string().optional(),
     body: s.mdx(),
   }),
 });
