@@ -12,7 +12,7 @@ function escapeXml(text: string): string {
 }
 
 export async function GET() {
-  const posts = getBlogPosts();
+  const posts = await getBlogPosts();
 
   const rssItems = posts
     .map((post) => {

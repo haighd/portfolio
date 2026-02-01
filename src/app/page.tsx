@@ -5,8 +5,8 @@ import { Section } from "@/components/layout";
 import { ProjectCard } from "@/components/project-card";
 import { getFeaturedProjects } from "@/lib/content";
 
-export default function HomePage() {
-  const featuredProjects = getFeaturedProjects();
+export default async function HomePage() {
+  const featuredProjects = await getFeaturedProjects();
 
   return (
     <>

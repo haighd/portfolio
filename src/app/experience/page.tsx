@@ -12,8 +12,8 @@ export const metadata: Metadata = {
     "Professional experience in analytics leadership, data science, and ML/AI.",
 };
 
-export default function ExperiencePage() {
-  const experiences = getExperiences();
+export default async function ExperiencePage() {
+  const experiences = await getExperiences();
 
   return (
     <>

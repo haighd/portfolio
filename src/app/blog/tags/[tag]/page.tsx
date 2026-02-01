@@ -14,7 +14,7 @@ interface TagPageProps {
 }
 
 export async function generateStaticParams() {
-  const tags = getAllBlogTags();
+  const tags = await getAllBlogTags();
   return tags.map((tag) => ({ tag }));
 }
 
@@ -22,7 +22,7 @@ export async function generateMetadata({
   params,
 }: TagPageProps): Promise<Metadata> {
   const { tag } = await params;
-  const posts = getPostsByTag(tag);
+  const posts = await getPostsByTag(tag);
 
   const displayTag = capitalizeTag(tag);
   return {
@@ -33,7 +33,7 @@ export async function generateMetadata({
 
 export default async function TagPage({ params }: TagPageProps) {
   const { tag } = await params;
-  const posts = getPostsByTag(tag);
+  const posts = await getPostsByTag(tag);
   const displayTag = capitalizeTag(tag);
 
   return (
