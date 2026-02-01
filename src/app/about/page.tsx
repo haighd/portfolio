@@ -57,11 +57,11 @@ export default async function AboutPage() {
   const currentRole =
     currentExperience?.role ??
     about?.currentRole ??
-    "Associate Director, Data Science & Analytics";
+    "Director, Data Science";
   const currentCompany =
     currentExperience?.company ??
     about?.currentCompany ??
-    "Merck";
+    "Merck & Co.";
   const focusAreas = about?.focusAreas ?? ["ML/AI", "Analytics", "Leadership"];
   const location = about?.location ?? "Roxbury Township, NJ";
 
