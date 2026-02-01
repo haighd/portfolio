@@ -89,8 +89,8 @@ Would be better if:
 ### Drizzle Setup
 
 ```bash
-bun add drizzle-orm pg
-bun add -D drizzle-kit @types/pg
+bun add drizzle-orm postgres
+bun add -D drizzle-kit
 ```
 
 ### Schema Example

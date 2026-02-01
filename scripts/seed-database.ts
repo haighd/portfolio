@@ -10,6 +10,7 @@ import postgres from "postgres";
 import * as schema from "../src/db/schema";
 import * as fs from "fs";
 import * as path from "path";
+import { certifications as staticCertifications } from "../src/data/skills";
 
 // Types for Velite JSON data
 interface VeliteProject {
@@ -82,22 +83,34 @@ async function main() {
 
   console.log("Starting database seed...\n");
 
+  // Check if Velite directory exists
+  if (!fs.existsSync(veliteDir)) {
+    console.error(
+      `Error: Velite output directory not found at ${veliteDir}\n` +
+        "Please run 'bun run build:velite' first to generate the content."
+    );
+    process.exit(1);
+  }
+
+  // Helper function to safely read Velite JSON files
+  function readVeliteJson<T>(filename: string): T {
+    const filePath = path.join(veliteDir, filename);
+    if (!fs.existsSync(filePath)) {
+      console.error(
+        `Error: Velite output file not found: ${filePath}\n` +
+          "Please run 'bun run build:velite' first to generate the content."
+      );
+      process.exit(1);
+    }
+    return JSON.parse(fs.readFileSync(filePath, "utf-8"));
+  }
+
   // Read Velite JSON files
-  const projectsData: VeliteProject[] = JSON.parse(
-    fs.readFileSync(path.join(veliteDir, "projects.json"), "utf-8")
-  );
-  const experiencesData: VeliteExperience[] = JSON.parse(
-    fs.readFileSync(path.join(veliteDir, "experiences.json"), "utf-8")
-  );
-  const blogData: VeliteBlogPost[] = JSON.parse(
-    fs.readFileSync(path.join(veliteDir, "blog.json"), "utf-8")
-  );
-  const skillsData: VeliteSkill[] = JSON.parse(
-    fs.readFileSync(path.join(veliteDir, "skills.json"), "utf-8")
-  );
-  const nowData: VeliteNow[] = JSON.parse(
-    fs.readFileSync(path.join(veliteDir, "now.json"), "utf-8")
-  );
+  const projectsData = readVeliteJson<VeliteProject[]>("projects.json");
+  const experiencesData = readVeliteJson<VeliteExperience[]>("experiences.json");
+  const blogData = readVeliteJson<VeliteBlogPost[]>("blog.json");
+  const skillsData = readVeliteJson<VeliteSkill[]>("skills.json");
+  const nowData = readVeliteJson<VeliteNow[]>("now.json");
 
   // Seed projects
   console.log(`Seeding ${projectsData.length} projects...`);
@@ -144,20 +157,34 @@ async function main() {
   }
   console.log("  Projects seeded successfully");
 
-  // Seed experiences
+  // Seed experiences using upsert with unique constraint
   console.log(`Seeding ${experiencesData.length} experiences...`);
-  // Clear existing experiences first (no unique constraint)
-  await db.delete(schema.experiences);
   for (const exp of experiencesData) {
-    await db.insert(schema.experiences).values({
-      company: exp.company,
-      role: exp.role,
-      startDate: exp.startDate,
-      endDate: exp.endDate ?? null,
-      location: exp.location,
-      order: exp.order,
-      body: exp.body,
-    });
+    await db
+      .insert(schema.experiences)
+      .values({
+        company: exp.company,
+        role: exp.role,
+        startDate: new Date(exp.startDate),
+        endDate: exp.endDate ? new Date(exp.endDate) : null,
+        location: exp.location,
+        order: exp.order,
+        body: exp.body,
+      })
+      .onConflictDoUpdate({
+        target: [
+          schema.experiences.company,
+          schema.experiences.role,
+          schema.experiences.startDate,
+        ],
+        set: {
+          endDate: exp.endDate ? new Date(exp.endDate) : null,
+          location: exp.location,
+          order: exp.order,
+          body: exp.body,
+          updatedAt: new Date(),
+        },
+      });
   }
   console.log("  Experiences seeded successfully");
 
@@ -170,8 +197,8 @@ async function main() {
         title: post.title,
         description: post.description,
         slug: post.slug,
-        publishedDate: post.publishedDate,
-        updatedDate: post.updatedDate ?? null,
+        publishedDate: new Date(post.publishedDate),
+        updatedDate: post.updatedDate ? new Date(post.updatedDate) : null,
         tags: post.tags,
         featured: post.featured,
         readingTime: post.readingTime,
@@ -182,8 +209,8 @@ async function main() {
         set: {
           title: post.title,
           description: post.description,
-          publishedDate: post.publishedDate,
-          updatedDate: post.updatedDate ?? null,
+          publishedDate: new Date(post.publishedDate),
+          updatedDate: post.updatedDate ? new Date(post.updatedDate) : null,
           tags: post.tags,
           featured: post.featured,
           readingTime: post.readingTime,
@@ -228,35 +255,21 @@ async function main() {
   if (nowItem) {
     await db.insert(schema.nowContent).values({
       title: nowItem.title,
-      lastUpdated: nowItem.lastUpdated,
+      lastUpdated: new Date(nowItem.lastUpdated),
       body: nowItem.body,
     });
   }
   console.log("  Now content seeded successfully");
 
-  // Seed certifications
-  console.log(`Seeding certifications...`);
-  const certifications = [
-    {
-      name: "Six Sigma Black Belt",
-      abbreviation: "SSBB",
-      issuer: "American Society for Quality (ASQ)",
-    },
-    {
-      name: "Certified in Planning and Inventory Management",
-      abbreviation: "CPIM",
-      issuer: "Association for Supply Chain Management (ASCM/APICS)",
-    },
-    {
-      name: "Certified Professional",
-      abbreviation: "CP",
-      issuer: "Association of Clinical Research Professionals (ACRP)",
-    },
-  ];
-
+  // Seed certifications (imported from src/data/skills.ts for single source of truth)
+  console.log(`Seeding ${staticCertifications.length} certifications...`);
   await db.delete(schema.certifications);
-  for (const cert of certifications) {
-    await db.insert(schema.certifications).values(cert);
+  for (const cert of staticCertifications) {
+    await db.insert(schema.certifications).values({
+      name: cert.name,
+      abbreviation: cert.abbreviation,
+      issuer: cert.issuer,
+    });
   }
   console.log("  Certifications seeded successfully");
 
@@ -267,7 +280,7 @@ async function main() {
   console.log(`Blog posts: ${blogData.length}`);
   console.log(`Skills: ${skillsData.length}`);
   console.log(`Now content: ${nowData.length}`);
-  console.log(`Certifications: ${certifications.length}`);
+  console.log(`Certifications: ${staticCertifications.length}`);
   console.log("\nDatabase seeded successfully!");
 
   await client.end();

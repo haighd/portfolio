@@ -6,6 +6,7 @@ import {
   timestamp,
   uuid,
   pgEnum,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 
 // Enums
@@ -40,18 +41,29 @@ export const projects = pgTable("projects", {
 });
 
 // Experiences table
-export const experiences = pgTable("experiences", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  company: text("company").notNull(),
-  role: text("role").notNull(),
-  startDate: text("start_date").notNull(),
-  endDate: text("end_date"),
-  location: text("location").notNull(),
-  order: integer("order").notNull(),
-  body: text("body").notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
-});
+export const experiences = pgTable(
+  "experiences",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    company: text("company").notNull(),
+    role: text("role").notNull(),
+    startDate: timestamp("start_date").notNull(),
+    endDate: timestamp("end_date"),
+    location: text("location").notNull(),
+    order: integer("order").notNull(),
+    body: text("body").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    // Unique constraint for idempotent seeding
+    companyRoleStartIdx: uniqueIndex("experiences_company_role_start_unique").on(
+      table.company,
+      table.role,
+      table.startDate
+    ),
+  })
+);
 
 // Blog posts table
 export const blogPosts = pgTable("blog_posts", {
@@ -59,8 +71,8 @@ export const blogPosts = pgTable("blog_posts", {
   title: text("title").notNull(),
   description: text("description").notNull(),
   slug: text("slug").notNull().unique(),
-  publishedDate: text("published_date").notNull(),
-  updatedDate: text("updated_date"),
+  publishedDate: timestamp("published_date").notNull(),
+  updatedDate: timestamp("updated_date"),
   tags: text("tags").array().notNull().default([]),
   featured: boolean("featured").notNull().default(false),
   readingTime: integer("reading_time").notNull().default(1),
@@ -86,7 +98,7 @@ export const skills = pgTable("skills", {
 export const nowContent = pgTable("now_content", {
   id: uuid("id").primaryKey().defaultRandom(),
   title: text("title").notNull(),
-  lastUpdated: text("last_updated").notNull(),
+  lastUpdated: timestamp("last_updated").notNull(),
   body: text("body").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
