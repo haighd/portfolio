@@ -37,7 +37,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
             </Badge>
           ))}
           {(project.techStack?.length ?? 0) > 4 && (
-            <Badge variant="outline">+{project.techStack.length - 4}</Badge>
+            <Badge variant="outline">+{(project.techStack?.length ?? 0) - 4}</Badge>
           )}
         </div>
       </CardContent>

@@ -44,7 +44,22 @@ export type Now = Omit<DbNowContent, "lastUpdated" | "createdAt" | "updatedAt"> 
 export type Certification = Omit<DbCertification, "createdAt" | "updatedAt">;
 
 // Helper to format date as ISO string (date only, no time)
-function formatDate(date: Date): string {
+// Handles both Date objects and string inputs from different database drivers
+function formatDate(date: Date | string): string {
+  if (typeof date === "string") {
+    // Already a string - extract date portion if it's a full ISO string
+    return date.split("T")[0] as string;
+  }
+  if (!(date instanceof Date) || isNaN(date.getTime())) {
+    // If not a valid Date, try to construct one
+    const parsed = new Date(date as unknown as string);
+    if (!isNaN(parsed.getTime())) {
+      return parsed.toISOString().split("T")[0] as string;
+    }
+    // Fallback for truly invalid dates
+    console.warn("Invalid date received:", date);
+    return new Date().toISOString().split("T")[0] as string;
+  }
   return date.toISOString().split("T")[0] as string;
 }
 

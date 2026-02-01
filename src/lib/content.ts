@@ -1,18 +1,72 @@
-import { projects, experiences, now, blog } from "#site/content";
-
 // Feature flag for database content
 const USE_DATABASE = process.env.DATABASE_CONTENT_ENABLED === "true";
+
+// Velite content is dynamically imported only when DATABASE_CONTENT_ENABLED=false
+let veliteContent: typeof import("#site/content") | null = null;
+
+async function getVeliteContent() {
+  if (!veliteContent) {
+    veliteContent = await import("#site/content");
+  }
+  return veliteContent;
+}
 
 // Lazy import for database content module (only loaded when USE_DATABASE is true)
 async function getDbContent() {
   return import("./db-content");
 }
 
-// Export Velite types for backward compatibility
-export type Project = (typeof projects)[number];
-export type Experience = (typeof experiences)[number];
-export type Now = (typeof now)[number];
-export type BlogPost = (typeof blog)[number];
+// Define types independently (compatible with both Velite and database formats)
+// id is optional because Velite doesn't generate id fields
+export type Project = {
+  id?: string;
+  title: string;
+  description: string;
+  slug: string;
+  featured: boolean;
+  order: number;
+  techStack?: string[] | null;
+  github?: string | null;
+  private?: boolean;
+  liveUrl?: string | null;
+  image?: string | null;
+  challenge?: string | null;
+  approach?: string | null;
+  impact?: string | null;
+  learnings?: string | null;
+  body: string;
+};
+
+export type Experience = {
+  id?: string;
+  company: string;
+  role: string;
+  startDate: string;
+  endDate?: string;
+  location?: string | null;
+  order: number;
+  body: string;
+};
+
+export type Now = {
+  id?: string;
+  title: string;
+  lastUpdated: string;
+  body: string;
+};
+
+export type BlogPost = {
+  id?: string;
+  title: string;
+  description: string;
+  slug: string;
+  publishedDate: string;
+  updatedDate?: string;
+  tags?: string[] | null;
+  featured: boolean;
+  readingTime?: number | string | null;
+  body: string;
+};
 
 // Helper to sort by published date descending
 const sortByPublishedDateDesc = (a: BlogPost, b: BlogPost) =>
@@ -27,7 +81,8 @@ export async function getProjects(): Promise<Project[]> {
     const dbContent = await getDbContent();
     return dbContent.getProjects() as Promise<Project[]>;
   }
-  return projects.sort((a, b) => a.order - b.order);
+  const velite = await getVeliteContent();
+  return velite.projects.sort((a, b) => a.order - b.order) as Project[];
 }
 
 export async function getFeaturedProjects(): Promise<Project[]> {
@@ -35,7 +90,10 @@ export async function getFeaturedProjects(): Promise<Project[]> {
     const dbContent = await getDbContent();
     return dbContent.getFeaturedProjects() as Promise<Project[]>;
   }
-  return projects.filter((p) => p.featured).sort((a, b) => a.order - b.order);
+  const velite = await getVeliteContent();
+  return velite.projects
+    .filter((p) => p.featured)
+    .sort((a, b) => a.order - b.order) as Project[];
 }
 
 export async function getProjectBySlug(
@@ -45,7 +103,8 @@ export async function getProjectBySlug(
     const dbContent = await getDbContent();
     return dbContent.getProjectBySlug(slug) as Promise<Project | undefined>;
   }
-  return projects.find((p) => p.slug === slug);
+  const velite = await getVeliteContent();
+  return velite.projects.find((p) => p.slug === slug) as Project | undefined;
 }
 
 export async function getAllProjectTechStack(): Promise<string[]> {
@@ -53,8 +112,9 @@ export async function getAllProjectTechStack(): Promise<string[]> {
     const dbContent = await getDbContent();
     return dbContent.getAllProjectTechStack();
   }
+  const velite = await getVeliteContent();
   const tech = new Set<string>();
-  projects.forEach((p) => p.techStack?.forEach((t) => tech.add(t)));
+  velite.projects.forEach((p) => p.techStack?.forEach((t) => tech.add(t)));
   return Array.from(tech).sort();
 }
 
@@ -67,7 +127,8 @@ export async function getExperiences(): Promise<Experience[]> {
     const dbContent = await getDbContent();
     return dbContent.getExperiences() as Promise<Experience[]>;
   }
-  return experiences.sort((a, b) => a.order - b.order);
+  const velite = await getVeliteContent();
+  return velite.experiences.sort((a, b) => a.order - b.order) as Experience[];
 }
 
 // ============================================================================
@@ -79,7 +140,8 @@ export async function getNowContent(): Promise<Now | undefined> {
     const dbContent = await getDbContent();
     return dbContent.getNowContent() as Promise<Now | undefined>;
   }
-  return now[0];
+  const velite = await getVeliteContent();
+  return velite.now[0] as Now | undefined;
 }
 
 // ============================================================================
@@ -91,7 +153,8 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
     const dbContent = await getDbContent();
     return dbContent.getBlogPosts() as Promise<BlogPost[]>;
   }
-  return blog.sort(sortByPublishedDateDesc);
+  const velite = await getVeliteContent();
+  return (velite.blog as BlogPost[]).sort(sortByPublishedDateDesc);
 }
 
 export async function getFeaturedBlogPosts(): Promise<BlogPost[]> {
@@ -99,7 +162,10 @@ export async function getFeaturedBlogPosts(): Promise<BlogPost[]> {
     const dbContent = await getDbContent();
     return dbContent.getFeaturedBlogPosts() as Promise<BlogPost[]>;
   }
-  return blog.filter((post) => post.featured).sort(sortByPublishedDateDesc);
+  const velite = await getVeliteContent();
+  return (velite.blog.filter((post) => post.featured) as BlogPost[]).sort(
+    sortByPublishedDateDesc
+  );
 }
 
 export async function getBlogPostBySlug(
@@ -109,7 +175,10 @@ export async function getBlogPostBySlug(
     const dbContent = await getDbContent();
     return dbContent.getBlogPostBySlug(slug) as Promise<BlogPost | undefined>;
   }
-  return blog.find((post) => post.slug === slug);
+  const velite = await getVeliteContent();
+  return velite.blog.find((post) => post.slug === slug) as
+    | BlogPost
+    | undefined;
 }
 
 export async function getAllBlogTags(): Promise<string[]> {
@@ -117,8 +186,9 @@ export async function getAllBlogTags(): Promise<string[]> {
     const dbContent = await getDbContent();
     return dbContent.getAllBlogTags();
   }
+  const velite = await getVeliteContent();
   const tags = new Set<string>();
-  blog.forEach((post) =>
+  velite.blog.forEach((post) =>
     post.tags?.forEach((tag) => tags.add(tag.toLowerCase()))
   );
   return Array.from(tags).sort();
@@ -129,8 +199,9 @@ export async function getPostsByTag(tag: string): Promise<BlogPost[]> {
     const dbContent = await getDbContent();
     return dbContent.getPostsByTag(tag) as Promise<BlogPost[]>;
   }
+  const velite = await getVeliteContent();
   const lowercasedTag = tag.toLowerCase();
-  return blog
+  return (velite.blog as BlogPost[])
     .filter((post) => post.tags?.some((t) => t.toLowerCase() === lowercasedTag))
     .sort(sortByPublishedDateDesc);
 }
@@ -144,6 +215,8 @@ export async function getRelatedPosts(
     return dbContent.getRelatedPosts(currentSlug, limit) as Promise<BlogPost[]>;
   }
 
+  const velite = await getVeliteContent();
+  const blog = velite.blog as BlogPost[];
   const currentPost = blog.find((post) => post.slug === currentSlug);
   if (!currentPost) return [];
 
