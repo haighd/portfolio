@@ -8,18 +8,18 @@ techStack: ["Python", "FastAPI", "React", "PostgreSQL", "asyncio", "Docker"]
 github: "https://github.com/predictive-trader/trader"
 private: true
 challenge: "Building an autonomous trading system that could identify high-probability intraday setups, execute trades with strict risk controls, and operate without manual intervention while adapting to changing market conditions."
-approach: "Developed VWAP Warrior - an intraday gap momentum strategy targeting low-float stocks with high pre-market relative volume. Built on event-driven Python architecture with multi-layered exits (ATR stops, trailing stops, profit targets, time-based) and comprehensive pre-trade validation. Implemented three-system alignment (production, rehearsal, backtesting) to catch integration bugs before deployment."
+approach: "Developed an intraday gap momentum strategy targeting low-float stocks with high pre-market relative volume. Built on event-driven Python architecture with multi-layered exits (ATR stops, trailing stops, profit targets, time-based) and comprehensive pre-trade validation. Implemented three-system alignment (production, rehearsal, backtesting) to catch integration bugs before deployment."
 impact: "Complete autonomous trading system with 20 epics delivered. Multi-layered risk management includes 2% position sizing, broker-level stop-losses, and circuit breakers. Three-AI code review process (Claude, Gemini, Codex) ensures code quality. React 19 dashboard provides real-time monitoring and emergency controls."
 learnings: "Three-system alignment (production, rehearsal, backtesting) is essential - divergence leads to 'works in backtest, fails in production' bugs. Event-driven architecture with typed domain events enables clean component communication. Trading rehearsals that intercept orders catch integration issues that unit tests miss."
 ---
 
 ## Overview
 
-An autonomous trading system implementing VWAP Warrior - an intraday gap momentum strategy targeting low-float stocks with high pre-market relative volume. Built on Python 3.13 with event-driven architecture and strict risk controls.
+An autonomous trading system implementing an intraday gap momentum strategy targeting low-float stocks with high pre-market relative volume. Built on Python 3.13 with event-driven architecture and strict risk controls.
 
 ## Key Features
 
-- **VWAP Warrior Strategy**: Intraday gap momentum targeting stocks with 3%+ gaps and 2x+ relative volume
+- **Gap Momentum Strategy**: Intraday momentum targeting stocks with 3%+ gaps and 2x+ relative volume
 - **Multi-Layered Exits**: ATR stops, trailing stops, profit targets, time-based exits, and EOD flatten
 - **Three-System Alignment**: Production, rehearsal, and backtesting systems share code paths
 - **Event-Driven Architecture**: Custom asyncio event bus for reactive component communication
@@ -41,6 +41,6 @@ The system follows a clean separation of concerns:
 
 1. **Market Data Layer**: WebSocket streaming and historical data via Alpaca API
 2. **Screening Layer**: Pre-market gap/RVOL scanning for trade candidates
-3. **Strategy Layer**: VWAP Warrior entry validation and exit management
+3. **Strategy Layer**: Entry validation and multi-exit management
 4. **Execution Layer**: Order engine with broker-level stop-losses
 5. **Monitoring Layer**: Real-time dashboard, health checks, and alerting
