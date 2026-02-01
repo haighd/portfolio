@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
-import { skills } from "#site/content";
 import { Section } from "@/components/layout";
 import { Badge } from "@/components/ui";
-import { proficiencyLevels, certifications, type Proficiency } from "@/data/skills";
+import {
+  proficiencyLevels,
+  getSkills,
+  getCertifications,
+  type Proficiency,
+} from "@/data/skills";
 
 export const metadata: Metadata = {
   title: "Skills & Certifications",
@@ -31,53 +35,66 @@ const categoryDescriptions: Record<CategoryName, string> = {
   "Leadership & Operations": "Management, strategy, and process improvement",
 };
 
-// Group skills by category
-const skillsByCategory: Record<string, (typeof skills)[number][]> = {};
-for (const skill of skills) {
-  const cat = skill.category;
-  if (!skillsByCategory[cat]) {
-    skillsByCategory[cat] = [];
+interface SkillItem {
+  name: string;
+  category: string;
+  proficiency: string;
+  order: number;
+}
+
+function groupAndSortSkills(skills: SkillItem[]) {
+  // Group skills by category
+  const skillsByCategory: Record<string, SkillItem[]> = {};
+  for (const skill of skills) {
+    const cat = skill.category;
+    if (!skillsByCategory[cat]) {
+      skillsByCategory[cat] = [];
+    }
+    skillsByCategory[cat]!.push(skill);
   }
-  skillsByCategory[cat]!.push(skill);
-}
 
-// Sort skills within each category by order
-for (const categorySkills of Object.values(skillsByCategory)) {
-  categorySkills.sort((a, b) => a.order - b.order);
-}
+  // Sort skills within each category by order
+  for (const categorySkills of Object.values(skillsByCategory)) {
+    categorySkills.sort((a, b) => a.order - b.order);
+  }
 
-// Detect unknown categories (skills with category not in categoryOrder)
-const unknownCategories = Object.keys(skillsByCategory).filter(
-  (cat) => !categoryOrder.includes(cat as CategoryName)
-);
-
-// Development-time warning for unknown categories
-if (process.env.NODE_ENV !== "production" && unknownCategories.length > 0) {
-  console.warn(
-    `[Skills Data Inconsistency] Unknown skill categories found: ${unknownCategories.join(", ")}. ` +
-      `Add these to categoryOrder in skills/page.tsx or fix the category names in the MDX files.`
+  // Detect unknown categories
+  const unknownCategories = Object.keys(skillsByCategory).filter(
+    (cat) => !categoryOrder.includes(cat as CategoryName)
   );
+
+  // Development-time warning for unknown categories
+  if (process.env.NODE_ENV !== "production" && unknownCategories.length > 0) {
+    console.warn(
+      `[Skills Data Inconsistency] Unknown skill categories found: ${unknownCategories.join(", ")}. ` +
+        `Add these to categoryOrder in skills/page.tsx or fix the category names in the MDX files.`
+    );
+  }
+
+  // Create ordered categories array
+  const orderedCategories = categoryOrder
+    .filter((cat) => cat in skillsByCategory)
+    .map((cat) => ({
+      name: cat,
+      description: categoryDescriptions[cat],
+      skills: skillsByCategory[cat]!,
+    }));
+
+  return [
+    ...orderedCategories,
+    ...unknownCategories.map((cat) => ({
+      name: cat,
+      description: "",
+      skills: skillsByCategory[cat]!,
+    })),
+  ];
 }
 
-// Create ordered categories array (known categories first, then any unknown ones)
-const orderedCategories = categoryOrder
-  .filter((cat) => cat in skillsByCategory)
-  .map((cat) => ({
-    name: cat,
-    description: categoryDescriptions[cat],
-    skills: skillsByCategory[cat]!,
-  }));
+export default async function SkillsPage() {
+  const skills = await getSkills();
+  const certifications = await getCertifications();
+  const sortedCategories = groupAndSortSkills(skills);
 
-const sortedCategories = [
-  ...orderedCategories,
-  ...unknownCategories.map((cat) => ({
-    name: cat,
-    description: "",
-    skills: skillsByCategory[cat]!,
-  })),
-];
-
-export default function SkillsPage() {
   return (
     <Section className="pt-24 md:pt-32">
       {/* Page header */}
@@ -87,7 +104,8 @@ export default function SkillsPage() {
           <span className="mt-2 block h-1 w-16 rounded-full bg-foreground/20" />
         </h1>
         <p className="mt-4 text-lg text-muted-foreground">
-          Technical expertise and professional certifications across data, engineering, and leadership.
+          Technical expertise and professional certifications across data,
+          engineering, and leadership.
         </p>
       </div>
 

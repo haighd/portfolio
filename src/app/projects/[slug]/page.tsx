@@ -22,7 +22,7 @@ interface ProjectPageProps {
 }
 
 export async function generateStaticParams() {
-  const projects = getProjects();
+  const projects = await getProjects();
   return projects.map((project) => ({ slug: project.slug }));
 }
 
@@ -30,7 +30,7 @@ export async function generateMetadata({
   params,
 }: ProjectPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const project = await getProjectBySlug(slug);
 
   if (!project) {
     return { title: "Project Not Found" };
@@ -44,7 +44,7 @@ export async function generateMetadata({
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const project = await getProjectBySlug(slug);
 
   if (!project) {
     notFound();

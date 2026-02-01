@@ -12,9 +12,9 @@ export const metadata: Metadata = {
     "Articles on analytics, data science, machine learning, and technical leadership.",
 };
 
-export default function BlogPage() {
-  const posts = getBlogPosts();
-  const allTags = getAllBlogTags();
+export default async function BlogPage() {
+  const posts = await getBlogPosts();
+  const allTags = await getAllBlogTags();
 
   if (posts.length === 0) {
     return (

@@ -1,8 +1,16 @@
 // Shared skills utilities and certifications data
 // Skills content now lives in src/content/skills/*.mdx (Velite collection)
+// or in the database when DATABASE_CONTENT_ENABLED=true
 // Used by: /skills, /about
 
 import { skills } from "#site/content";
+
+const USE_DATABASE = process.env.DATABASE_CONTENT_ENABLED === "true";
+
+// Lazy import for database content module (only loaded when USE_DATABASE is true)
+async function getDbContent() {
+  return import("@/lib/db-content");
+}
 
 export const proficiencyLevels = ["expert", "advanced", "intermediate"] as const;
 export type Proficiency = (typeof proficiencyLevels)[number];
@@ -13,6 +21,7 @@ export type Certification = {
   abbreviation: string;
 };
 
+// Static certifications (also available in database)
 export const certifications: Certification[] = [
   {
     name: "Six Sigma Black Belt",
@@ -51,7 +60,8 @@ const skillsSummary: Record<string, string[]> = {
 };
 
 // Development-time validation: ensure summary skills exist in the Velite collection
-if (process.env.NODE_ENV !== "production") {
+// Only runs with Velite (not database) to avoid async complexity
+if (process.env.NODE_ENV !== "production" && !USE_DATABASE) {
   const allSkillNames = skills.map((s) => s.name);
   const summarySkills = Object.values(skillsSummary).flat();
 
@@ -66,4 +76,27 @@ if (process.env.NODE_ENV !== "production") {
 
 export function getSkillsSummary(): Record<string, string[]> {
   return skillsSummary;
+}
+
+// Export skills getter that supports both Velite and database
+export async function getSkills() {
+  if (USE_DATABASE) {
+    const dbContent = await getDbContent();
+    return dbContent.getSkills();
+  }
+  return skills;
+}
+
+// Export certifications getter that supports both static and database
+export async function getCertifications(): Promise<Certification[]> {
+  if (USE_DATABASE) {
+    const dbContent = await getDbContent();
+    const dbCerts = await dbContent.getCertifications();
+    return dbCerts.map((c) => ({
+      name: c.name,
+      abbreviation: c.abbreviation,
+      issuer: c.issuer,
+    }));
+  }
+  return certifications;
 }

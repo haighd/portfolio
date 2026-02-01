@@ -9,9 +9,9 @@ export const metadata: Metadata = {
     "Technical projects demonstrating hands-on capability in Python, ML/AI, and data engineering.",
 };
 
-export default function ProjectsPage() {
-  const projects = getProjects();
-  const allTech = getAllProjectTechStack();
+export default async function ProjectsPage() {
+  const projects = await getProjects();
+  const allTech = await getAllProjectTechStack();
 
   return (
     <Section className="pt-24 md:pt-32">

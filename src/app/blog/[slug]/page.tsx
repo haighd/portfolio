@@ -14,7 +14,7 @@ interface BlogPostPageProps {
 }
 
 export async function generateStaticParams() {
-  const posts = getBlogPosts();
+  const posts = await getBlogPosts();
   return posts.map((post) => ({ slug: post.slug }));
 }
 
@@ -22,7 +22,7 @@ export async function generateMetadata({
   params,
 }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogPostBySlug(slug);
+  const post = await getBlogPostBySlug(slug);
 
   if (!post) {
     return { title: "Post Not Found" };
@@ -64,13 +64,13 @@ export async function generateMetadata({
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
-  const post = getBlogPostBySlug(slug);
+  const post = await getBlogPostBySlug(slug);
 
   if (!post) {
     notFound();
   }
 
-  const relatedPosts = getRelatedPosts(slug, 3);
+  const relatedPosts = await getRelatedPosts(slug, 3);
 
   return (
     <Section className="pt-24 md:pt-32" containerSize="narrow">

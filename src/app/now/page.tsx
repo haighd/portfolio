@@ -14,8 +14,8 @@ export const metadata: Metadata = {
   description,
 };
 
-export default function NowPage() {
-  const now = getNowContent();
+export default async function NowPage() {
+  const now = await getNowContent();
 
   if (!now) {
     notFound();
