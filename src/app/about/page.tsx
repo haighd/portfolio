@@ -53,9 +53,17 @@ export default async function AboutPage() {
   const currentExperience = experiences.find((exp) => !exp.endDate);
 
   const title = about?.title ?? "About Me";
-  const currentRole = currentExperience?.role ?? "Associate Director, Data Science & Analytics";
-  const currentCompany = currentExperience?.company ?? "Merck";
+  // Derive current role/company from experiences (source of truth), fall back to about content, then hardcoded
+  const currentRole =
+    currentExperience?.role ??
+    about?.currentRole ??
+    "Associate Director, Data Science & Analytics";
+  const currentCompany =
+    currentExperience?.company ??
+    about?.currentCompany ??
+    "Merck";
   const focusAreas = about?.focusAreas ?? ["ML/AI", "Analytics", "Leadership"];
+  const location = about?.location ?? "Roxbury Township, NJ";
 
   return (
     <>
@@ -104,7 +112,7 @@ export default async function AboutPage() {
             </div>
             <div className="rounded-lg border border-border p-6">
               <h2 className="font-semibold">Location</h2>
-              <p className="mt-2 text-sm text-muted-foreground">Roxbury Township, NJ</p>
+              <p className="mt-2 text-sm text-muted-foreground">{location}</p>
             </div>
             <div className="rounded-lg border border-border p-6">
               <h2 className="font-semibold">Focus Areas</h2>
