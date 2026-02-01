@@ -5,6 +5,8 @@ import { ArrowRight } from "lucide-react";
 import { Section } from "@/components/layout";
 import { Badge, Button } from "@/components/ui";
 import { getSkillsSummary } from "@/data/skills";
+import { getAboutContent } from "@/lib/content";
+import { MDXContent } from "@/components/mdx-content";
 
 export const metadata: Metadata = {
   title: "About",
@@ -14,40 +16,58 @@ export const metadata: Metadata = {
 
 const skills = getSkillsSummary();
 
-export default function AboutPage() {
+// Fallback content for when database content is not available
+const fallbackBio = (
+  <>
+    <p className="text-lg">
+      I&apos;m an analytics leader who believes the best data work happens when
+      strategic thinking meets technical execution.
+    </p>
+    <p>
+      With experience spanning data science, machine learning, and analytics
+      leadership, I bring a unique perspective that combines hands-on technical
+      capability with the ability to translate complex insights into business
+      impact.
+    </p>
+    <p>
+      Currently, I lead analytics initiatives at Merck, where I develop ML/AI
+      solutions for business process optimization and partner with
+      cross-functional teams to drive data-informed decision making.
+    </p>
+    <p>
+      Outside of work, I build side projects that let me explore new
+      technologies and stay sharp on the technical side. From algorithmic
+      trading systems to full-stack web applications, these projects keep me
+      connected to the craft of building software.
+    </p>
+  </>
+);
+
+export default async function AboutPage() {
+  const about = await getAboutContent();
+
+  const title = about?.title ?? "About Me";
+  const currentRole =
+    about?.currentRole ?? "Associate Director, Data Science & Analytics";
+  const currentCompany = about?.currentCompany ?? "Merck";
+  const location = about?.location ?? "Remote";
+  const focusAreas = about?.focusAreas ?? ["ML/AI", "Analytics", "Leadership"];
+
   return (
     <>
       <Section className="pt-24 md:pt-32">
         <div className="grid gap-12 md:grid-cols-3">
           <div className="md:col-span-2">
             <h1 className="text-4xl font-bold tracking-tight">
-              About Me
+              {title}
               <span className="mt-2 block h-1 w-16 rounded-full bg-foreground/20" />
             </h1>
             <div className="mt-6 space-y-4 text-muted-foreground">
-              <p className="text-lg">
-                I&apos;m an analytics leader who believes the best data work
-                happens when strategic thinking meets technical execution.
-              </p>
-              <p>
-                With experience spanning data science, machine learning, and
-                analytics leadership, I bring a unique perspective that combines
-                hands-on technical capability with the ability to translate
-                complex insights into business impact.
-              </p>
-              <p>
-                Currently, I lead analytics initiatives at Merck, where I
-                develop ML/AI solutions for business process optimization and
-                partner with cross-functional teams to drive data-informed
-                decision making.
-              </p>
-              <p>
-                Outside of work, I build side projects that let me explore new
-                technologies and stay sharp on the technical side. From
-                algorithmic trading systems to full-stack web applications,
-                these projects keep me connected to the craft of building
-                software.
-              </p>
+              {about?.body ? (
+                <MDXContent code={about.body} />
+              ) : (
+                fallbackBio
+              )}
             </div>
             <div className="mt-8 flex gap-4">
               <Button asChild>
@@ -75,21 +95,21 @@ export default function AboutPage() {
             </div>
             <div className="rounded-lg border border-border p-6">
               <h2 className="font-semibold">Current Role</h2>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Associate Director, Data Science & Analytics
-              </p>
-              <p className="text-sm text-muted-foreground">Merck</p>
+              <p className="mt-2 text-sm text-muted-foreground">{currentRole}</p>
+              <p className="text-sm text-muted-foreground">{currentCompany}</p>
             </div>
             <div className="rounded-lg border border-border p-6">
               <h2 className="font-semibold">Location</h2>
-              <p className="mt-2 text-sm text-muted-foreground">Remote</p>
+              <p className="mt-2 text-sm text-muted-foreground">{location}</p>
             </div>
             <div className="rounded-lg border border-border p-6">
               <h2 className="font-semibold">Focus Areas</h2>
               <div className="mt-2 flex flex-wrap gap-2">
-                <Badge variant="secondary">ML/AI</Badge>
-                <Badge variant="secondary">Analytics</Badge>
-                <Badge variant="secondary">Leadership</Badge>
+                {focusAreas.map((area) => (
+                  <Badge key={area} variant="secondary">
+                    {area}
+                  </Badge>
+                ))}
               </div>
             </div>
           </div>

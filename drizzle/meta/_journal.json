@@ -15,6 +15,13 @@
       "when": 1769952708302,
       "tag": "0001_concerned_lila_cheney",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1769973537105,
+      "tag": "0002_sturdy_jack_power",
+      "breakpoints": true
     }
   ]
 }

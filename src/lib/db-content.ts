@@ -10,12 +10,14 @@ import {
   blogPosts,
   skills,
   nowContent,
+  aboutContent,
   certifications,
   type Project as DbProject,
   type Experience as DbExperience,
   type BlogPost as DbBlogPost,
   type Skill as DbSkill,
   type NowContent as DbNowContent,
+  type AboutContent as DbAboutContent,
   type Certification as DbCertification,
 } from "@/db/schema";
 import { asc, desc, eq, sql } from "drizzle-orm";
@@ -41,6 +43,7 @@ export type Skill = Omit<DbSkill, "createdAt" | "updatedAt">;
 export type Now = Omit<DbNowContent, "lastUpdated" | "createdAt" | "updatedAt"> & {
   lastUpdated: string;
 };
+export type About = Omit<DbAboutContent, "createdAt" | "updatedAt">;
 export type Certification = Omit<DbCertification, "createdAt" | "updatedAt">;
 
 // Helper to format date as ISO string (date only, no time)
@@ -183,6 +186,19 @@ export const getNowContent = unstable_cache(
     return result[0] ? toNow(result[0]) : undefined;
   },
   ["db-now-content"],
+  { revalidate: CACHE_REVALIDATE }
+);
+
+// ============================================================================
+// About Content
+// ============================================================================
+
+export const getAboutContent = unstable_cache(
+  async (): Promise<About | undefined> => {
+    const result = await getDb().select().from(aboutContent).limit(1);
+    return result[0];
+  },
+  ["db-about-content"],
   { revalidate: CACHE_REVALIDATE }
 );
 
