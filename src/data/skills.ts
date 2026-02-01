@@ -7,12 +7,6 @@ import { skills } from "#site/content";
 export const proficiencyLevels = ["expert", "advanced", "intermediate"] as const;
 export type Proficiency = (typeof proficiencyLevels)[number];
 
-export const proficiencyVariant: Record<Proficiency, "expert" | "advanced" | "intermediate"> = {
-  expert: "expert",
-  advanced: "advanced",
-  intermediate: "intermediate",
-};
-
 export type Certification = {
   name: string;
   issuer: string;

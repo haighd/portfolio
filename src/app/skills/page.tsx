@@ -2,12 +2,7 @@ import type { Metadata } from "next";
 import { skills } from "#site/content";
 import { Section } from "@/components/layout";
 import { Badge } from "@/components/ui";
-import {
-  proficiencyLevels,
-  proficiencyVariant,
-  certifications,
-  type Proficiency,
-} from "@/data/skills";
+import { proficiencyLevels, certifications, type Proficiency } from "@/data/skills";
 
 export const metadata: Metadata = {
   title: "Skills & Certifications",
@@ -15,7 +10,7 @@ export const metadata: Metadata = {
     "Technical expertise and professional certifications across data, engineering, and leadership.",
 };
 
-// Category display configuration
+// Category display configuration (typed as literal tuple for compile-time safety)
 const categoryOrder = [
   "Languages",
   "Frameworks & Libraries",
@@ -23,9 +18,11 @@ const categoryOrder = [
   "Platforms & Infrastructure",
   "Tools",
   "Leadership & Operations",
-];
+] as const;
 
-const categoryDescriptions: Record<string, string> = {
+type CategoryName = (typeof categoryOrder)[number];
+
+const categoryDescriptions: Record<CategoryName, string> = {
   Languages: "Programming and query languages",
   "Frameworks & Libraries": "Development frameworks and data libraries",
   "Data Science & Analytics": "Machine learning, statistics, and analytics",
@@ -49,14 +46,36 @@ for (const categorySkills of Object.values(skillsByCategory)) {
   categorySkills.sort((a, b) => a.order - b.order);
 }
 
-// Create ordered categories array
-const sortedCategories = categoryOrder
+// Detect unknown categories (skills with category not in categoryOrder)
+const unknownCategories = Object.keys(skillsByCategory).filter(
+  (cat) => !categoryOrder.includes(cat as CategoryName)
+);
+
+// Development-time warning for unknown categories
+if (process.env.NODE_ENV !== "production" && unknownCategories.length > 0) {
+  console.warn(
+    `[Skills Data Inconsistency] Unknown skill categories found: ${unknownCategories.join(", ")}. ` +
+      `Add these to categoryOrder in skills/page.tsx or fix the category names in the MDX files.`
+  );
+}
+
+// Create ordered categories array (known categories first, then any unknown ones)
+const orderedCategories = categoryOrder
   .filter((cat) => cat in skillsByCategory)
   .map((cat) => ({
     name: cat,
     description: categoryDescriptions[cat],
     skills: skillsByCategory[cat]!,
   }));
+
+const sortedCategories = [
+  ...orderedCategories,
+  ...unknownCategories.map((cat) => ({
+    name: cat,
+    description: "",
+    skills: skillsByCategory[cat]!,
+  })),
+];
 
 export default function SkillsPage() {
   return (
@@ -84,7 +103,7 @@ export default function SkillsPage() {
               {category.skills.map((skill) => (
                 <Badge
                   key={skill.name}
-                  variant={proficiencyVariant[skill.proficiency as Proficiency]}
+                  variant={skill.proficiency as Proficiency}
                 >
                   {skill.name}
                   <span className="sr-only">
@@ -102,7 +121,7 @@ export default function SkillsPage() {
       <div className="mt-8 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
         <span>Proficiency:</span>
         {proficiencyLevels.map((level) => (
-          <Badge key={level} variant={proficiencyVariant[level]}>
+          <Badge key={level} variant={level}>
             {level.charAt(0).toUpperCase() + level.slice(1)}
           </Badge>
         ))}
