@@ -49,14 +49,13 @@ function formatDate(date: Date | string): string {
   // Create a new Date object to handle both Date and string types uniformly
   const d = new Date(date);
 
-  // Check if the date is valid. `new Date('invalid-string')` results in an invalid date.
+  // Throw error for invalid dates to surface data integrity issues early
   if (isNaN(d.getTime())) {
-    console.warn("Invalid date received, could not parse:", date);
-    return new Date().toISOString().split("T")[0] as string;
+    throw new Error(`Invalid date received, could not parse: "${date}"`);
   }
 
-  // If valid, format as YYYY-MM-DD
-  return d.toISOString().split("T")[0] as string;
+  // Format as YYYY-MM-DD (toISOString always has 'T', so split is safe)
+  return d.toISOString().split("T")[0]!;
 }
 
 // Helper to convert DB experience to Velite-compatible format

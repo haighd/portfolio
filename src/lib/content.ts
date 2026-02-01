@@ -25,7 +25,7 @@ export type Project = {
   slug: string;
   featured: boolean;
   order: number;
-  techStack?: string[] | null;
+  techStack?: string[];
   github?: string | null;
   private?: boolean;
   liveUrl?: string | null;
@@ -62,7 +62,7 @@ export type BlogPost = {
   slug: string;
   publishedDate: string;
   updatedDate?: string;
-  tags?: string[] | null;
+  tags: string[];
   featured: boolean;
   readingTime?: number | string | null;
   body: string;
