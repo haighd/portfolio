@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Download } from "lucide-react";
 import { Section } from "@/components/layout";
 import { Badge, Button } from "@/components/ui";
 import { getSkillsSummary } from "@/data/skills";
@@ -105,6 +105,17 @@ export default async function AboutPage() {
                 priority
               />
             </div>
+            {/* Resume Download */}
+            <Button variant="outline" className="w-full" asChild>
+              <a
+                href="/static/dan-haight-resume.pdf"
+                download="Dan Haight - Resume.pdf"
+                aria-label="Download Dan Haight Resume PDF"
+              >
+                <Download className="h-4 w-4" />
+                Download Resume
+              </a>
+            </Button>
             <div className="rounded-lg border border-border p-6">
               <h2 className="font-semibold">Current Role</h2>
               <p className="mt-2 text-sm text-muted-foreground">{currentRole}</p>
