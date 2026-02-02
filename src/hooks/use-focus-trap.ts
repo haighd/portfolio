@@ -123,7 +123,9 @@ export function useFocusTrap<T extends HTMLElement>(
       const activeContainer = containerRef.current;
       if (!activeContainer) return;
 
-      const target = e.target as HTMLElement;
+      const target = e.target;
+      // Only handle if target is an HTMLElement
+      if (!(target instanceof HTMLElement)) return;
       // If focus moved outside the container, bring it back
       if (!activeContainer.contains(target)) {
         const focusableElements = getFocusableElements(activeContainer);
