@@ -54,9 +54,9 @@ function normalizePagefindUrl(url: string) {
   return `${normalized}${queryPart}${hashPart}`;
 }
 
-function getResultType(meta: PagefindResult["meta"]): SearchResult["type"] {
-  if (meta.type === "blog") return "blog";
-  if (meta.type === "project") return "project";
+function getResultType(meta?: PagefindResult["meta"]): SearchResult["type"] {
+  if (meta?.type === "blog") return "blog";
+  if (meta?.type === "project") return "project";
   return "page";
 }
 
