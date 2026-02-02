@@ -118,6 +118,15 @@ function toAbout(db: DbAboutContent): About {
   };
 }
 
+// Helper to convert DB uses content to Velite-compatible format
+function toUses(db: DbUsesContent): Uses {
+  return {
+    id: db.id,
+    title: db.title,
+    body: db.body,
+  };
+}
+
 // Cache configuration - longer revalidation for mostly static portfolio content
 const CACHE_REVALIDATE =
   Number(process.env.CACHE_REVALIDATE_SECONDS) || 3600; // default: 1 hour
@@ -226,9 +235,7 @@ export const getAboutContent = unstable_cache(
 export const getUsesContent = unstable_cache(
   async (): Promise<Uses | undefined> => {
     const result = await getDb().select().from(usesContent).limit(1);
-    return result[0]
-      ? { id: result[0].id, title: result[0].title, body: result[0].body }
-      : undefined;
+    return result[0] ? toUses(result[0]) : undefined;
   },
   ["db-uses-content"],
   { revalidate: CACHE_REVALIDATE }
