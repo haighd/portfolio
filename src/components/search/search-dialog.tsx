@@ -30,8 +30,8 @@ interface SearchResult {
 }
 
 function getResultType(url: string): SearchResult["type"] {
-  if (url.includes("/blog/")) return "blog";
-  if (url.includes("/projects/")) return "project";
+  if (url.startsWith("/blog/")) return "blog";
+  if (url.startsWith("/projects/")) return "project";
   return "page";
 }
 
@@ -72,6 +72,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
     search: (query: string) => Promise<PagefindResponse>;
   } | null>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const resultsContainerRef = React.useRef<HTMLDivElement>(null);
 
   // Load Pagefind on mount
   React.useEffect(() => {
@@ -152,6 +153,15 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [open, onOpenChange]);
+
+  // Scroll selected result into view
+  React.useEffect(() => {
+    if (resultsContainerRef.current?.children[selectedIndex]) {
+      resultsContainerRef.current.children[selectedIndex].scrollIntoView({
+        block: "nearest",
+      });
+    }
+  }, [selectedIndex]);
 
   // Handle keyboard navigation within dialog
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -236,6 +246,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 
           {/* Results */}
           <div
+            ref={resultsContainerRef}
             id="search-results"
             className="max-h-[300px] overflow-y-auto"
             role="listbox"
