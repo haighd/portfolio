@@ -2,6 +2,12 @@ import Link from "next/link";
 import { Github, Linkedin, Mail, Rss } from "lucide-react";
 import { Container } from "@/components/ui";
 
+const footerLinks = [
+  { name: "Now", href: "/now" },
+  { name: "Uses", href: "/uses" },
+  { name: "Contact", href: "/contact" },
+];
+
 const socialLinks = [
   {
     name: "GitHub",
@@ -36,6 +42,19 @@ export function Footer() {
           <p className="text-sm text-muted-foreground">
             &copy; {currentYear} Dan Haight. All rights reserved.
           </p>
+
+          {/* Footer Navigation Links */}
+          <nav aria-label="Footer" className="flex items-center gap-6">
+            {footerLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {link.name}
+              </Link>
+            ))}
+          </nav>
 
           {/* Social Links */}
           <div className="flex items-center gap-4">

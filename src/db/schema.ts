@@ -118,6 +118,15 @@ export const aboutContent = pgTable("about_content", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
+// Uses content table (singleton pattern)
+export const usesContent = pgTable("uses_content", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  title: text("title").notNull(),
+  body: text("body").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
 // Certifications table
 export const certifications = pgTable("certifications", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -146,6 +155,9 @@ export type NewNowContent = typeof nowContent.$inferInsert;
 
 export type AboutContent = typeof aboutContent.$inferSelect;
 export type NewAboutContent = typeof aboutContent.$inferInsert;
+
+export type UsesContent = typeof usesContent.$inferSelect;
+export type NewUsesContent = typeof usesContent.$inferInsert;
 
 export type Certification = typeof certifications.$inferSelect;
 export type NewCertification = typeof certifications.$inferInsert;

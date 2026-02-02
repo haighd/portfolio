@@ -11,6 +11,7 @@ import {
   skills,
   nowContent,
   aboutContent,
+  usesContent,
   certifications,
   type Project as DbProject,
   type Experience as DbExperience,
@@ -18,6 +19,7 @@ import {
   type Skill as DbSkill,
   type NowContent as DbNowContent,
   type AboutContent as DbAboutContent,
+  type UsesContent as DbUsesContent,
   type Certification as DbCertification,
 } from "@/db/schema";
 import { asc, desc, eq, sql } from "drizzle-orm";
@@ -44,6 +46,7 @@ export type Now = Omit<DbNowContent, "lastUpdated" | "createdAt" | "updatedAt"> 
   lastUpdated: string;
 };
 export type About = Omit<DbAboutContent, "createdAt" | "updatedAt">;
+export type Uses = Omit<DbUsesContent, "createdAt" | "updatedAt">;
 export type Certification = Omit<DbCertification, "createdAt" | "updatedAt">;
 
 // Helper to format date as ISO string (date only, no time)
@@ -217,6 +220,21 @@ export const getAboutContent = unstable_cache(
 );
 
 // ============================================================================
+// Uses Content
+// ============================================================================
+
+export const getUsesContent = unstable_cache(
+  async (): Promise<Uses | undefined> => {
+    const result = await getDb().select().from(usesContent).limit(1);
+    return result[0]
+      ? { id: result[0].id, title: result[0].title, body: result[0].body }
+      : undefined;
+  },
+  ["db-uses-content"],
+  { revalidate: CACHE_REVALIDATE }
+);
+
+// ============================================================================
 // Blog Posts
 // ============================================================================
 
@@ -280,18 +298,11 @@ export const getPostsByTag = async (tag: string): Promise<BlogPost[]> => {
   const lowercasedTag = tag.toLowerCase();
   const cachedFn = unstable_cache(
     async (): Promise<BlogPost[]> => {
-      // Filter by tag at the database level using unnest for case-insensitive matching
-      const result = await getDb().execute(sql`
-        SELECT * FROM ${blogPosts}
-        WHERE EXISTS (
-          SELECT 1
-          FROM unnest(${blogPosts.tags}) as t
-          WHERE lower(t) = ${lowercasedTag}
-        )
-        ORDER BY ${blogPosts.publishedDate} DESC
-      `);
-      // Map raw SQL results to Velite-compatible format
-      return (result as unknown as DbBlogPost[]).map(toBlogPost);
+      // Get all posts and filter by tag in TypeScript for proper type mapping
+      const allPosts = await getBlogPosts();
+      return allPosts.filter((post) =>
+        post.tags?.some((t) => t.toLowerCase() === lowercasedTag)
+      );
     },
     ["db-posts-by-tag", lowercasedTag],
     { revalidate: CACHE_REVALIDATE }

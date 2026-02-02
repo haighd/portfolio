@@ -99,6 +99,16 @@ const skills = defineCollection({
   }),
 });
 
+const uses = defineCollection({
+  name: "Uses",
+  pattern: "uses/index.mdx",
+  single: true,
+  schema: s.object({
+    title: s.string(),
+    body: s.mdx(),
+  }),
+});
+
 export default defineConfig({
   root: "src/content",
   output: {
@@ -108,7 +118,7 @@ export default defineConfig({
     name: "[name]-[hash:6].[ext]",
     clean: true,
   },
-  collections: { projects, experiences, now, about, blog, skills },
+  collections: { projects, experiences, now, about, blog, skills, uses },
   mdx: {
     remarkPlugins: [],
     rehypePlugins: [],
