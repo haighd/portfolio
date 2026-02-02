@@ -5,6 +5,11 @@ import { useRouter } from "next/navigation";
 import { Search, X, FileText, Folder, Briefcase, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+// Search configuration constants
+const DEBOUNCE_DELAY_MS = 200;
+const MAX_SEARCH_RESULTS = 10;
+const FOCUS_DELAY_MS = 50;
+
 interface PagefindResult {
   url: string;
   meta: {
@@ -102,7 +107,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
       setResults([]);
       setSelectedIndex(0);
       // Small delay to ensure dialog is rendered
-      setTimeout(() => inputRef.current?.focus(), 50);
+      setTimeout(() => inputRef.current?.focus(), FOCUS_DELAY_MS);
     }
   }, [open]);
 
@@ -118,7 +123,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
       try {
         const response = await pagefind.search(query);
         const searchResults = await Promise.all(
-          response.results.slice(0, 10).map(async (result) => {
+          response.results.slice(0, MAX_SEARCH_RESULTS).map(async (result) => {
             const data = await result.data();
             return {
               url: data.url,
@@ -138,13 +143,22 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
       }
     };
 
-    const debounce = setTimeout(search, 200);
+    const debounce = setTimeout(search, DEBOUNCE_DELAY_MS);
     return () => clearTimeout(debounce);
   }, [query, pagefind]);
 
   // Global keyboard shortcut
   React.useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
+      // Don't trigger shortcut in input fields
+      if (
+        e.target instanceof HTMLElement &&
+        (e.target.tagName === "INPUT" ||
+          e.target.tagName === "TEXTAREA" ||
+          e.target.isContentEditable)
+      ) {
+        return;
+      }
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         onOpenChange(!open);
@@ -165,6 +179,13 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 
   // Handle keyboard navigation within dialog
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    // Guard: don't navigate if no results
+    if (
+      results.length === 0 &&
+      (e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === "Enter")
+    ) {
+      return;
+    }
     switch (e.key) {
       case "ArrowDown":
         e.preventDefault();
