@@ -107,7 +107,11 @@ export default async function AboutPage() {
             </div>
             {/* Resume Download */}
             <Button variant="outline" className="w-full" asChild>
-              <a href="/static/dan-haight-resume.pdf" download>
+              <a
+                href="/static/dan-haight-resume.pdf"
+                download="Dan Haight - Resume.pdf"
+                aria-label="Download Dan Haight Resume PDF"
+              >
                 <Download className="h-4 w-4" />
                 Download Resume
               </a>
