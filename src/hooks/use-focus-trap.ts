@@ -39,6 +39,29 @@ function canFocus(element: HTMLElement | null): element is HTMLElement {
 }
 
 /**
+ * Checks if an element is visually visible (not display:none or visibility:hidden).
+ */
+function isVisible(element: HTMLElement): boolean {
+  // offsetParent is null for display:none elements (except for body/html)
+  if (element.offsetParent === null && element.tagName !== "BODY") {
+    return false;
+  }
+  const style = getComputedStyle(element);
+  return style.visibility !== "hidden" && style.display !== "none";
+}
+
+/**
+ * Gets all focusable elements within a container that are actually visible.
+ */
+function getFocusableElements(container: HTMLElement): HTMLElement[] {
+  const elements = Array.from(
+    container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
+  );
+  // Filter out elements that are visually hidden with CSS
+  return elements.filter(isVisible);
+}
+
+/**
  * Traps focus within a container element when active.
  * Tab/Shift+Tab cycle through focusable elements.
  * Restores focus to the previously focused element when deactivated.
@@ -68,9 +91,7 @@ export function useFocusTrap<T extends HTMLElement>(
       const activeContainer = containerRef.current;
       if (!activeContainer) return;
 
-      const focusableElements = Array.from(
-        activeContainer.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
-      );
+      const focusableElements = getFocusableElements(activeContainer);
       if (focusableElements.length === 0) return;
 
       const firstElement = focusableElements.at(0);
@@ -94,11 +115,34 @@ export function useFocusTrap<T extends HTMLElement>(
       }
     }
 
-    container.addEventListener("keydown", handleKeyDown);
+    /**
+     * Handles focus escaping the container (e.g., programmatic focus changes).
+     * Brings focus back to the first focusable element if it escapes.
+     */
+    function handleFocusIn(e: FocusEvent) {
+      const activeContainer = containerRef.current;
+      if (!activeContainer) return;
 
-    // Cleanup: remove listener and restore focus on deactivation or unmount
+      const target = e.target as HTMLElement;
+      // If focus moved outside the container, bring it back
+      if (!activeContainer.contains(target)) {
+        const focusableElements = getFocusableElements(activeContainer);
+        const firstFocusable = focusableElements[0];
+        if (firstFocusable) {
+          e.preventDefault();
+          firstFocusable.focus();
+        }
+      }
+    }
+
+    container.addEventListener("keydown", handleKeyDown);
+    // Listen on document for focus escaping the container
+    document.addEventListener("focusin", handleFocusIn);
+
+    // Cleanup: remove listeners and restore focus on deactivation or unmount
     return () => {
       container.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("focusin", handleFocusIn);
       // Only restore focus if element is still in the DOM
       if (canFocus(previousActiveElement.current)) {
         previousActiveElement.current.focus();
