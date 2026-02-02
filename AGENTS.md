@@ -48,6 +48,14 @@ Content types: `blog`, `projects`, `experience`, `skills`, `about`, `now`, `uses
 
 Access via `src/lib/content.ts` abstraction layer.
 
+## Deployment
+
+- **Platform**: Railway (auto-deployed)
+- **Trigger**: PR merges to `main` branch
+- **Database**: Railway-hosted PostgreSQL
+
+No manual deployment steps required - merging a PR triggers automatic deployment.
+
 ## Key Conventions
 
 - **No AI attribution** in code, commits, or files
