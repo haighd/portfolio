@@ -123,7 +123,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         )}
       </header>
 
-      <article>
+      <article data-pagefind-meta="type:blog">
         <MDXContent code={post.body} />
       </article>
 

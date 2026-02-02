@@ -4,6 +4,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Search, X, FileText, Folder, Briefcase, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useFocusTrap } from "@/hooks/use-focus-trap";
 
 // Search configuration constants
 const DEBOUNCE_DELAY_MS = 200;
@@ -14,6 +15,7 @@ interface PagefindResult {
   url: string;
   meta: {
     title?: string;
+    type?: string;
   };
   excerpt: string;
 }
@@ -34,7 +36,34 @@ interface SearchResult {
   type: "blog" | "project" | "page";
 }
 
-function getResultType(url: string): SearchResult["type"] {
+function normalizePagefindUrl(url: string) {
+  if (!url.startsWith("/")) return url;
+
+  const [pathWithQuery = "", hash = ""] = url.split("#");
+  const [path = "", query = ""] = pathWithQuery.split("?");
+
+  let normalized = path;
+  if (normalized.endsWith("/index.html")) {
+    normalized = normalized.slice(0, -"/index.html".length) || "/";
+  } else if (normalized.endsWith(".html")) {
+    normalized = normalized.slice(0, -".html".length) || "/";
+  }
+
+  const queryPart = query ? `?${query}` : "";
+  const hashPart = hash ? `#${hash}` : "";
+  return `${normalized}${queryPart}${hashPart}`;
+}
+
+function getResultType(
+  meta: PagefindResult["meta"],
+  url: string
+): SearchResult["type"] {
+  // Prefer meta type if available
+  if (meta.type === "blog") return "blog";
+  if (meta.type === "project") return "project";
+  if (meta.type === "page") return "page";
+
+  // Fallback to URL-based detection for backwards compatibility
   if (url.startsWith("/blog/")) return "blog";
   if (url.startsWith("/projects/")) return "project";
   return "page";
@@ -78,6 +107,10 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
   } | null>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const resultsContainerRef = React.useRef<HTMLDivElement>(null);
+  const dialogRef = React.useRef<HTMLDivElement>(null);
+
+  // Trap focus within dialog and restore on close
+  useFocusTrap(dialogRef, open);
 
   // Load Pagefind on mount
   React.useEffect(() => {
@@ -125,11 +158,12 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
         const searchResults = await Promise.all(
           response.results.slice(0, MAX_SEARCH_RESULTS).map(async (result) => {
             const data = await result.data();
+            const normalizedUrl = normalizePagefindUrl(data.url);
             return {
-              url: data.url,
+              url: normalizedUrl,
               title: data.meta?.title || "Untitled",
               excerpt: data.excerpt,
-              type: getResultType(data.url),
+              type: getResultType(data.meta, normalizedUrl),
             };
           })
         );
@@ -231,7 +265,10 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 
       {/* Dialog */}
       <div className="fixed top-[20%] left-1/2 w-full max-w-lg -translate-x-1/2 px-4">
-        <div className="border-border bg-background overflow-hidden rounded-lg border shadow-lg">
+        <div
+          ref={dialogRef}
+          className="border-border bg-background overflow-hidden rounded-lg border shadow-lg"
+        >
           {/* Search input */}
           <div className="border-border flex items-center border-b px-4">
             <Search
