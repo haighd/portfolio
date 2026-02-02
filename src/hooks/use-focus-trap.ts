@@ -42,11 +42,8 @@ function canFocus(element: HTMLElement | null): element is HTMLElement {
  * Checks if an element is visually visible (not display:none or visibility:hidden).
  */
 function isVisible(element: HTMLElement): boolean {
-  // offsetParent is null for display:none elements (except for body/html)
-  if (element.offsetParent === null && element.tagName !== "BODY") {
-    return false;
-  }
   const style = getComputedStyle(element);
+  // Check computed style directly - handles all cases including position:fixed
   return style.visibility !== "hidden" && style.display !== "none";
 }
 
