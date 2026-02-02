@@ -54,18 +54,9 @@ function normalizePagefindUrl(url: string) {
   return `${normalized}${queryPart}${hashPart}`;
 }
 
-function getResultType(
-  meta: PagefindResult["meta"],
-  url: string
-): SearchResult["type"] {
-  // Prefer meta type if available
+function getResultType(meta: PagefindResult["meta"]): SearchResult["type"] {
   if (meta.type === "blog") return "blog";
   if (meta.type === "project") return "project";
-  if (meta.type === "page") return "page";
-
-  // Fallback to URL-based detection for backwards compatibility
-  if (url.startsWith("/blog/")) return "blog";
-  if (url.startsWith("/projects/")) return "project";
   return "page";
 }
 
@@ -163,7 +154,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
               url: normalizedUrl,
               title: data.meta?.title || "Untitled",
               excerpt: data.excerpt,
-              type: getResultType(data.meta, normalizedUrl),
+              type: getResultType(data.meta),
             };
           })
         );
