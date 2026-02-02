@@ -1,0 +1,15 @@
+# Pagefind configuration
+# See: https://pagefind.app/docs/config-options/
+
+# Only index the main content area
+root_selector: "main"
+
+# Exclude non-content elements
+exclude_selectors:
+  - "nav"
+  - "footer"
+  - "[data-pagefind-ignore]"
+  - ".sr-only"
+
+# Keep URLs clean (remove .html extension)
+keep_index_url: false
