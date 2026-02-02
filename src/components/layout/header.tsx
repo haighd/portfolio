@@ -7,7 +7,7 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Container, Logo } from "@/components/ui";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { SearchTrigger } from "@/components/search";
+import { SearchTrigger, SearchDialog } from "@/components/search";
 
 const navigation = [
   { name: "About", href: "/about" },
@@ -22,9 +22,12 @@ const navigation = [
 export function Header() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [searchOpen, setSearchOpen] = React.useState(false);
 
   return (
-    <header className="border-border bg-background/80 sticky top-0 z-50 border-b backdrop-blur-sm">
+    <>
+      <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
+      <header className="border-border bg-background/80 sticky top-0 z-50 border-b backdrop-blur-sm">
       <Container>
         <nav
           aria-label="Main"
@@ -59,13 +62,13 @@ export function Header() {
                 </li>
               ))}
             </ul>
-            <SearchTrigger />
+            <SearchTrigger onClick={() => setSearchOpen(true)} />
             <ThemeToggle />
           </div>
 
           {/* Mobile Controls */}
           <div className="flex items-center gap-2 md:hidden">
-            <SearchTrigger />
+            <SearchTrigger onClick={() => setSearchOpen(true)} />
             <ThemeToggle />
             <button
               type="button"
@@ -113,5 +116,6 @@ export function Header() {
         )}
       </Container>
     </header>
+    </>
   );
 }
