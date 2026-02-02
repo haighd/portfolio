@@ -2,8 +2,14 @@
 
 import * as React from "react";
 
+// Selector for focusable elements, excluding hidden and aria-hidden elements
 const FOCUSABLE_SELECTOR =
-  'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])';
+  'button:not([disabled]):not([hidden]):not([aria-hidden="true"]), ' +
+  '[href]:not([hidden]):not([aria-hidden="true"]), ' +
+  'input:not([disabled]):not([hidden]):not([aria-hidden="true"]), ' +
+  'select:not([disabled]):not([hidden]):not([aria-hidden="true"]), ' +
+  'textarea:not([disabled]):not([hidden]):not([aria-hidden="true"]), ' +
+  '[tabindex]:not([tabindex="-1"]):not([disabled]):not([hidden]):not([aria-hidden="true"])';
 
 /**
  * Traps focus within a container element when active.
@@ -11,38 +17,34 @@ const FOCUSABLE_SELECTOR =
  * Restores focus to the previously focused element when deactivated.
  */
 export function useFocusTrap(
-  containerRef: React.RefObject<HTMLElement | null>,
+  containerRef: React.RefObject<HTMLElement>,
   isActive: boolean
 ) {
   const previousActiveElement = React.useRef<HTMLElement | null>(null);
 
   React.useEffect(() => {
     if (!isActive) {
-      // Restore focus when deactivated
-      if (previousActiveElement.current) {
-        previousActiveElement.current.focus();
-        previousActiveElement.current = null;
-      }
+      return;
+    }
+
+    const container = containerRef.current;
+    if (!container) {
       return;
     }
 
     // Store the currently focused element
     previousActiveElement.current = document.activeElement as HTMLElement;
 
-    const container = containerRef.current;
-    if (!container) return;
-
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key !== "Tab") return;
 
       const focusableElements = Array.from(
-        container!.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
+        container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
       );
       if (focusableElements.length === 0) return;
 
       const firstElement = focusableElements[0];
       const lastElement = focusableElements[focusableElements.length - 1];
-      if (!firstElement || !lastElement) return;
 
       if (e.shiftKey) {
         // Shift+Tab: if on first element, wrap to last
@@ -60,6 +62,14 @@ export function useFocusTrap(
     }
 
     container.addEventListener("keydown", handleKeyDown);
-    return () => container.removeEventListener("keydown", handleKeyDown);
+
+    // Cleanup: remove listener and restore focus on deactivation or unmount
+    return () => {
+      container.removeEventListener("keydown", handleKeyDown);
+      if (previousActiveElement.current) {
+        previousActiveElement.current.focus();
+        previousActiveElement.current = null;
+      }
+    };
   }, [isActive, containerRef]);
 }
