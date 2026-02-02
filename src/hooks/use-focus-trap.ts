@@ -16,8 +16,8 @@ const FOCUSABLE_SELECTOR =
  * Tab/Shift+Tab cycle through focusable elements.
  * Restores focus to the previously focused element when deactivated.
  */
-export function useFocusTrap(
-  containerRef: React.RefObject<HTMLElement>,
+export function useFocusTrap<T extends HTMLElement>(
+  containerRef: React.RefObject<T | null>,
   isActive: boolean
 ) {
   const previousActiveElement = React.useRef<HTMLElement | null>(null);
@@ -38,13 +38,17 @@ export function useFocusTrap(
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key !== "Tab") return;
 
+      const activeContainer = containerRef.current;
+      if (!activeContainer) return;
+
       const focusableElements = Array.from(
-        container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
+        activeContainer.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
       );
       if (focusableElements.length === 0) return;
 
-      const firstElement = focusableElements[0];
-      const lastElement = focusableElements[focusableElements.length - 1];
+      const firstElement = focusableElements.at(0);
+      const lastElement = focusableElements.at(-1);
+      if (!firstElement || !lastElement) return;
 
       if (e.shiftKey) {
         // Shift+Tab: if on first element, wrap to last

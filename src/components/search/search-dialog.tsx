@@ -36,6 +36,24 @@ interface SearchResult {
   type: "blog" | "project" | "page";
 }
 
+function normalizePagefindUrl(url: string) {
+  if (!url.startsWith("/")) return url;
+
+  const [pathWithQuery, hash = ""] = url.split("#");
+  const [path, query = ""] = pathWithQuery.split("?");
+
+  let normalized = path;
+  if (normalized.endsWith("/index.html")) {
+    normalized = normalized.slice(0, -"/index.html".length) || "/";
+  } else if (normalized.endsWith(".html")) {
+    normalized = normalized.slice(0, -".html".length) || "/";
+  }
+
+  const queryPart = query ? `?${query}` : "";
+  const hashPart = hash ? `#${hash}` : "";
+  return `${normalized}${queryPart}${hashPart}`;
+}
+
 function getResultType(
   meta: PagefindResult["meta"],
   url: string
@@ -140,11 +158,14 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
         const searchResults = await Promise.all(
           response.results.slice(0, MAX_SEARCH_RESULTS).map(async (result) => {
             const data = await result.data();
+            const normalizedUrl = normalizePagefindUrl(
+              data.meta?.url || data.url
+            );
             return {
-              url: data.url,
+              url: normalizedUrl,
               title: data.meta?.title || "Untitled",
               excerpt: data.excerpt,
-              type: getResultType(data.meta, data.url),
+              type: getResultType(data.meta, normalizedUrl),
             };
           })
         );
