@@ -92,23 +92,28 @@ export function useFocusTrap<T extends HTMLElement>(
       if (!activeContainer) return;
 
       const focusableElements = getFocusableElements(activeContainer);
-      if (focusableElements.length === 0) return;
+      if (focusableElements.length === 0) {
+        // No focusable elements - prevent Tab from escaping
+        e.preventDefault();
+        return;
+      }
 
       const firstElement = focusableElements.at(0);
       const lastElement = focusableElements.at(-1);
       if (!firstElement || !lastElement) return;
 
       const currentActive = getActiveHTMLElement();
+      const isInFocusableList = focusableElements.includes(currentActive as HTMLElement);
 
       if (e.shiftKey) {
-        // Shift+Tab: if on first element, wrap to last
-        if (currentActive === firstElement) {
+        // Shift+Tab: wrap to last if on first, or go to last if not in list
+        if (currentActive === firstElement || !isInFocusableList) {
           e.preventDefault();
           lastElement.focus();
         }
       } else {
-        // Tab: if on last element, wrap to first
-        if (currentActive === lastElement) {
+        // Tab: wrap to first if on last, or go to first if not in list
+        if (currentActive === lastElement || !isInFocusableList) {
           e.preventDefault();
           firstElement.focus();
         }
@@ -131,8 +136,10 @@ export function useFocusTrap<T extends HTMLElement>(
         const focusableElements = getFocusableElements(activeContainer);
         const firstFocusable = focusableElements[0];
         if (firstFocusable) {
-          e.preventDefault();
           firstFocusable.focus();
+        } else {
+          // Fallback: focus container itself (requires tabindex on container)
+          activeContainer.focus();
         }
       }
     }
