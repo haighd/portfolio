@@ -18,7 +18,7 @@ export default async function BlogPage() {
 
   if (posts.length === 0) {
     return (
-      <Section className="pt-24 md:pt-32">
+      <Section className="pt-24 md:pt-32" data-pagefind-meta="type:page">
         <div className="mx-auto max-w-2xl text-center">
           <h1 className="text-4xl font-bold tracking-tight">Blog</h1>
           <p className="mt-4 text-lg text-muted-foreground">
@@ -39,7 +39,7 @@ export default async function BlogPage() {
   }
 
   return (
-    <Section className="pt-24 md:pt-32">
+    <Section className="pt-24 md:pt-32" data-pagefind-meta="type:page">
       <div className="mb-12">
         <h1 className="text-4xl font-bold tracking-tight">Blog</h1>
         <p className="mt-4 text-lg text-muted-foreground">

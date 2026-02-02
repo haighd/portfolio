@@ -51,4 +51,3 @@ docs/resume/*.pdf
 
 # claude code config (local only)
 .claude/
-CLAUDE.md
