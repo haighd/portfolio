@@ -39,8 +39,8 @@ interface SearchResult {
 function normalizePagefindUrl(url: string) {
   if (!url.startsWith("/")) return url;
 
-  const [pathWithQuery, hash = ""] = url.split("#");
-  const [path, query = ""] = pathWithQuery.split("?");
+  const [pathWithQuery = "", hash = ""] = url.split("#");
+  const [path = "", query = ""] = pathWithQuery.split("?");
 
   let normalized = path;
   if (normalized.endsWith("/index.html")) {
@@ -158,9 +158,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
         const searchResults = await Promise.all(
           response.results.slice(0, MAX_SEARCH_RESULTS).map(async (result) => {
             const data = await result.data();
-            const normalizedUrl = normalizePagefindUrl(
-              data.meta?.url || data.url
-            );
+            const normalizedUrl = normalizePagefindUrl(data.url);
             return {
               url: normalizedUrl,
               title: data.meta?.title || "Untitled",
