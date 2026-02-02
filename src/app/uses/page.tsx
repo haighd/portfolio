@@ -29,7 +29,7 @@ export default async function UsesPage() {
         <p className="mt-4 text-lg text-muted-foreground">{description}</p>
       </header>
 
-      <article>
+      <article data-pagefind-meta="type:page">
         <MDXContent code={uses.body} />
       </article>
     </Section>

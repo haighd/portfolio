@@ -67,7 +67,7 @@ export default async function AboutPage() {
 
   return (
     <>
-      <Section className="pt-24 md:pt-32">
+      <Section className="pt-24 md:pt-32" data-pagefind-meta="type:page">
         <div className="grid gap-12 md:grid-cols-3">
           <div className="md:col-span-2">
             <h1 className="text-4xl font-bold tracking-tight">

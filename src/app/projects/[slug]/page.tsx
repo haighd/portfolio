@@ -148,7 +148,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </div>
       )}
 
-      <article>
+      <article data-pagefind-meta="type:project">
         <MDXContent code={project.body} />
       </article>
     </Section>

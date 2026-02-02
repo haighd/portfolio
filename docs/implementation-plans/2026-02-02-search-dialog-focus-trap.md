@@ -1,7 +1,7 @@
 # Implementation Plan: Search Dialog Focus Trap
 
 **Issue:** #66 - Add focus trap to search dialog
-**Status:** Ready for implementation
+**Status:** Implemented
 **Effort:** Low
 **Priority:** Medium
 

@@ -36,7 +36,7 @@ export default async function NowPage() {
         </p>
       </header>
 
-      <article>
+      <article data-pagefind-meta="type:page">
         <MDXContent code={now.body} />
       </article>
     </Section>

@@ -2,13 +2,13 @@
 
 import * as React from "react";
 
-// Base focusable element types
+// Base focusable element types (excluding tabindex=-1 which removes from tab order)
 const FOCUSABLE_ELEMENTS = [
-  "button:not([disabled])",
-  "[href]",
-  "input:not([disabled])",
-  "select:not([disabled])",
-  "textarea:not([disabled])",
+  'button:not([disabled]):not([tabindex="-1"])',
+  '[href]:not([tabindex="-1"])',
+  'input:not([disabled]):not([tabindex="-1"])',
+  'select:not([disabled]):not([tabindex="-1"])',
+  'textarea:not([disabled]):not([tabindex="-1"])',
   '[tabindex]:not([tabindex="-1"]):not([disabled])',
 ];
 
