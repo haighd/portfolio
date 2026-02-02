@@ -48,6 +48,7 @@ public/pagefind
 
 # resume files (privacy)
 docs/resume/*.pdf
+docs/resume/*.md
 
 # claude code config (local only)
 .claude/
