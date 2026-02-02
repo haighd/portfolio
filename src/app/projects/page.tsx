@@ -14,7 +14,7 @@ export default async function ProjectsPage() {
   const allTech = await getAllProjectTechStack();
 
   return (
-    <Section className="pt-24 md:pt-32">
+    <Section className="pt-24 md:pt-32" data-pagefind-meta="type:page">
       <div className="mb-12">
         <h1 className="text-4xl font-bold tracking-tight">Projects</h1>
         <p className="text-muted-foreground mt-4 text-lg">
