@@ -103,7 +103,7 @@ export function useFocusTrap<T extends HTMLElement>(
       if (!firstElement || !lastElement) return;
 
       const currentActive = getActiveHTMLElement();
-      const isInFocusableList = focusableElements.includes(currentActive as HTMLElement);
+      const isInFocusableList = !!currentActive && focusableElements.includes(currentActive);
 
       if (e.shiftKey) {
         // Shift+Tab: wrap to last if on first, or go to last if not in list
@@ -120,38 +120,11 @@ export function useFocusTrap<T extends HTMLElement>(
       }
     }
 
-    /**
-     * Handles focus escaping the container (e.g., programmatic focus changes).
-     * Brings focus back to the first focusable element if it escapes.
-     */
-    function handleFocusIn(e: FocusEvent) {
-      const activeContainer = containerRef.current;
-      if (!activeContainer) return;
-
-      const target = e.target;
-      // Only handle if target is an HTMLElement
-      if (!(target instanceof HTMLElement)) return;
-      // If focus moved outside the container, bring it back
-      if (!activeContainer.contains(target)) {
-        const focusableElements = getFocusableElements(activeContainer);
-        const firstFocusable = focusableElements[0];
-        if (firstFocusable) {
-          firstFocusable.focus();
-        } else {
-          // Fallback: focus container itself (requires tabindex on container)
-          activeContainer.focus();
-        }
-      }
-    }
-
     container.addEventListener("keydown", handleKeyDown);
-    // Listen on document for focus escaping the container
-    document.addEventListener("focusin", handleFocusIn);
 
-    // Cleanup: remove listeners and restore focus on deactivation or unmount
+    // Cleanup: remove listener and restore focus on deactivation or unmount
     return () => {
       container.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("focusin", handleFocusIn);
       // Only restore focus if element is still in the DOM
       if (canFocus(previousActiveElement.current)) {
         previousActiveElement.current.focus();
