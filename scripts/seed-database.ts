@@ -78,6 +78,11 @@ interface VeliteAbout {
   body: string;
 }
 
+interface VeliteUses {
+  title: string;
+  body: string;
+}
+
 async function main() {
   const connectionString = process.env.DATABASE_URL;
 
@@ -122,6 +127,7 @@ async function main() {
   const skillsData = readVeliteJson<VeliteSkill[]>("skills.json");
   const nowData = readVeliteJson<VeliteNow[]>("now.json");
   const aboutData = readVeliteJson<VeliteAbout>("about.json");
+  const usesData = readVeliteJson<VeliteUses>("uses.json");
 
   // Seed projects
   console.log(`Seeding ${projectsData.length} projects...`);
@@ -288,6 +294,17 @@ async function main() {
   }
   console.log("  About content seeded successfully");
 
+  // Seed uses content (singleton)
+  console.log(`Seeding uses content...`);
+  await db.delete(schema.usesContent);
+  if (usesData) {
+    await db.insert(schema.usesContent).values({
+      title: usesData.title,
+      body: usesData.body,
+    });
+  }
+  console.log("  Uses content seeded successfully");
+
   // Seed certifications (imported from src/data/skills.ts for single source of truth)
   console.log(`Seeding ${staticCertifications.length} certifications...`);
   await db.delete(schema.certifications);
@@ -308,6 +325,7 @@ async function main() {
   console.log(`Skills: ${skillsData.length}`);
   console.log(`Now content: ${nowData.length}`);
   console.log(`About content: ${aboutData ? 1 : 0}`);
+  console.log(`Uses content: ${usesData ? 1 : 0}`);
   console.log(`Certifications: ${staticCertifications.length}`);
   console.log("\nDatabase seeded successfully!");
 

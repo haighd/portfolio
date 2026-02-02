@@ -79,6 +79,12 @@ export type BlogPost = {
   body: string;
 };
 
+export type Uses = {
+  id?: string;
+  title: string;
+  body: string;
+};
+
 // Helper to sort by published date descending
 const sortByPublishedDateDesc = (a: BlogPost, b: BlogPost) =>
   new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime();
@@ -166,6 +172,19 @@ export async function getAboutContent(): Promise<About | undefined> {
   }
   const velite = await getVeliteContent();
   return velite.about as About | undefined;
+}
+
+// ============================================================================
+// Uses Content
+// ============================================================================
+
+export async function getUsesContent(): Promise<Uses | undefined> {
+  if (USE_DATABASE) {
+    const dbContent = await getDbContent();
+    return dbContent.getUsesContent() as Promise<Uses | undefined>;
+  }
+  const velite = await getVeliteContent();
+  return velite.uses as Uses | undefined;
 }
 
 // ============================================================================
