@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "velite build && next dev --turbopack",
-    "build": "velite build && next build",
+    "build": "velite build && next build && pagefind --site .next/server/app --output-path public/pagefind",
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
@@ -39,6 +39,7 @@
     "drizzle-kit": "^0.31.8",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "pagefind": "^1.4.0",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4",

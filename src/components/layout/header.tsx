@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Container, Logo } from "@/components/ui";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { SearchTrigger } from "@/components/search";
 
 const navigation = [
   { name: "About", href: "/about" },
@@ -23,13 +24,16 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-sm">
+    <header className="border-border bg-background/80 sticky top-0 z-50 border-b backdrop-blur-sm">
       <Container>
-        <nav aria-label="Main" className="flex h-16 items-center justify-between">
+        <nav
+          aria-label="Main"
+          className="flex h-16 items-center justify-between"
+        >
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center gap-2 text-lg font-semibold tracking-tight transition-colors hover:text-muted-foreground"
+            className="hover:text-muted-foreground flex items-center gap-2 text-lg font-semibold tracking-tight transition-colors"
           >
             <Logo variant="d-bars" size={28} />
             <span>Dan Haight</span>
@@ -44,7 +48,7 @@ export function Header() {
                     href={item.href}
                     aria-current={pathname === item.href ? "page" : undefined}
                     className={cn(
-                      "text-sm transition-colors hover:text-foreground",
+                      "hover:text-foreground text-sm transition-colors",
                       pathname === item.href
                         ? "text-foreground"
                         : "text-muted-foreground"
@@ -55,15 +59,17 @@ export function Header() {
                 </li>
               ))}
             </ul>
+            <SearchTrigger />
             <ThemeToggle />
           </div>
 
           {/* Mobile Controls */}
           <div className="flex items-center gap-2 md:hidden">
+            <SearchTrigger />
             <ThemeToggle />
             <button
               type="button"
-              className="inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground"
+              className="text-muted-foreground hover:bg-muted hover:text-foreground inline-flex items-center justify-center rounded-md p-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-menu"
@@ -80,7 +86,10 @@ export function Header() {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div id="mobile-menu" className="border-t border-border pb-4 md:hidden">
+          <div
+            id="mobile-menu"
+            className="border-border border-t pb-4 md:hidden"
+          >
             <ul className="mt-4 space-y-2">
               {navigation.map((item) => (
                 <li key={item.name}>
@@ -88,7 +97,7 @@ export function Header() {
                     href={item.href}
                     aria-current={pathname === item.href ? "page" : undefined}
                     className={cn(
-                      "block rounded-md px-3 py-2 text-base transition-colors hover:bg-muted",
+                      "hover:bg-muted block rounded-md px-3 py-2 text-base transition-colors",
                       pathname === item.href
                         ? "bg-muted text-foreground"
                         : "text-muted-foreground"
