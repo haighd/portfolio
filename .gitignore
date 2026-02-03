@@ -50,5 +50,9 @@ public/pagefind
 docs/resume/*.pdf
 docs/resume/*.md
 
+# linkedin optimization content (privacy)
+docs/linkedin-optimization-content.md
+docs/linkedin-thumbnails/
+
 # claude code config (local only)
 .claude/
