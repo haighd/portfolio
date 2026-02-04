@@ -1,10 +1,16 @@
 import { defineConfig } from "drizzle-kit";
 
-const DATABASE_URL = process.env.DATABASE_URL;
+// Use the same fallback chain as src/db/index.ts for consistency
+// DATABASE_PUBLIC_URL is used during Railway builds when internal URLs aren't available
+const DATABASE_URL =
+  process.env.DATABASE_POOLER_URL ||
+  process.env.DATABASE_PUBLIC_URL ||
+  process.env.DATABASE_URL;
 
 if (!DATABASE_URL) {
   throw new Error(
-    "DATABASE_URL environment variable is not set. Please define it before running drizzle-kit."
+    "DATABASE_URL, DATABASE_POOLER_URL, or DATABASE_PUBLIC_URL environment variable is required. " +
+      "Please define one before running drizzle-kit."
   );
 }
 

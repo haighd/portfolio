@@ -9,13 +9,16 @@ let _client: ReturnType<typeof postgres> | null = null;
 export function getDb() {
   if (_db) return _db;
 
-  // Use pooler URL if available (recommended for serverless), otherwise direct connection
+  // Connection priority: pooler URL (recommended for serverless) > public URL (for build-time) > direct connection
+  // DATABASE_PUBLIC_URL is used during Railway builds when internal URLs aren't available
   const connectionString =
-    process.env.DATABASE_POOLER_URL || process.env.DATABASE_URL;
+    process.env.DATABASE_POOLER_URL ||
+    process.env.DATABASE_PUBLIC_URL ||
+    process.env.DATABASE_URL;
 
   if (!connectionString) {
     throw new Error(
-      "DATABASE_URL or DATABASE_POOLER_URL environment variable is required. " +
+      "DATABASE_URL, DATABASE_POOLER_URL, or DATABASE_PUBLIC_URL environment variable is required. " +
         "Set DATABASE_CONTENT_ENABLED=false to use Velite instead."
     );
   }
