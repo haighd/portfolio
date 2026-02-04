@@ -1,5 +1,5 @@
 import { defineConfig } from "drizzle-kit";
-import { getDatabaseUrl } from "./src/lib/utils/db-url";
+import { getDatabaseUrl } from "./src/lib/utils";
 
 const DATABASE_URL = getDatabaseUrl();
 
