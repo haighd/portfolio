@@ -9,8 +9,8 @@ let _client: ReturnType<typeof postgres> | null = null;
 export function getDb() {
   if (_db) return _db;
 
-  // Use pooler URL if available (recommended for serverless), otherwise direct connection
-  // DATABASE_PUBLIC_URL is used during Railway builds (internal URLs aren't available at build time)
+  // Connection priority: pooler URL (recommended for serverless) > public URL (for build-time) > direct connection
+  // DATABASE_PUBLIC_URL is used during Railway builds when internal URLs aren't available
   const connectionString =
     process.env.DATABASE_POOLER_URL ||
     process.env.DATABASE_PUBLIC_URL ||
