@@ -1,6 +1,7 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema";
+import { getDatabaseUrl } from "@/lib/utils";
 
 // Lazy database connection - only created when first accessed
 let _db: ReturnType<typeof drizzle<typeof schema>> | null = null;
@@ -9,12 +10,7 @@ let _client: ReturnType<typeof postgres> | null = null;
 export function getDb() {
   if (_db) return _db;
 
-  // Connection priority: pooler URL (recommended for serverless) > public URL (for build-time) > direct connection
-  // DATABASE_PUBLIC_URL is used during Railway builds when internal URLs aren't available
-  const connectionString =
-    process.env.DATABASE_POOLER_URL ||
-    process.env.DATABASE_PUBLIC_URL ||
-    process.env.DATABASE_URL;
+  const connectionString = getDatabaseUrl();
 
   if (!connectionString) {
     throw new Error(
