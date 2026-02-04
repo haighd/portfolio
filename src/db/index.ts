@@ -18,7 +18,7 @@ export function getDb() {
 
   if (!connectionString) {
     throw new Error(
-      "DATABASE_URL or DATABASE_POOLER_URL environment variable is required. " +
+      "DATABASE_URL, DATABASE_POOLER_URL, or DATABASE_PUBLIC_URL environment variable is required. " +
         "Set DATABASE_CONTENT_ENABLED=false to use Velite instead."
     );
   }
