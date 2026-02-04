@@ -10,8 +10,11 @@ export function getDb() {
   if (_db) return _db;
 
   // Use pooler URL if available (recommended for serverless), otherwise direct connection
+  // DATABASE_PUBLIC_URL is used during Railway builds (internal URLs aren't available at build time)
   const connectionString =
-    process.env.DATABASE_POOLER_URL || process.env.DATABASE_URL;
+    process.env.DATABASE_POOLER_URL ||
+    process.env.DATABASE_PUBLIC_URL ||
+    process.env.DATABASE_URL;
 
   if (!connectionString) {
     throw new Error(
