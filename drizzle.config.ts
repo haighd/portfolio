@@ -1,11 +1,7 @@
 import { defineConfig } from "drizzle-kit";
+import { getDatabaseUrl } from "./src/lib/utils/db-url";
 
-// Use the same fallback chain as src/db/index.ts for consistency
-// DATABASE_PUBLIC_URL is used during Railway builds when internal URLs aren't available
-const DATABASE_URL =
-  process.env.DATABASE_POOLER_URL ||
-  process.env.DATABASE_PUBLIC_URL ||
-  process.env.DATABASE_URL;
+const DATABASE_URL = getDatabaseUrl();
 
 if (!DATABASE_URL) {
   throw new Error(
