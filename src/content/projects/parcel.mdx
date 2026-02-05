@@ -1,0 +1,45 @@
+---
+title: "Parcel Overpack Simulator"
+description: "Interactive 3D bin packing simulator for optimizing overpack box selection in distribution center shipping operations"
+slug: "parcel"
+featured: true
+order: 0
+techStack: ["R", "Shiny", "golem", "shinydashboard", "Docker"]
+github: "https://github.com/haighd/parcel"
+liveUrl: "https://parcel.danalytics.com"
+challenge: "Distribution centers stock dozens of overpack box sizes, but determining the optimal set of sizes to minimize waste, cost, and inventory complexity requires analyzing thousands of historical shipments against candidate box configurations — a problem too complex for spreadsheet analysis."
+approach: "Built an interactive simulation tool using R Shiny and the golem framework. Users upload shipment data from any ERP system, map columns via drag-and-drop, define candidate overpack boxes with real corrugated flute thickness options, and run 3D bin packing simulations to evaluate fit rates across their shipment history."
+impact: "Enabled CI analysts to run what-if scenarios in minutes instead of weeks, comparing box configurations against actual shipment data. The simulator identifies which items won't fit (candidates for free-case shipping) and helps teams converge on the minimum set of box SKUs that covers acceptable shipment volume."
+learnings: "The drag-and-drop column mapping pattern proved essential — every ERP exports different column names, so a flexible mapping UI eliminated the need for rigid file templates. Building with golem's module system kept the reactive logic manageable across file upload, column mapping, box configuration, and simulation stages."
+---
+
+## Overview
+
+A strategic simulation tool for continuous improvement analysts at distribution centers. Parcel helps determine the optimal set of overpack box sizes to stock by running 3D bin packing simulations against historical shipment data.
+
+## Key Features
+
+- **ERP-Agnostic Upload**: Accepts CSV, TSV, XLSX, and XLS files from any warehouse management system
+- **Drag-and-Drop Column Mapping**: Flexible field assignment for order ID, dimensions, weight, and quantity
+- **Box Configuration**: Define candidate overpack sizes with corrugated flute thickness options (B, C, E, BC, EB)
+- **Bin Packing Simulation**: 3D packing algorithm evaluates fit rates across all shipments
+- **Results Analysis**: Identifies unfitted items (bin_id=0) for free-case shipping decisions
+
+## Technical Highlights
+
+Built with production R tooling for maintainability:
+
+- golem framework for structured Shiny application development
+- Modular architecture: file upload, column mapping, box config, and simulation as separate modules
+- gbp (Guillotine Bin Packing) algorithm for 3D packing optimization
+- sortable.js integration for intuitive drag-and-drop column assignment
+- Dockerized for consistent deployment across environments
+
+## Simulation Workflow
+
+The four-step guided process walks analysts through each phase:
+
+1. **Upload Shipments**: Import historical shipment data with item dimensions and quantities
+2. **Assign Columns**: Map input fields to required attributes via drag-and-drop
+3. **Select Overpack Sizes**: Add candidate box dimensions with wall thickness adjustments
+4. **Run Simulation**: Execute bin packing and download results with per-item placement coordinates
