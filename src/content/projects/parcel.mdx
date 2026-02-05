@@ -23,16 +23,16 @@ A strategic simulation tool for continuous improvement analysts at distribution 
 - **Drag-and-Drop Column Mapping**: Flexible field assignment for order ID, dimensions, weight, and quantity
 - **Box Configuration**: Define candidate overpack sizes with corrugated flute thickness options (B, C, E, BC, EB)
 - **Bin Packing Simulation**: 3D packing algorithm evaluates fit rates across all shipments
-- **Results Analysis**: Identifies unfitted items (bin_id=0) for free-case shipping decisions
+- **Results Analysis**: Identifies unfitted items for free-case shipping decisions
 
 ## Technical Highlights
 
 Built with production R tooling for maintainability:
 
 - golem framework for structured Shiny application development
-- Modular architecture: file upload, column mapping, box config, and simulation as separate modules
+- Modular architecture: file upload, column mapping, box configuration, and simulation as separate modules
 - gbp (Guillotine Bin Packing) algorithm for 3D packing optimization
-- sortable.js integration for intuitive drag-and-drop column assignment
+- sortable R package for intuitive drag-and-drop column assignment
 - Dockerized for consistent deployment across environments
 
 ## Simulation Workflow
