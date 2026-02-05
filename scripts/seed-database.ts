@@ -11,6 +11,7 @@ import * as schema from "../src/db/schema";
 import * as fs from "fs";
 import * as path from "path";
 import { certifications as staticCertifications } from "../src/data/skills";
+import { getDatabaseUrl } from "../src/lib/utils/db-url";
 
 // Types for Velite JSON data
 interface VeliteProject {
@@ -84,10 +85,10 @@ interface VeliteUses {
 }
 
 async function main() {
-  const connectionString = process.env.DATABASE_URL;
+  const connectionString = getDatabaseUrl();
 
   if (!connectionString) {
-    console.error("DATABASE_URL environment variable is required");
+    console.error("Database URL is required (set DATABASE_POOLER_URL, DATABASE_PUBLIC_URL, or DATABASE_URL)");
     process.exit(1);
   }
 
