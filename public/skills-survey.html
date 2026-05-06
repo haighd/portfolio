@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skills Proficiency Survey</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: #0a0a0a;
+      color: #fafafa;
+    }
+    h1 { margin-bottom: 0.5rem; }
+    .subtitle { color: #888; margin-bottom: 2rem; }
+    .category {
+      background: #141414;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .category h2 {
+      margin: 0 0 1rem 0;
+      font-size: 1.1rem;
+      color: #ddd;
+    }
+    .skill-row {
+      display: grid;
+      grid-template-columns: 200px repeat(4, 1fr);
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #222;
+    }
+    .skill-row:last-child { border-bottom: none; }
+    .skill-name { font-weight: 500; }
+    .radio-group {
+      display: flex;
+      justify-content: center;
+    }
+    input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    .header-row {
+      display: grid;
+      grid-template-columns: 200px repeat(4, 1fr);
+      padding: 0.5rem 0;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+      color: #888;
+      text-align: center;
+    }
+    .header-row span:first-child { text-align: left; }
+    .custom-skill {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .custom-skill input[type="text"] {
+      flex: 1;
+      padding: 0.5rem;
+      background: #0a0a0a;
+      border: 1px solid #333;
+      border-radius: 4px;
+      color: #fafafa;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    button:hover { background: #1d4ed8; }
+    .submit-section {
+      margin-top: 2rem;
+      text-align: center;
+    }
+    .submit-section button {
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+    }
+    #output {
+      margin-top: 2rem;
+      background: #141414;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 1rem;
+      display: none;
+    }
+    #output h3 { margin-top: 0; }
+    #output textarea {
+      width: 100%;
+      height: 300px;
+      background: #0a0a0a;
+      color: #fafafa;
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 1rem;
+      font-family: monospace;
+      font-size: 0.85rem;
+    }
+    .copy-btn { margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+  <h1>Skills Proficiency Survey</h1>
+  <p class="subtitle">Select your proficiency level for each skill. Add any missing skills at the bottom of each category.</p>
+
+  <form id="skillsForm">
+    <!-- Programming Languages -->
+    <div class="category">
+      <h2>Programming Languages</h2>
+      <div class="header-row">
+        <span>Skill</span>
+        <span>Expert</span>
+        <span>Advanced</span>
+        <span>Intermediate</span>
+        <span>None</span>
+      </div>
+      <div id="languages"></div>
+      <div class="custom-skill">
+        <input type="text" id="newLanguage" placeholder="Add another language...">
+        <button type="button" onclick="addSkill('languages', 'newLanguage')">Add</button>
+      </div>
+    </div>
+
+    <!-- Frameworks & Libraries -->
+    <div class="category">
+      <h2>Frameworks & Libraries</h2>
+      <div class="header-row">
+        <span>Skill</span>
+        <span>Expert</span>
+        <span>Advanced</span>
+        <span>Intermediate</span>
+        <span>None</span>
+      </div>
+      <div id="frameworks"></div>
+      <div class="custom-skill">
+        <input type="text" id="newFramework" placeholder="Add another framework...">
+        <button type="button" onclick="addSkill('frameworks', 'newFramework')">Add</button>
+      </div>
+    </div>
+
+    <!-- Data & Analytics -->
+    <div class="category">
+      <h2>Data & Analytics</h2>
+      <div class="header-row">
+        <span>Skill</span>
+        <span>Expert</span>
+        <span>Advanced</span>
+        <span>Intermediate</span>
+        <span>None</span>
+      </div>
+      <div id="data"></div>
+      <div class="custom-skill">
+        <input type="text" id="newData" placeholder="Add another skill...">
+        <button type="button" onclick="addSkill('data', 'newData')">Add</button>
+      </div>
+    </div>
+
+    <!-- Platforms & Infrastructure -->
+    <div class="category">
+      <h2>Platforms & Infrastructure</h2>
+      <div class="header-row">
+        <span>Skill</span>
+        <span>Expert</span>
+        <span>Advanced</span>
+        <span>Intermediate</span>
+        <span>None</span>
+      </div>
+      <div id="platforms"></div>
+      <div class="custom-skill">
+        <input type="text" id="newPlatform" placeholder="Add another platform...">
+        <button type="button" onclick="addSkill('platforms', 'newPlatform')">Add</button>
+      </div>
+    </div>
+
+    <!-- Tools & Software -->
+    <div class="category">
+      <h2>Tools & Software</h2>
+      <div class="header-row">
+        <span>Skill</span>
+        <span>Expert</span>
+        <span>Advanced</span>
+        <span>Intermediate</span>
+        <span>None</span>
+      </div>
+      <div id="tools"></div>
+      <div class="custom-skill">
+        <input type="text" id="newTool" placeholder="Add another tool...">
+        <button type="button" onclick="addSkill('tools', 'newTool')">Add</button>
+      </div>
+    </div>
+
+    <!-- Leadership & Soft Skills -->
+    <div class="category">
+      <h2>Leadership & Soft Skills</h2>
+      <div class="header-row">
+        <span>Skill</span>
+        <span>Expert</span>
+        <span>Advanced</span>
+        <span>Intermediate</span>
+        <span>None</span>
+      </div>
+      <div id="leadership"></div>
+      <div class="custom-skill">
+        <input type="text" id="newLeadership" placeholder="Add another skill...">
+        <button type="button" onclick="addSkill('leadership', 'newLeadership')">Add</button>
+      </div>
+    </div>
+
+    <div class="submit-section">
+      <button type="button" onclick="generateOutput()">Generate Skills Summary</button>
+    </div>
+  </form>
+
+  <div id="output">
+    <h3>Copy this and paste it back to Claude:</h3>
+    <textarea id="outputText" readonly></textarea>
+    <button type="button" class="copy-btn" onclick="copyOutput()">Copy to Clipboard</button>
+  </div>
+
+  <script>
+    const skillsData = {
+      languages: [
+        "Python", "SQL", "R", "TypeScript", "JavaScript", "VBA",
+        "Java", "C#", "C++", "Go", "Rust", "Ruby", "PHP", "Scala",
+        "Julia", "MATLAB", "SAS", "Bash/Shell"
+      ],
+      frameworks: [
+        "React", "FastAPI", "R Shiny", "R tidyverse", "Quarto", "Next.js", "Vue.js",
+        "Angular", "Django", "Flask", "Express.js", "Spring Boot",
+        ".NET", "TensorFlow", "PyTorch", "scikit-learn", "pandas",
+        "NumPy", "Spark", "Airflow", "dbt"
+      ],
+      data: [
+        "Machine Learning", "Statistical Modeling", "Data Engineering",
+        "Data Visualization", "Business Intelligence", "Operations Research",
+        "ETL Pipelines", "A/B Testing", "Predictive Modeling",
+        "Natural Language Processing", "Computer Vision", "Time Series Analysis",
+        "Recommendation Systems", "Deep Learning", "Data Mining",
+        "Experiment Design", "Causal Inference"
+      ],
+      platforms: [
+        "PostgreSQL", "MySQL", "SQL Server", "MongoDB", "Redis",
+        "Docker", "Kubernetes", "AWS", "Azure", "GCP", "Railway",
+        "Vercel", "Heroku", "Snowflake", "Databricks", "BigQuery",
+        "Redshift", "Linux", "Git/GitHub"
+      ],
+      tools: [
+        "Power BI", "Power Apps", "Tableau", "Looker", "Excel",
+        "Jupyter", "VS Code", "RStudio", "JIRA", "Confluence",
+        "Figma", "Postman", "Terraform", "Ansible"
+      ],
+      leadership: [
+        "Team Management", "Strategy Development", "Stakeholder Communication",
+        "Mentorship", "Project Management", "Agile/Scrum", "Cross-functional Collaboration",
+        "Technical Writing", "Public Speaking", "Hiring & Interviewing",
+        "Budget Management", "Vendor Management", "Change Management"
+      ]
+    };
+
+    function createSkillRow(category, skill) {
+      const safeName = skill.replace(/[^a-zA-Z0-9]/g, '_');
+      const id = `${category}_${safeName}`;
+      return `
+        <div class="skill-row">
+          <span class="skill-name">${skill}</span>
+          <div class="radio-group"><input type="radio" name="${id}" value="expert"></div>
+          <div class="radio-group"><input type="radio" name="${id}" value="advanced"></div>
+          <div class="radio-group"><input type="radio" name="${id}" value="intermediate"></div>
+          <div class="radio-group"><input type="radio" name="${id}" value="none" checked></div>
+        </div>
+      `;
+    }
+
+    function initializeForm() {
+      for (const [category, skills] of Object.entries(skillsData)) {
+        const container = document.getElementById(category);
+        container.innerHTML = skills.map(s => createSkillRow(category, s)).join('');
+      }
+    }
+
+    function addSkill(category, inputId) {
+      const input = document.getElementById(inputId);
+      const skill = input.value.trim();
+      if (!skill) return;
+
+      const container = document.getElementById(category);
+      container.insertAdjacentHTML('beforeend', createSkillRow(category, skill));
+      input.value = '';
+    }
+
+    function generateOutput() {
+      const result = {};
+      const form = document.getElementById('skillsForm');
+      const radios = form.querySelectorAll('input[type="radio"]:checked');
+
+      radios.forEach(radio => {
+        if (radio.value !== 'none') {
+          const [category, ...nameParts] = radio.name.split('_');
+          const skillName = nameParts.join('_').replace(/_/g, ' ').replace(/  +/g, ' ');
+
+          // Find the actual skill name from the row
+          const row = radio.closest('.skill-row');
+          const actualName = row.querySelector('.skill-name').textContent;
+
+          if (!result[radio.value]) {
+            result[radio.value] = [];
+          }
+          result[radio.value].push(actualName);
+        }
+      });
+
+      const output = `## My Skills Proficiency
+
+### Expert
+${(result.expert || []).map(s => `- ${s}`).join('\n') || '(none selected)'}
+
+### Advanced
+${(result.advanced || []).map(s => `- ${s}`).join('\n') || '(none selected)'}
+
+### Intermediate
+${(result.intermediate || []).map(s => `- ${s}`).join('\n') || '(none selected)'}
+`;
+
+      document.getElementById('output').style.display = 'block';
+      document.getElementById('outputText').value = output;
+    }
+
+    function copyOutput() {
+      const textarea = document.getElementById('outputText');
+      textarea.select();
+      document.execCommand('copy');
+      alert('Copied to clipboard!');
+    }
+
+    initializeForm();
+  </script>
+</body>
+</html>
