@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# Local archive for accidental duplicate files (macOS " 2" copies)
+/_archive
+
 # dependencies
 /node_modules
 /.pnp
