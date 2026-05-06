@@ -1,0 +1,40 @@
+\usepackage{fontspec}
+\setmainfont{Helvetica Neue}
+
+\usepackage[left=0.85in,right=0.85in,top=1.25in,bottom=1in]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{array}
+
+% Keep page 2+ at the default top margin and add extra top offset on page 1 only.
+\newcommand{\ResumeFirstPageTopExtra}{0.04in}
+\AtBeginDocument{\vspace*{\ResumeFirstPageTopExtra}}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.3em}
+\raggedbottom
+
+\linespread{1}
+
+% \titleformat{\paragraph}{\fontsize{20pt}{22pt}\selectfont\bfseries\MakeUppercase}{}{0pt}{}
+% \titlespacing*{\paragraph}{0pt}{10.65em}{0.35em}
+
+\titleformat{\subsection}{\fontsize{10pt}{12pt}\selectfont\bfseries\MakeUppercase}{}{0pt}{}
+\titlespacing*{\subsection}{0pt}{1.5em}{0.02em}
+
+\titleformat{\subsubsection}[runin]{\normalsize\bfseries}{}{0pt}{}[\enspace]
+\titlespacing*{\subsubsection}{0pt}{0.12em}{0.22em}
+
+\setlist[itemize]{
+  leftmargin=1.35em,
+  itemsep=0em,
+  topsep=0em,
+  parsep=0pt,
+  partopsep=0pt
+}
+
+\renewcommand{\arraystretch}{1.0}
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+\AtBeginEnvironment{longtable}{\small}
