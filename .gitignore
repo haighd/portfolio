@@ -62,3 +62,7 @@ docs/linkedin-images/
 
 # claude code config (local only)
 .claude/
+
+# Local session-state cache (not versioned)
+.agents/project.md
+.agents/session-journal.md
