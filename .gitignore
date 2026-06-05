@@ -63,6 +63,6 @@ docs/linkedin-images/
 # claude code config (local only)
 .claude/
 
-# AI agent session-state (local resume cache — not versioned)
+# Local session-state cache (not versioned)
 .agents/project.md
 .agents/session-journal.md
