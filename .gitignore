@@ -52,9 +52,12 @@ next-env.d.ts
 # pagefind search index (generated at build time)
 public/pagefind
 
-# resume files (privacy)
-docs/resume/*.pdf
-docs/resume/*.md
+# resume files (privacy): ignore everything except the rendering tooling
+docs/resume/*
+!docs/resume/cleanup-samples.sh
+!docs/resume/render-resume-reference.sh
+!docs/resume/resume-reference-style.lua
+!docs/resume/resume-reference-style.tex
 
 # linkedin optimization content (privacy)
 docs/linkedin-optimization-content.md

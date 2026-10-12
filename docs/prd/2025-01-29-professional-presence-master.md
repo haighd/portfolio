@@ -227,7 +227,7 @@ portfolio/
 
 ## 9. References
 
-- Source resume: `docs/resume/daniel-j-haight-resume-20240805.docx`
+- Source resume: kept locally in `docs/resume/` (gitignored, not in the repository)
 - Portfolio repository: github.com/haighd/portfolio
 - Domain: danalytics.info
 
