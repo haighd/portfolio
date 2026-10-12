@@ -56,6 +56,11 @@ public/pagefind
 docs/resume/*.pdf
 docs/resume/*.md
 docs/resume/*.docx
+docs/resume/*.pdf_original
+docs/resume/.pdf-pages/
+docs/resume/.pdf-previews/
+docs/resume/.Rhistory
+docs/resume/graphify-out/
 
 # linkedin optimization content (privacy)
 docs/linkedin-optimization-content.md
