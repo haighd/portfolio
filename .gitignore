@@ -55,6 +55,7 @@ public/pagefind
 # resume files (privacy)
 docs/resume/*.pdf
 docs/resume/*.md
+docs/resume/*.docx
 
 # linkedin optimization content (privacy)
 docs/linkedin-optimization-content.md
